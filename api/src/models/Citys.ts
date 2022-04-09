@@ -1,18 +1,30 @@
-import { Column, CreatedAt, Model, Table, UpdatedAt } from "sequelize-typescript"
-@Table
+import {
+  BelongsToMany,
+  Column,
+  CreatedAt,
+  Model,
+  Table,
+  UpdatedAt,
+} from "sequelize-typescript";
+import { usercitys } from "./usercitys";
+import { users } from "./users";
 
-export class Citys extends Model<Citys>{
+@Table
+export class citys extends Model<citys> {
   @Column
-  name!:string
-  
+  name!: string;
+
   @Column
-  cityId!:number
+  cityId!: number;
 
   @CreatedAt
   @Column
-  createdAt!:string
+  createdAt!: string;
 
   @UpdatedAt
   @Column
-  updatedAt!:string
+  updatedAt!: string;
+
+  @BelongsToMany(() => users, () => usercitys)
+  users!: Array<users & { usercitys: usercitys }>;
 }
