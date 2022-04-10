@@ -1,29 +1,41 @@
 import {
+  AutoIncrement,
   BelongsToMany,
   Column,
   CreatedAt,
+  DataType,
   Model,
+  PrimaryKey,
   Table,
   UpdatedAt,
 } from "sequelize-typescript";
 import { usercitys } from "./usercitys";
 import { users } from "./users";
 
-@Table
-export class citys extends Model<citys> {
-  @Column
-  name!: string;
+interface City{
+  id?:number,
+  name:string,
+  createdAt?:Date,
+  updatedAt?:Date
+}
 
-  @Column
-  cityId!: number;
+@Table
+export class citys extends Model<City> {
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  id!:number
+
+  @Column(DataType.CHAR)
+  name!:string;
 
   @CreatedAt
-  @Column
-  createdAt!: string;
+  @Column(DataType.DATE)
+  createdAt!: Date;
 
   @UpdatedAt
-  @Column
-  updatedAt!: string;
+  @Column(DataType.DATE)
+  updatedAt!: Date;
 
   @BelongsToMany(() => users, () => usercitys)
   users!: Array<users & { usercitys: usercitys }>;
