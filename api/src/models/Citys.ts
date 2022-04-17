@@ -7,6 +7,7 @@ import {
   Model,
   PrimaryKey,
   Table,
+  Unique,
   UpdatedAt,
 } from "sequelize-typescript";
 import { usercitys } from "./usercitys";
@@ -26,6 +27,7 @@ export class citys extends Model<City> {
   @Column(DataType.INTEGER)
   id!:number
 
+  @Unique(true)
   @Column(DataType.CHAR)
   name!:string;
 

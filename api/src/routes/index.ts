@@ -1,11 +1,18 @@
 import { Router } from "express";
-import { getCity, getCityDetails, getFavCitys, saveCitys } from "../controllers/index";
+import { getCity, getCityDetails, getFavCitys, addFavorites, deleteFavorites, registerUser,
+  loginUser 
+} from "../controllers/index";
 
 const routes = Router();
 
 routes.get("/user/:name",getFavCitys);
-routes.get("/city/:name",getCity);
+routes.get("/city/:city",getCity);
 routes.get("/details",getCityDetails);
-routes.get("/save",saveCitys);
+
+routes.post("/saveFavorites",addFavorites);
+routes.delete("/deleteFavorites",deleteFavorites);
+
+routes.post("/registerUser",registerUser);
+routes.post("/loginUser",loginUser);
 
 export default routes;
