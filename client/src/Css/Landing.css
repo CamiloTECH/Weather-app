@@ -1,0 +1,9 @@
+.bg{
+  background-image: url("https://us.123rf.com/450wm/goldminer/goldminer1704/goldminer170400017/75393016-foto-de-una-playa-tropical-en-el-d%C3%ADa-soleado-imagen-entonada.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.contenido{
+  width: 75%;
+}

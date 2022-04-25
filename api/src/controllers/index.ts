@@ -68,7 +68,7 @@ export const getCityDetails = async (req: Request, res: Response) => {
 //Añadir a la DB la ciudad que el usuario quiera añadir a favoritos, para que pueda ser mostrada luego
 export const addFavorites = async (req: Request, res: Response) => {
   interface Body {
-    id: string;
+    id: number;
     ciudad: string;
   }
   const { id, ciudad } = req.body as Body;
