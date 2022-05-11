@@ -137,27 +137,6 @@ function ValidationEmail({
           </button>
         </div>
       </form>
-
-      <div className="row mt-4">
-        <span>
-          You don't have an account?{" "}
-          <button
-            onClick={handleSignUp}
-            className="bg-transparent border-0 mb-2 text-primary text-decoration-underline"
-          >
-            Sign up
-          </button>
-        </span>
-        <span>
-          You have an account?{" "}
-          <button
-            onClick={handleSignIn}
-            className="bg-transparent border-0 text-primary text-decoration-underline"
-          >
-            Login
-          </button>
-        </span>
-      </div>
     </>
   );
 }

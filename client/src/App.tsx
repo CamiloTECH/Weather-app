@@ -3,7 +3,6 @@ import Landing from "./components/Landing";
 import Home from "./components/Home";
 import SearchBar from "./components/SerchBar";
 import Details from "./components/Details";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
