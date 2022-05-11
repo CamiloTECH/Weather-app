@@ -148,6 +148,7 @@ function Landing() {
   const handleSignUp = () => {
     signUp ? setSignUp(false) : setSignUp(true);
     setViewPassword(false);
+    setForgotPassword(false)
     setState({
       email: "",
       password: "",
@@ -307,7 +308,7 @@ function Landing() {
             )}
 
             <br />
-            {!signUp ? (
+            {!signUp && !forgotPassword ? (
               <span>
                 Forgot your password?{" "}
                 <button className="bg-transparent border-0 text-primary text-decoration-underline" onClick={() => setForgotPassword(true)}>
