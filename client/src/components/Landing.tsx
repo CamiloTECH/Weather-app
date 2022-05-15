@@ -1,17 +1,10 @@
 import "../Css/Landing.css";
-import {
-  useState,
-  useEffect,
-  ChangeEvent,
-  FormEvent,
-  FormEventHandler,
-  SyntheticEvent,
-} from "react";
+import { useState, SyntheticEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import ValidationEmail from "./Login/ValidationEmail";
-import LoginGoogle from "./LoginGoogle";
+import LoginGoogle from "./Login/LoginGoogle";
 import SignUp from "./Login/SignUp";
 import Login from "./Login/Login";
 
@@ -19,57 +12,8 @@ function Landing() {
   //const { registerUser, loginUser, role } = useSelector(store => store)
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [validation, setValidation] = useState(true);
   const [forgotPassword, setForgotPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
-  const [viewPassword, setViewPassword] = useState(false);
-  const [loading, setLoading] = useState({
-    login: false,
-    register: false,
-  });
-  const [SigInUp, setSignInUp] = useState({
-    login: false,
-    register: false,
-    forgotPass: false,
-  });
-  const [state, setState] = useState({
-    email: "",
-    password: "",
-    user: "",
-  });
-
-  const [error, setError] = useState({
-    email: false,
-    password: false,
-    user: false,
-  });
-
-  useEffect(() => {
-    window.scroll({ top: 0, behavior: "smooth" });
-    if (signUp) {
-      if (
-        !error.email &&
-        !error.password &&
-        !error.user &&
-        state.email &&
-        state.password &&
-        state.user
-      ) {
-        setValidation(false);
-      } else {
-        setValidation(true);
-      }
-    } else {
-      if (!error.email && !error.password && state.email && state.password) {
-        setValidation(false);
-      } else {
-        setValidation(true);
-      }
-    }
-
-    //return () => dispatch(clearUser())
-  }, [error, state]);
-
   // useEffect(() => {
   //   if (window.localStorage.getItem("token")) {
   //     const token = window.localStorage.getItem("token")
@@ -143,165 +87,113 @@ function Landing() {
   //       })
   //     }
   //   }
+  //return () => dispatch(clearUser())
+
   // }, [registerUser, loginUser, role])
 
-  const handleSignUp = () => {
-    signUp ? setSignUp(false) : setSignUp(true);
-    setViewPassword(false);
-    setForgotPassword(false)
-    setState({
-      email: "",
-      password: "",
-      user: "",
-    });
-    setError({
-      email: false,
-      password: false,
-      user: false,
-    });
-    setSignInUp({
-      ...SigInUp,
-      login: false,
-      register: false,
-    });
-    setValidation(true);
-  };
-
-  const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
-    const name = e.target.name;
-
-    switch (name) {
-      case "user":
-        setState({
-          ...state,
-          [name]: value,
-        });
-        if (value.trim().length > 4) {
-          setError({
-            ...error,
-            [name]: false,
-          });
-        } else {
-          setError({
-            ...error,
-            [name]: true,
-          });
-        }
-        break;
-      case "password":
-        const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-        setState({
-          ...state,
-          [name]: value,
-        });
-        setSignInUp({
-          ...SigInUp,
-          login: false,
-          register: false,
-        });
-        if (signUp) {
-          if (regexPass.test(value)) {
-            setError({
-              ...error,
-              [name]: false,
-            });
-          } else {
-            setError({
-              ...error,
-              [name]: true,
-            });
-          }
-        }
-        break;
-
-      case "email":
-        setState({
-          ...state,
-          [name]: value.trim(),
-        });
-        setSignInUp({
-          ...SigInUp,
-          login: false,
-          register: false,
-        });
-
-        if (regexEmail.test(value.trim())) {
-          setError({
-            ...error,
-            [name]: false,
-          });
-        } else {
-          setError({
-            ...error,
-            [name]: true,
-          });
-        }
-        break;
-      default:
-        break;
-    }
+  const handleSignUp = (boolean: boolean) => {
+    signUp ? setSignUp(boolean) : setSignUp(boolean);
+    setForgotPassword(false);
   };
 
   const hanldeSubmit = (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    if (e.currentTarget.id === "login") {
-      // dispatch(loginUsers({
-      //   email: state.email,
-      //   password: state.password,
-      // }))
-      setLoading({
-        ...loading,
-        login: true,
-      });
-    } else if (e.currentTarget.id === "signUp") {
-      // dispatch(registerUsers({
-      //   email: state.email,
-      //   password: state.password,
-      //   userName: state.user.trim()
-      // }))
-      setLoading({
-        ...loading,
-        register: true,
-      });
-    }
+    // e.preventDefault();
+    // if (e.currentTarget.id === "login") {
+    //   // dispatch(loginUsers({
+    //   //   email: state.email,
+    //   //   password: state.password,
+    //   // }))
+    //   setLoading({
+    //     ...loading,
+    //     login: true,
+    //   });
+    // } else if (e.currentTarget.id === "signUp") {
+    //   // dispatch(registerUsers({
+    //   //   email: state.email,
+    //   //   password: state.password,
+    //   //   userName: state.user.trim()
+    //   // }))
+    //   setLoading({
+    //     ...loading,
+    //     register: true,
+    //   });
+    // }
   };
 
   return (
-    <div className="container d-flex justify-content-center" style={{ marginTop: "7rem", marginBottom: "3rem" }}>
+    <div
+      className="container d-flex justify-content-center"
+      style={{
+        marginTop: signUp ? "1rem" : "4rem",
+        marginBottom: signUp ? "0rem" : "3rem",
+      }}
+    >
       <div className="row shadow-lg rounded rounded-3 align-items-stretch contenido">
         <div className="col bg d-none d-lg-block rounded-start shadow-lg"></div>
 
         <div className="col bg-light p-5 rounded-end">
           <div className="text-end">
-            <img src="" alt="logo" width="50" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="50"
+              fill="currentColor"
+              className="bi bi-brightness-high-fill text-warning"
+              viewBox="0 0 16 16"
+            >
+              <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+            </svg>
           </div>
           <h2 className="fw-bold text-center pt-3 mb-5">Welcome</h2>
 
           {forgotPassword ? (
             <ValidationEmail signIn={setForgotPassword} register={setSignUp} />
-          ) : signUp 
-              ? ( <SignUp /> ) 
-              : ( <Login /> )
-          }
+          ) : signUp ? (
+            <SignUp />
+          ) : (
+            <Login />
+          )}
 
           <div className="mt-4">
-            {!signUp 
-              ? (
+            {forgotPassword ? (
+              <>
+                <span>
+                  You don't have an account?{" "}
+                  <button
+                    onClick={() => handleSignUp(true)}
+                    className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"
+                  >
+                    Sign up
+                  </button>
+                </span>
+                <br />
+                <span>
+                  You have an account?{" "}
+                  <button
+                    onClick={() => handleSignUp(false)}
+                    className="bg-transparent border-0 text-primary text-decoration-underline"
+                  >
+                    Login
+                  </button>
+                </span>
+              </>
+            ) : !signUp ? (
               <span>
                 You don't have an account?{" "}
-                <button onClick={handleSignUp} className="bg-transparent border-0 mb-3 text-primary text-decoration-underline">
+                <button
+                  onClick={() => handleSignUp(true)}
+                  className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"
+                >
                   Sign up
                 </button>
               </span>
-                ) 
-              : (
+            ) : (
               <span>
                 You have an account?{" "}
-                <button onClick={handleSignUp} className="bg-transparent border-0 text-primary text-decoration-underline">
+                <button
+                  onClick={() => handleSignUp(false)}
+                  className="bg-transparent border-0 text-primary text-decoration-underline"
+                >
                   Login
                 </button>
               </span>
@@ -311,7 +203,10 @@ function Landing() {
             {!signUp && !forgotPassword ? (
               <span>
                 Forgot your password?{" "}
-                <button className="bg-transparent border-0 text-primary text-decoration-underline" onClick={() => setForgotPassword(true)}>
+                <button
+                  className="bg-transparent border-0 text-primary text-decoration-underline"
+                  onClick={() => setForgotPassword(true)}
+                >
                   Recover password
                 </button>
               </span>
