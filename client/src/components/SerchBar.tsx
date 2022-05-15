@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
 
@@ -7,6 +7,9 @@ function SearchBar() {
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
 
+  const handleSubmit=()=>{
+    country.length>0?console.log(country):console.log("nada")
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg bg-black bg-opacity-75 py-3">
       <div className="container-fluid">
@@ -41,14 +44,14 @@ function SearchBar() {
             id="example-collapse-text"
           >
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 mx-4">
-              <li className="nav-item">
-                <Link
+              <li className="nav-item hvr-underline-reveal">
+                <NavLink
                   to={"/home"}
                   className="nav-link active fs-4 pt-0 text-light"
                   aria-current="page"
                 >
                   Home
-                </Link>
+                </NavLink>
               </li>
             </ul>
             <div className="d-flex">
@@ -59,7 +62,7 @@ function SearchBar() {
                 aria-label="Search"
                 onChange={(e) => setCountry(e.target.value)}
               />
-              <button className="btn btn-outline-info">Search</button>
+              <button className="btn btn-outline-info" onClick={handleSubmit}>Search</button>
             </div>
           </div>
         </Collapse>
