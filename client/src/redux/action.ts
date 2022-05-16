@@ -5,7 +5,7 @@ export const GET_FAVORITES:string = "getFavorites",
   ADD_FAVORITES:string = "addFavorites",
   DELETE_FAVORITES:string = "deleteFavorites"
 
-const URL = "localhost:3001";
+const URL = "http://localhost:3001";
 
 export const getFavorites = (name: string) => {
   return async function (dispatch: Dispatch) {

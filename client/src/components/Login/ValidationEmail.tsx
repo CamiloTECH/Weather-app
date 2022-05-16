@@ -7,9 +7,7 @@ import {
   Dispatch,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-//import { forgottenPassword, clearPassword } from "../redux/actions/changeOfPassword"
 import Swal from "sweetalert2";
-import { JsxEmit } from "typescript";
 
 function ValidationEmail({
   signIn,
@@ -18,7 +16,6 @@ function ValidationEmail({
   signIn: React.Dispatch<SetStateAction<boolean>>;
   register: React.Dispatch<SetStateAction<boolean>>;
 }): JSX.Element {
-  //const { changePasswort } = useSelector(store => store)
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
@@ -59,17 +56,6 @@ function ValidationEmail({
   //   }
   // }, [changePasswort])
 
-  const handleSignIn = () => {
-    setErrorSendEmail(false);
-    signIn(false);
-    register(false);
-  };
-
-  const handleSignUp = () => {
-    setErrorSendEmail(false);
-    signIn(false);
-    register(true);
-  };
 
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =

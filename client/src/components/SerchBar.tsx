@@ -1,15 +1,22 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { getCity } from "../redux/action";
 
 function SearchBar() {
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const dispatch=useDispatch()
+  
 
   const handleSubmit=()=>{
-    country.length>0?console.log(country):console.log("nada")
+    if(country.length>0){
+      dispatch(getCity(country))
+    }
   }
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg bg-black bg-opacity-75 py-3">
       <div className="container-fluid">
