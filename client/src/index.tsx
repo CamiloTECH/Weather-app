@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css"
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const container = document.getElementById("root");
 

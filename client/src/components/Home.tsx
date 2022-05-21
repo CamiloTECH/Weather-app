@@ -11,12 +11,12 @@ interface State {
 function Home() {
   const { citys } = useSelector((state: State) => state);
   
-  return <div>
+  return <>
     {citys.length>0 
       ? <Cards citys={citys}/>
       :null
     }
-  </div>;
+  </>;
 }
 
 export default Home;

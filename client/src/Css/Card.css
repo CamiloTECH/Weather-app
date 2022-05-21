@@ -1,0 +1,15 @@
+.logos{
+  color:#0dcaf0;
+  width: 2rem;
+  transition: color .5s;
+}
+
+.imagen{
+  filter: drop-shadow(15px 10px 10px black);
+  display: flex;
+}
+
+.logos:hover{
+  color: #ff4136;
+  transition: color .5s;
+}

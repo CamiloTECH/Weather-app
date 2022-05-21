@@ -14,6 +14,8 @@ function SearchBar() {
   const handleSubmit=()=>{
     if(country.length>0){
       dispatch(getCity(country))
+      setCountry("")
+
     }
   }
   
@@ -33,6 +35,7 @@ function SearchBar() {
           </svg>
           <h2 className="navbar-brand text-white fs-4">Weather app</h2>
         </div>
+        
         <Button
           onClick={() => setExpanded(!expanded)}
           className="navbar-toggler bg-info"
@@ -67,6 +70,7 @@ function SearchBar() {
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
+                value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
               <button className="btn btn-outline-info" onClick={handleSubmit}>Search</button>

@@ -36,7 +36,7 @@ function rootReducer(state: State = inicialState, action:actionTypes) {
     case GET_CITY:
       return {
         ...state,
-        citys: [...state.citys,action.payload]
+        citys: [action.payload,...state.citys]
       }
     case GET_CITY_DETAILS:
       return {

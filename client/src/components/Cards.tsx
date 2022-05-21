@@ -3,7 +3,7 @@ import Card from "./Card";
 function Cards({ citys }: { citys: [] }) {
 
   return (
-    <div className="container d-flex gap-4 mt-5">
+    <div className="container d-flex flex-wrap justify-content-center align-items-center gap-5 my-5">
       {citys.map((city:any)=>(
         <Card 
         key={city.id}

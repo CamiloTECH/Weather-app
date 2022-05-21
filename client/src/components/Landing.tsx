@@ -9,7 +9,6 @@ import SignUp from "./Login/SignUp";
 import Login from "./Login/Login";
 
 function Landing() {
-  //const { registerUser, loginUser, role } = useSelector(store => store)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [forgotPassword, setForgotPassword] = useState(false);
