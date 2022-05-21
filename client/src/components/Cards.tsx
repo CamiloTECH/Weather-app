@@ -14,6 +14,7 @@ function Cards({ citys }: { citys: [] }) {
         country={city.sys.country}
         temperature={city.main.temp}
         coord={city.coord}
+        favorite={city.fav}
         />
         ))}
     </div>

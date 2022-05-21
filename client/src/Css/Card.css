@@ -4,8 +4,13 @@
   transition: color .5s;
 }
 
+.fav{
+  color:#ff4136;
+  width: 2rem;
+}
+
 .imagen{
-  filter: drop-shadow(15px 10px 10px black);
+  filter: drop-shadow(0px 0px 15px black);
   display: flex;
 }
 

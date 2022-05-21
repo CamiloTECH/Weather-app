@@ -29,6 +29,7 @@ export const getFavCitys = async (req: Request, res: Response) => {
             process.env.API_KEY
           }&units=metric`
         );
+        response.data.fav=true
         userCitys.push(response.data);
       }
     }
@@ -46,6 +47,7 @@ export const getCity = async (req: Request, res: Response) => {
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}&units=metric`
     );
+    response.data.fav=false
     res.json(response.data);
   } catch (error) {
     res.json({});

@@ -15,7 +15,6 @@ function SearchBar() {
     if(country.length>0){
       dispatch(getCity(country))
       setCountry("")
-
     }
   }
   

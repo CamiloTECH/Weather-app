@@ -3,7 +3,9 @@ export const GET_FAVORITES:string = "getFavorites",
   GET_CITY:string = "getCity",
   GET_CITY_DETAILS:string = "getCityDetails",
   ADD_FAVORITES:string = "addFavorites",
-  DELETE_FAVORITES:string = "deleteFavorites"
+  DELETE_FAVORITES:string = "deleteFavorites",
+  DELETE_CITY:string="deleteCity",
+  CHANGE_STATUS_FAV:string="changeStatusFav"
 
 const URL = "http://localhost:3001";
 
@@ -48,34 +50,44 @@ interface Result {
   status:Boolean
 }
 export const addFavorites = (info: Info) => {
-  return async (dispatch: Dispatch) => {
-    const response = await fetch(`${URL}/saveFavorites`, {
-      method: "POST",
-      body: JSON.stringify(info),
-      headers: { "Content-Type": "application/json" },
-    });
-    const result:Result = await response.json();
-    return dispatch({
-      type:ADD_FAVORITES,
-      payload:result
-    })
-  };
+  // return async (dispatch: Dispatch) => {
+  //   const response = await fetch(`${URL}/saveFavorites`, {
+  //     method: "POST",
+  //     body: JSON.stringify(info),
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  //   const result:Result = await response.json();
+  //   dispatch({ type:ADD_FAVORITES, payload:result })
+  //   dispatch({ type:CHANGE_STATUS_FAV, payload:info.ciudad})
+  return changeStatusFav(info.ciudad)
+  //};
 };
 
 export const deleteFavorites = (info: Info) => {
-  return async (dispatch: Dispatch) => {
-    const response = await fetch(`${URL}/deleteFavorites`, {
-      method: "DELETE",
-      body: JSON.stringify(info),
-      headers: { "Content-Type": "application/json" },
-    });
-    const result:Result = await response.json();
-    return dispatch({
-      type:DELETE_FAVORITES,
-      payload:result
-    })
+  // return async (dispatch: Dispatch) => {
+  //   const response = await fetch(`${URL}/deleteFavorites`, {
+  //     method: "DELETE",
+  //     body: JSON.stringify(info),
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  //   const result:Result = await response.json();
+  //   dispatch({ type:DELETE_FAVORITES, payload:result })
+    return changeStatusFav(info.ciudad)
+  //}
   };
-};
 
+const changeStatusFav=(ciudad:string)=>{
+  return {
+    type:CHANGE_STATUS_FAV,
+    payload:ciudad
+  }
+}
+
+export const deleteCity=(name:String)=>{
+  return {
+    type:DELETE_CITY,
+    payload:name
+  }
+}
 
 //Terminar de hacer todos lo actions register y loguin

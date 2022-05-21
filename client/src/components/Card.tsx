@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "../Css/Card.css";
+import { getCityDetails, deleteCity, addFavorites, deleteFavorites } from "../redux/action";
 
 function Card({
   name,
@@ -9,22 +12,55 @@ function Card({
   country,
   temperature,
   coord,
+  favorite
 }: {
-  name: String;
-  logo: String;
-  description: String;
-  weather: String;
-  country: String;
+  name: string;
+  logo: string;
+  description: string;
+  weather: string;
+  country: string;
   temperature: number;
   coord: { lon: number; lat: number };
+  favorite:boolean
 }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [fav, setFav] = useState(false);
 
+  useEffect(()=>{
+    setFav(favorite)
+  },[])
+
+  const details = () => {
+    dispatch(getCityDetails(coord.lat, coord.lon));
+    navigate(`/home/details/${name}`);
+  };
+
+  const addFav = () => {
+    dispatch(addFavorites({ id: 2, ciudad: name }));
+    setFav(true);
+  };
+
+  const deleteFav = () => {
+    dispatch(deleteFavorites({ id: 2, ciudad: name }));
+    setFav(false);
+  };
+
+  const deleteCurrentCity=()=>{
+    dispatch(deleteCity(name))
+    if(fav){
+      //dispatch(deleteFavorites({ id: 2, ciudad: name }))
+    }
+  }
 
   return (
     <div className="card p-2 shadow-lg bg-light" style={{ width: "20rem" }}>
       <div className="p-0 m-0 text-end">
-        <button className="p-0 m-0 bg-transparent border-0" title="Delete">
+        <button
+          className="p-0 m-0 bg-transparent border-0"
+          title="Delete"
+          onClick={deleteCurrentCity}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="36"
@@ -50,9 +86,9 @@ function Card({
         <h5 className="card-title text-center fs-4 fw-bold mb-3">
           {name} - {country}
         </h5>
-        <p className="card-text px-3 py-2">
+        <p className="card-text px-3 py-2 text-capitalize">
           <strong>Status: </strong>
-          {description.toUpperCase()}
+          {description}
         </p>
       </div>
 
@@ -68,17 +104,21 @@ function Card({
       </ul>
 
       <div className="card-body d-flex justify-content-between">
-        <button className="btn btn-info fw-bold">See more details</button>
+        <button className="btn btn-info fw-bold" onClick={details}>
+          See more details
+        </button>
+
         <button
           className="p-0 m-0 bg-transparent border-0"
-          title="Add to favorite"
+          title={fav?"Delete to favorite":"Add to favorite"}
+          onClick={fav?deleteFav:addFav}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="36"
             height="36"
             fill="currentColor"
-            className="bi bi-heart-fill logos"
+            className={`bi bi-heart-fill animate__animated ${fav?"fav animate__heartBeat":"logos animate__pulse"} `}
             viewBox="0 0 16 16"
           >
             <path
@@ -87,6 +127,7 @@ function Card({
             />
           </svg>
         </button>
+
       </div>
     </div>
   );

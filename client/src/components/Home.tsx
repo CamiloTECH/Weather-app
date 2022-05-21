@@ -10,9 +10,8 @@ interface State {
 }
 function Home() {
   const { citys } = useSelector((state: State) => state);
-  
   return <>
-    {citys.length>0 
+    {citys.length>0
       ? <Cards citys={citys}/>
       :null
     }
