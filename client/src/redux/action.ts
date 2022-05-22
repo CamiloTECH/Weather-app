@@ -5,7 +5,8 @@ export const GET_FAVORITES:string = "getFavorites",
   ADD_FAVORITES:string = "addFavorites",
   DELETE_FAVORITES:string = "deleteFavorites",
   DELETE_CITY:string="deleteCity",
-  CHANGE_STATUS_FAV:string="changeStatusFav"
+  CHANGE_STATUS_FAV:string="changeStatusFav",
+  CHANGE_GENERAL_STATUS:string="changeGeneralStatus"
 
 const URL = "http://localhost:3001";
 
@@ -22,12 +23,11 @@ export const getFavorites = (name: string) => {
 
 export const getCity = (name: string) => {
   return async (dispatch: Dispatch) => {
+    dispatch({type:CHANGE_GENERAL_STATUS,payload:true})
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`);
     const result: {} = await response.json();
-    return dispatch({
-      type: GET_CITY,
-      payload: result,
-    });
+    dispatch({type:CHANGE_GENERAL_STATUS,payload:false})
+    dispatch({type: GET_CITY,payload: result,});
   };
 };
 
@@ -89,5 +89,6 @@ export const deleteCity=(name:String)=>{
     payload:name
   }
 }
+
 
 //Terminar de hacer todos lo actions register y loguin

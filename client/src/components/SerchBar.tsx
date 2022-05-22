@@ -1,23 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCity } from "../redux/action";
 
+interface State {
+  citys: [];
+  cityDetail: {};
+  user: {};
+  statusFavorites: {};
+  statusLogin: {};
+  generalStatus: boolean;
+}
 function SearchBar() {
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const dispatch=useDispatch()
-  
 
-  const handleSubmit=()=>{
-    if(country.length>0){
-      dispatch(getCity(country))
-      setCountry("")
+  const dispatch = useDispatch();
+  const { generalStatus } = useSelector((state: State) => state);
+
+  const handleSubmit = () => {
+    if (country.length > 0) {
+      dispatch(getCity(country));
+      setCountry("");
     }
-  }
-  
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg bg-black bg-opacity-75 py-3">
       <div className="container-fluid">
@@ -34,7 +43,7 @@ function SearchBar() {
           </svg>
           <h2 className="navbar-brand text-white fs-4">Weather app</h2>
         </div>
-        
+
         <Button
           onClick={() => setExpanded(!expanded)}
           className="navbar-toggler bg-info"
@@ -72,7 +81,16 @@ function SearchBar() {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
-              <button className="btn btn-outline-info" onClick={handleSubmit}>Search</button>
+              <button className="btn btn-outline-info" onClick={handleSubmit}>
+                {generalStatus ? (
+                  <span
+                    className="spinner-border text-warning p-0 mx-3"
+                    style={{"height":"20px", "width":"20px"}}
+                    role="status"
+                  ></span>
+                ) : "Search"
+                }
+              </button>
             </div>
           </div>
         </Collapse>

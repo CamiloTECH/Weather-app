@@ -7,9 +7,11 @@ interface State {
   user: {};
   statusFavorites: {};
   statusLogin: {};
+  generalStatus: boolean,
 }
 function Home() {
   const { citys } = useSelector((state: State) => state);
+  
   return <>
     {citys.length>0
       ? <Cards citys={citys}/>
