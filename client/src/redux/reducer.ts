@@ -8,6 +8,7 @@ import {
   CHANGE_STATUS_FAV,
   LOADING,
   GENERAL_ERROR,
+  CLEAR_CITY_DETAIL,
 } from "./action";
 
 interface State {
@@ -16,7 +17,7 @@ interface State {
   user: {};
   statusFavorites: {};
   statusLogin: {};
-  loading: boolean;
+  loading: {status:boolean, component:string};
   generalError: boolean;
 }
 interface actionTypes {
@@ -30,7 +31,7 @@ const inicialState: State = {
   user: {},
   statusFavorites: {},
   statusLogin: {},
-  loading: false,
+  loading:  {status:false, component:""},
   generalError: false,
 };
 
@@ -95,6 +96,12 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       return {
         ...state,
         generalError: action.payload,
+      };
+
+    case CLEAR_CITY_DETAIL:
+      return {
+        ...state,
+        cityDetail: action.payload,
       };
     default:
       return state;

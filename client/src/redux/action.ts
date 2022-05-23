@@ -7,7 +7,8 @@ export const GET_FAVORITES: string = "getFavorites",
   DELETE_CITY: string = "deleteCity",
   CHANGE_STATUS_FAV: string = "changeStatusFav",
   LOADING: string = "loading",
-  GENERAL_ERROR: string = "generalError";
+  GENERAL_ERROR: string = "generalError",
+  CLEAR_CITY_DETAIL: string = "clearCityDetail";
 
 const URL = "http://localhost:3001";
 
@@ -24,10 +25,13 @@ export const getFavorites = (name: string) => {
 
 export const getCity = (name: string) => {
   return async (dispatch: Dispatch) => {
-    dispatch({ type: LOADING, payload: true });
+    dispatch({ type: LOADING, payload: { status: true, component: "search" } });
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`);
     const result: any = await response.json();
-    dispatch({ type: LOADING, payload: false });
+    dispatch({
+      type: LOADING,
+      payload: { status: false, component: "search" },
+    });
     return result.id
       ? dispatch({ type: GET_CITY, payload: result })
       : dispatch(changeGeneralError(true));
@@ -36,14 +40,14 @@ export const getCity = (name: string) => {
 
 export const getCityDetails = (lat: string, lon: string) => {
   return async (dispatch: Dispatch) => {
-    dispatch({ type: LOADING, payload: true });
+    dispatch({ type: LOADING, payload: { status: true, component: "detail" } });
     const response = await fetch(`${URL}/details?lat=${lat}&lon=${lon}`);
     const result: any = await response.json();
-    dispatch({ type: LOADING, payload: false });
 
-    return result.lat
-      ? dispatch({ type: GET_CITY_DETAILS, payload: result,})
+    result.lat
+      ? dispatch({ type: GET_CITY_DETAILS, payload: result })
       : dispatch(changeGeneralError(true));
+    dispatch({ type: LOADING, payload: { status: false, component: "detail" }});
   };
 };
 
@@ -99,6 +103,13 @@ const changeStatusFav = (ciudad: string) => {
   return {
     type: CHANGE_STATUS_FAV,
     payload: ciudad,
+  };
+};
+
+export const clearCityDetail = () => {
+  return {
+    type: CLEAR_CITY_DETAIL,
+    payload: {},
   };
 };
 

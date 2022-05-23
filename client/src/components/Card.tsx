@@ -98,7 +98,7 @@ function Card({
       </ul>
 
       <div className="card-body d-flex justify-content-between">
-        <Link to={`/home/details?lat=${coord.lat}&lon=${coord.lon}`} className="btn btn-info fw-bold">
+        <Link to={`/home/details/${name}?lat=${coord.lat}&lon=${coord.lon}`} className="btn btn-info fw-bold">
           See more details
         </Link>
 

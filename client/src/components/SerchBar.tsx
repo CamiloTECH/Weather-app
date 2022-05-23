@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,21 +7,26 @@ import { getCity } from "../redux/action";
 
 interface State {
   citys: [];
-  cityDetail: any;
+  cityDetail: {};
   user: {};
   statusFavorites: {};
   statusLogin: {};
-  loading: boolean;
+  loading: {status:boolean, component:string};
+  generalError: boolean;
 }
+
 function SearchBar() {
+  const dispatch = useDispatch();
+  const navigate=useNavigate()
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
-
-  const dispatch = useDispatch();
-  const { loading, cityDetail } = useSelector((state: State) => state);
+  const { loading } = useSelector((state: State) => state);
 
   const handleSubmit = () => {
-    if (country.trim().length > 0) dispatch(getCity(country.trim()))
+    if (country.trim().length > 0){
+      if(window.location.pathname!=="/home") navigate("/home")
+      dispatch(getCity(country.trim()))
+    }
     setCountry("");
   };
 
@@ -79,8 +84,8 @@ function SearchBar() {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
-              <button className="btn btn-outline-info" disabled={loading && !cityDetail.hasOwnProperty("lat")} onClick={handleSubmit}>
-                {!cityDetail.hasOwnProperty("lat") && loading ? (
+              <button className="btn btn-outline-info" disabled={loading.status && loading.component==="search"} onClick={handleSubmit}>
+                {loading.status && loading.component==="search" ? (
                   <span
                     className="spinner-border text-warning p-0 mx-3"
                     style={{"height":"20px", "width":"20px"}}

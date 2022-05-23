@@ -16,7 +16,7 @@ function App() {
       />
 
       <Route
-        path="/home/details"
+        path="/home/details/:name"
         element={[<SearchBar key={"SearchBar"} />, <Details key={"details"} />]}
       />
       
