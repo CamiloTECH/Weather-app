@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../Css/Card.css";
-import { getCityDetails, deleteCity, addFavorites, deleteFavorites } from "../redux/action";
+import { deleteCity, addFavorites, deleteFavorites } from "../redux/action";
 
 function Card({
   name,
@@ -24,17 +24,11 @@ function Card({
   favorite:boolean
 }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [fav, setFav] = useState(false);
 
   useEffect(()=>{
     setFav(favorite)
   },[])
-
-  const details = () => {
-    dispatch(getCityDetails(coord.lat, coord.lon));
-    navigate(`/home/details/${name}`);
-  };
 
   const addFav = () => {
     dispatch(addFavorites({ id: 2, ciudad: name }));
@@ -104,9 +98,9 @@ function Card({
       </ul>
 
       <div className="card-body d-flex justify-content-between">
-        <button className="btn btn-info fw-bold" onClick={details}>
+        <Link to={`/home/details?lat=${coord.lat}&lon=${coord.lon}`} className="btn btn-info fw-bold">
           See more details
-        </button>
+        </Link>
 
         <button
           className="p-0 m-0 bg-transparent border-0"

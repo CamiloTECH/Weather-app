@@ -1,12 +1,13 @@
 import { Dispatch } from "redux";
-export const GET_FAVORITES:string = "getFavorites",
-  GET_CITY:string = "getCity",
-  GET_CITY_DETAILS:string = "getCityDetails",
-  ADD_FAVORITES:string = "addFavorites",
-  DELETE_FAVORITES:string = "deleteFavorites",
-  DELETE_CITY:string="deleteCity",
-  CHANGE_STATUS_FAV:string="changeStatusFav",
-  CHANGE_GENERAL_STATUS:string="changeGeneralStatus"
+export const GET_FAVORITES: string = "getFavorites",
+  GET_CITY: string = "getCity",
+  GET_CITY_DETAILS: string = "getCityDetails",
+  ADD_FAVORITES: string = "addFavorites",
+  DELETE_FAVORITES: string = "deleteFavorites",
+  DELETE_CITY: string = "deleteCity",
+  CHANGE_STATUS_FAV: string = "changeStatusFav",
+  LOADING: string = "loading",
+  GENERAL_ERROR: string = "generalError";
 
 const URL = "http://localhost:3001";
 
@@ -23,22 +24,26 @@ export const getFavorites = (name: string) => {
 
 export const getCity = (name: string) => {
   return async (dispatch: Dispatch) => {
-    dispatch({type:CHANGE_GENERAL_STATUS,payload:true})
+    dispatch({ type: LOADING, payload: true });
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`);
-    const result: {} = await response.json();
-    dispatch({type:CHANGE_GENERAL_STATUS,payload:false})
-    dispatch({type: GET_CITY,payload: result,});
+    const result: any = await response.json();
+    dispatch({ type: LOADING, payload: false });
+    return result.id
+      ? dispatch({ type: GET_CITY, payload: result })
+      : dispatch(changeGeneralError(true));
   };
 };
 
-export const getCityDetails = (lat: number, lon: number) => {
+export const getCityDetails = (lat: string, lon: string) => {
   return async (dispatch: Dispatch) => {
+    dispatch({ type: LOADING, payload: true });
     const response = await fetch(`${URL}/details?lat=${lat}&lon=${lon}`);
-    const result: {} = await response.json();
-    return dispatch({
-      type: GET_CITY_DETAILS,
-      payload: result,
-    });
+    const result: any = await response.json();
+    dispatch({ type: LOADING, payload: false });
+
+    return result.lat
+      ? dispatch({ type: GET_CITY_DETAILS, payload: result,})
+      : dispatch(changeGeneralError(true));
   };
 };
 
@@ -47,7 +52,7 @@ interface Info {
   ciudad: string;
 }
 interface Result {
-  status:Boolean
+  status: Boolean;
 }
 export const addFavorites = (info: Info) => {
   // return async (dispatch: Dispatch) => {
@@ -59,7 +64,7 @@ export const addFavorites = (info: Info) => {
   //   const result:Result = await response.json();
   //   dispatch({ type:ADD_FAVORITES, payload:result })
   //   dispatch({ type:CHANGE_STATUS_FAV, payload:info.ciudad})
-  return changeStatusFav(info.ciudad)
+  return changeStatusFav(info.ciudad);
   //};
 };
 
@@ -72,23 +77,29 @@ export const deleteFavorites = (info: Info) => {
   //   });
   //   const result:Result = await response.json();
   //   dispatch({ type:DELETE_FAVORITES, payload:result })
-    return changeStatusFav(info.ciudad)
+  return changeStatusFav(info.ciudad);
   //}
+};
+
+export const changeGeneralError = (status: boolean) => {
+  return {
+    type: GENERAL_ERROR,
+    payload: status,
   };
+};
 
-const changeStatusFav=(ciudad:string)=>{
+export const deleteCity = (name: String) => {
   return {
-    type:CHANGE_STATUS_FAV,
-    payload:ciudad
-  }
-}
+    type: DELETE_CITY,
+    payload: name,
+  };
+};
 
-export const deleteCity=(name:String)=>{
+const changeStatusFav = (ciudad: string) => {
   return {
-    type:DELETE_CITY,
-    payload:name
-  }
-}
-
+    type: CHANGE_STATUS_FAV,
+    payload: ciudad,
+  };
+};
 
 //Terminar de hacer todos lo actions register y loguin

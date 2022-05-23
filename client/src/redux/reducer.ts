@@ -6,7 +6,8 @@ import {
   DELETE_FAVORITES,
   DELETE_CITY,
   CHANGE_STATUS_FAV,
-  CHANGE_GENERAL_STATUS
+  LOADING,
+  GENERAL_ERROR,
 } from "./action";
 
 interface State {
@@ -15,7 +16,8 @@ interface State {
   user: {};
   statusFavorites: {};
   statusLogin: {};
-  generalStatus: boolean;
+  loading: boolean;
+  generalError: boolean;
 }
 interface actionTypes {
   type: string;
@@ -28,7 +30,8 @@ const inicialState: State = {
   user: {},
   statusFavorites: {},
   statusLogin: {},
-  generalStatus: false,
+  loading: false,
+  generalError: false,
 };
 
 function rootReducer(state: State = inicialState, action: actionTypes) {
@@ -48,7 +51,6 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         : {
             ...state,
             citys: [action.payload, ...state.citys],
-            generalStatus: false,
           };
 
     case GET_CITY_DETAILS:
@@ -82,12 +84,18 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         citys: [...newCitysFav],
       };
-    
-    case CHANGE_GENERAL_STATUS:
-      return{
+
+    case LOADING:
+      return {
         ...state,
-        generalStatus:action.payload
-      }
+        loading: action.payload,
+      };
+
+    case GENERAL_ERROR:
+      return {
+        ...state,
+        generalError: action.payload,
+      };
     default:
       return state;
   }

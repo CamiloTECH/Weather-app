@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
@@ -7,24 +7,22 @@ import { getCity } from "../redux/action";
 
 interface State {
   citys: [];
-  cityDetail: {};
+  cityDetail: any;
   user: {};
   statusFavorites: {};
   statusLogin: {};
-  generalStatus: boolean;
+  loading: boolean;
 }
 function SearchBar() {
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
 
   const dispatch = useDispatch();
-  const { generalStatus } = useSelector((state: State) => state);
+  const { loading, cityDetail } = useSelector((state: State) => state);
 
   const handleSubmit = () => {
-    if (country.length > 0) {
-      dispatch(getCity(country));
-      setCountry("");
-    }
+    if (country.trim().length > 0) dispatch(getCity(country.trim()))
+    setCountry("");
   };
 
   return (
@@ -81,8 +79,8 @@ function SearchBar() {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
               />
-              <button className="btn btn-outline-info" onClick={handleSubmit}>
-                {generalStatus ? (
+              <button className="btn btn-outline-info" disabled={loading && !cityDetail.hasOwnProperty("lat")} onClick={handleSubmit}>
+                {!cityDetail.hasOwnProperty("lat") && loading ? (
                   <span
                     className="spinner-border text-warning p-0 mx-3"
                     style={{"height":"20px", "width":"20px"}}
