@@ -50,9 +50,19 @@ function Details() {
     }
   }, [generalError]);
 
+  const unixTimeNormalDate = (unix: number):string => {
+    const milliseconds = unix* 1000;
+    const dateObject = new Date(milliseconds);
+    const weekday = dateObject.toLocaleString("en-US",{weekday:"short"});
+    const dayNumber = dateObject.toLocaleString("en-US",{day:"numeric"});
+    const month = dateObject.toLocaleString("en-US",{month:"short"});
+    const hourt = dateObject.toLocaleString("en-US",{hour12:true,hour:"numeric",minute:"numeric"});
+
+    return `${weekday}.,${dayNumber} of ${month} ${hourt}`
+  };
   console.log(cityDetail);
   return (
-    <div>
+    <>
       {loading.status && loading.component === "detail" ? (
         <div className="text-center">
           <span
@@ -66,34 +76,60 @@ function Details() {
             role="status"
           ></span>
         </div>
-      ) : cityDetail.lat && (
-        <div className="container">
-          <div className="row p-2 bg-secondary">
-            <div className="col-12">
-              <h1 className="">{name}</h1>
-              <h1 className="">{cityDetail.current.dt}</h1>
-            </div>
+      ) : (
+        cityDetail.lat && (
+          <div className="container" style={{ marginTop: "4rem" }}>
+            <div className="row">
+              <div
+                className="col p-3 bg-black bg-opacity-75 shadow-lg"
+                style={{ borderRadius: "25px" }}
+              >
+                <div className="col-12 text-white">
+                  <h1 className="">{name}</h1>
+                  <h1 className="">{unixTimeNormalDate(cityDetail.current.dt)}</h1>
+                </div>
 
-            <div className="col-12">
-              <div className="d-flex align-items-center">
-                <img
-                  src={`http://openweathermap.org/img/wn/${cityDetail.current.weather[0].icon}@2x.png`}
-                  className="card-img-top w-25 imagen"
-                  alt="Logo"
-                />
-                <h1>{cityDetail.current.temp}</h1>
+                <div className="col-12 row text-white-50">
+                  <div className="col d-flex align-items-center p-0">
+                    <img
+                      src={`http://openweathermap.org/img/wn/${cityDetail.current.weather[0].icon}@2x.png`}
+                      className="card-img-top imagen"
+                      style={{ filter:"drop-shadow(0px 0px 20px #07FFFF)"}}
+                      alt="Logo"
+                    />
+                    <h1 style={{ fontSize: "4rem" }}>
+                      {cityDetail.current.temp}°
+                    </h1>
+                  </div>
+
+                  <div className="col-5 p-0 text-end d-flex flex-column justify-content-center">
+                    <p className="fs-4 text-capitalize fw-bold p-0 m-0">
+                      {cityDetail.current.weather[0].description}
+                    </p>
+                    <p className="fs-4 fw-bold p-0 m-0">
+                      {cityDetail.current.dew_point}° /{" "}
+                      {cityDetail.current.feels_like}°
+                    </p>
+                    <p className="fs-4 fw-bold p-0 m-0">
+                      Humidity {cityDetail.current.humidity}%
+                    </p>
+                  </div>
+                </div>
+                <hr  className="rounded rounded-3 bg-info p-1"/>
+
+                <div className="col-12">
+
+                </div>
               </div>
-              
-              <div></div>
+
+              <div className="col">
+                <h1>hola</h1>
+              </div>
             </div>
-
-            <div className="col-12"></div>
           </div>
-
-          <div className="row"></div>
-        </div>
+        )
       )}
-    </div>
+    </>
   );
 }
 

@@ -31,7 +31,7 @@ function SearchBar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg bg-black bg-opacity-75 py-3">
+    <nav className="navbar navbar-expand-lg navbar-light shadow-lg bg-black bg-opacity-75 py-3">
       <div className="container-fluid">
         <div className="d-flex gap-2">
           <svg
