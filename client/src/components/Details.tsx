@@ -84,32 +84,34 @@ function Details() {
       ) : (
         cityDetail.lat && (
           <div className="container my-5 py-2" >
-            <div className="row">
+            <div className="row justify-content-center">
               <div
-                className="col-6 p-3 bg-black bg-opacity-75 shadow-lg"
+                className="col-10 col-lg-6 p-3 bg-black bg-opacity-75 shadow-lg"
                 style={{ borderRadius: "25px" }}
               >
-                <div className="col-12 text-white">
+                <div className="text-white">
                   <h1 className="">{name}</h1>
                   <h1 className="fs-2">
                     {unixTimeNormalDate(cityDetail.current.dt, false)}
                   </h1>
                 </div>
+
                 <hr className="text-white" />
-                <div className="col-12 row" style={{ color: "#D0D3D4" }}>
-                  <div className="col d-flex align-items-center p-0">
+                
+                <div className="row px-3" style={{ color: "#D0D3D4" }}>
+                  <div className="col-md-6 col-lg-12 col-xl-6 d-flex flex-column flex-sm-row justify-content-center justify-content-xl-start align-items-center p-0 m-0">
                     <img
                       src={`http://openweathermap.org/img/wn/${cityDetail.current.weather[0].icon}@2x.png`}
-                      className="card-img-top"
+                      className="col col-5 col-xl-6"
                       style={{ filter: "drop-shadow(0px 0px 25px #0dcaf0)" }}
                       alt="Logo"
                     />
-                    <h1 style={{ fontSize: "4rem" }}>
+                    <h1 className=" mb-4 m-sm-0 temp">
                       {cityDetail.current.temp}°
                     </h1>
                   </div>
 
-                  <div className="col-5 p-0 text-end d-flex flex-column justify-content-center">
+                  <div className="col-md-6 col-lg-12 col-xl-6 p-0 text-center text-xl-end text-md-end text-lg-center d-flex flex-column justify-content-center">
                     <p className="fs-3 text-capitalize fw-bold p-0 m-0">
                       {cityDetail.current.weather[0].description}
                     </p>
@@ -150,7 +152,7 @@ function Details() {
                 </div>
               </div>
 
-              <div className="col">
+              <div className="col-12 col-lg-6">
                 <h1>hola</h1>
               </div>
             </div>

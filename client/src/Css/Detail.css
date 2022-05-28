@@ -2,7 +2,9 @@
   background-color: rgba(255, 255, 255, 0.404);
   border-radius: 10px;
 }
-
+.temp{
+  font-size: 4rem;
+}
 .scroll::-webkit-scrollbar-thumb{
   background-color: white;
   border-radius: 10px;
@@ -10,4 +12,10 @@
 
 .scroll::-webkit-scrollbar-thumb:hover{
   background-color: #0dcaf0
+}
+
+@media (max-width:575px) {
+  .temp{
+    font-size: 3rem;
+  } 
 }
