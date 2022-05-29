@@ -75,7 +75,6 @@ function Details() {
     return `${dayNumber} - ${weekday}`;
   };
 
-  console.log(cityDetail);
   return (
     <>
       {loading.status && loading.component === "detail" ? (
@@ -126,8 +125,7 @@ function Details() {
                       {cityDetail.current.weather[0].description}
                     </p>
                     <p className="fs-3 fw-bold p-0 m-0">
-                      {cityDetail.current.dew_point}° /{" "}
-                      {cityDetail.current.feels_like}°
+                      {cityDetail.current.feels_like}° / {cityDetail.current.dew_point}° 
                     </p>
                     <p className="fs-3 fw-bold p-0 m-0">
                       Humidity {cityDetail.current.humidity}%
@@ -169,10 +167,9 @@ function Details() {
                 style={{ borderRadius: "25px" }}
               >
                 {cityDetail.daily.slice(1).map((day: any, index: number) => (
-                  <>
+                  <div key={day.dt}>
                     {index !== 0 ? <hr className="text-white m-0 mb-2" /> : ""}
                     <div
-                      key={day.dt}
                       className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row"
                     >
                       <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
@@ -197,7 +194,7 @@ function Details() {
                         </div>
                       </div>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
             </div>
