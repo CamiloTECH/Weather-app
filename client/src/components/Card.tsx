@@ -71,7 +71,7 @@ function Card({
       <div className="w-100 d-flex justify-content-center">
         <img
           src={`http://openweathermap.org/img/wn/${logo}@2x.png`}
-          className="card-img-top w-50 imagen"
+          className="card-img-top w-50 img"
           alt="Logo"
         />
       </div>

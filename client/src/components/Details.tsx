@@ -6,7 +6,7 @@ import {
   getCityDetails,
   clearCityDetail,
 } from "../redux/action";
-import "../Css/Detail.css"
+import "../Css/Detail.css";
 import Swal from "sweetalert2";
 
 interface State {
@@ -65,6 +65,16 @@ function Details() {
 
     return short ? hourt : `${weekday}.,${dayNumber} of ${month} ${hourt}`;
   };
+
+  const weekDay = (unix: number): string => {
+    const milliseconds = unix * 1000;
+    const dateObject = new Date(milliseconds);
+    const weekday = dateObject.toLocaleString("en-US", { weekday: "long" });
+    const dayNumber = dateObject.toLocaleString("en-US", { day: "numeric" });
+
+    return `${dayNumber} - ${weekday}`;
+  };
+
   console.log(cityDetail);
   return (
     <>
@@ -83,8 +93,8 @@ function Details() {
         </div>
       ) : (
         cityDetail.lat && (
-          <div className="container my-5 py-2" >
-            <div className="row justify-content-center">
+          <div className="container my-5 py-2">
+            <div className="row justify-content-center gap-5 ">
               <div
                 className="col-10 col-lg-6 p-3 bg-black bg-opacity-75 shadow-lg"
                 style={{ borderRadius: "25px" }}
@@ -97,13 +107,13 @@ function Details() {
                 </div>
 
                 <hr className="text-white" />
-                
+
                 <div className="row px-3" style={{ color: "#D0D3D4" }}>
                   <div className="col-md-6 col-lg-12 col-xl-6 d-flex flex-column flex-sm-row justify-content-center justify-content-xl-start align-items-center p-0 m-0">
                     <img
                       src={`http://openweathermap.org/img/wn/${cityDetail.current.weather[0].icon}@2x.png`}
-                      className="col col-5 col-xl-6"
-                      style={{ filter: "drop-shadow(0px 0px 25px #0dcaf0)" }}
+                      className="col col-6 col-xl-6"
+                      style={{ filter: "drop-shadow(0px 0px 20px #0dcaf0)" }}
                       alt="Logo"
                     />
                     <h1 className=" mb-4 m-sm-0 temp">
@@ -126,9 +136,11 @@ function Details() {
                 </div>
                 <hr className="rounded rounded-3 bg-info p-1" />
 
-                <div className="col-12 d-flex gap-3 text-white w-100 mt-4 pb-3 scroll" style={{overflowX:"scroll"}}>
+                <div
+                  className="col-12 d-flex gap-3 text-white w-100 mt-4 pb-3 scroll"
+                  style={{ overflowX: "scroll" }}
+                >
                   {cityDetail.hourly.map((hora: any, index: number) => (
-                    
                     <div key={index} className="w-100">
                       <p className="m-0 text-center fw-bold fs-5">
                         {unixTimeNormalDate(hora.dt, true)}
@@ -138,7 +150,7 @@ function Details() {
                         style={{ filter: "drop-shadow(1px 1px 10px #ffFFFF)" }}
                         alt="Logo"
                       />
-                      
+
                       <div className="d-flex justify-content-center gap-2">
                         <i className="bi bi-thermometer-half text-warning"></i>
                         <p className="text-center m-0 fs-6">{hora.temp}°</p>
@@ -152,8 +164,41 @@ function Details() {
                 </div>
               </div>
 
-              <div className="col-12 col-lg-6">
-                <h1>hola</h1>
+              <div
+                className="col-10 col-lg-5 px-1 px-md-3 py-3 bg-black bg-opacity-75 shadow-lg"
+                style={{ borderRadius: "25px" }}
+              >
+                {cityDetail.daily.slice(1).map((day: any, index: number) => (
+                  <>
+                    {index !== 0 ? <hr className="text-white m-0 mb-2" /> : ""}
+                    <div
+                      key={day.dt}
+                      className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row"
+                    >
+                      <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
+                        {weekDay(day.dt)}
+                      </p>
+                      <div className="d-flex align-items-center justify-content-evenly justify-content-md-evenly justify-content-xl-center gap-2 w-100">
+                        <div className="d-flex gap-0 gap-sm-2">
+                          <i className="bi bi-droplet-half text-primary"></i>
+                          <p className="text-center m-0">{day.humidity}%</p>
+                        </div>
+
+                        <img
+                          src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                          className="imagen"
+                          alt="Logo"
+                        />
+                        <div className="d-flex gap-0 gap-sm-2">
+                          <i className="bi bi-thermometer-half text-warning  d-none d-sm-inline"></i>
+                          <p className="text-center m-0 fs-6 text-white">
+                            {day.temp.max}° / {day.temp.min}°
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))}
               </div>
             </div>
           </div>
