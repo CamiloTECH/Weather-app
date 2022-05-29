@@ -13,10 +13,11 @@ interface State {
   loading: boolean,
   generalError: boolean,
 }
+
 function Home() {
   const { citys, generalError } = useSelector((state: State) => state);
   const dispatch=useDispatch()
-
+ 
   useEffect(()=>{
     if(generalError){
       Swal.fire({
@@ -26,7 +27,7 @@ function Home() {
       }).then(()=>dispatch(changeGeneralError(false)))
     }
   },[generalError])
-  
+
   return <>
     {citys.length>0
       ? <Cards citys={citys}/>
