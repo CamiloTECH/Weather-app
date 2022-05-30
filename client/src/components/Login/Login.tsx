@@ -1,22 +1,53 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { singIn } from "../../redux/action";
+
+interface State {
+  citys: [];
+  cityDetail: {};
+  user: {};
+  statusFavorites: {};
+  statusLogin: { status: boolean; token?: string };
+  statusRegister: { status: boolean };
+  loading: { status: boolean; component: string };
+  generalError: boolean;
+}
 
 function Login() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const [error, setError] = useState({ email: false, password: false, send:false });
+  const statusLogin = useSelector((state: State) => state.statusLogin);
+  const [error, setError] = useState({
+    email: false,
+    password: false,
+    send: false,
+  });
 
-  
   useEffect(() => {
-      if ( !error.email && !error.password && inputs.email && inputs.password ) { 
-        setValidation(false);
-      } else {
-        setValidation(true);
+    if (!error.email && !error.password && inputs.email && inputs.password) {
+      setValidation(false);
+    } else {
+      setValidation(true);
     }
   }, [error, inputs]);
 
-  const handleSubmit = (e: SyntheticEvent) => {};
+  useEffect(() => {
+    if(statusLogin){
+      console.log("bien")
+    }
+    else{
+      console.log("mal")
+    }
+  }, [statusLogin]);
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(singIn(inputs));
+    setLoading(true);
+  };
 
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
@@ -56,7 +87,6 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit}>
-
       <div className="mb-4">
         <div className="row">
           <label htmlFor="email" className="col form-label">

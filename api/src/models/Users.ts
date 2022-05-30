@@ -15,7 +15,9 @@ import { usercitys } from "./usercitys";
 
 interface User{
   id?:number,
-  name:string,
+  userName:string,
+  email:string,
+  password:string
   creationDate?:Date,
   updatedOn?:Date
 }
@@ -27,9 +29,17 @@ export class users extends Model<User> {
   @Column(DataType.INTEGER)
   id!:number
 
+  @Unique(false)
+  @Column(DataType.STRING)
+  userName!: string;
+
   @Unique(true)
   @Column(DataType.STRING)
-  name!: string;
+  email!: string;
+
+  @Unique(false)
+  @Column(DataType.TEXT)
+  password!: string;
 
   @CreatedAt
   @Column(DataType.DATE)

@@ -8,7 +8,9 @@ export const GET_FAVORITES: string = "getFavorites",
   CHANGE_STATUS_FAV: string = "changeStatusFav",
   LOADING: string = "loading",
   GENERAL_ERROR: string = "generalError",
-  CLEAR_CITY_DETAIL: string = "clearCityDetail";
+  CLEAR_CITY_DETAIL: string = "clearCityDetail",
+  SING_IN:string="singIn",
+  SING_UP:string="singUp"
 
 const URL = "http://localhost:3001";
 
@@ -22,22 +24,19 @@ export const getFavorites = (name: string) => {
     });
   };
 };
-
+//Funcionando
 export const getCity = (name: string) => {
   return async (dispatch: Dispatch) => {
     dispatch({ type: LOADING, payload: { status: true, component: "search" } });
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`);
     const result: any = await response.json();
-    dispatch({
-      type: LOADING,
-      payload: { status: false, component: "search" },
-    });
+    dispatch({ type: LOADING, payload: { status: false, component: "search" } });
     return result.id
       ? dispatch({ type: GET_CITY, payload: result })
       : dispatch(changeGeneralError(true));
   };
 };
-
+//Funcionando
 export const getCityDetails = (lat: string, lon: string) => {
   return async (dispatch: Dispatch) => {
     dispatch({ type: LOADING, payload: { status: true, component: "detail" } });
@@ -85,27 +84,54 @@ export const deleteFavorites = (info: Info) => {
   //}
 };
 
+export const singIn=(info:{email:string, password:string})=>{
+    return async (dispatch:Dispatch)=>{
+        const response= await fetch(`${URL}/loginUser`,{
+          method:"POST", 
+          body:JSON.stringify(info),
+          headers:{ "Content-Type": "application/json" }
+        })
+        const result=await response.json()
+
+        return dispatch({ type:SING_IN, payload:result })
+    }
+}
+
+export const singUp=(info:{email:string, password:string,userName:string})=>{
+  return async (dispatch:Dispatch)=>{
+      const response= await fetch(`${URL}/registerUser`,{
+        method:"POST", 
+        body:JSON.stringify(info),
+        headers:{ "Content-Type": "application/json" }
+      })
+      const result=await response.json()
+
+      return dispatch({ type:SING_UP, payload:result })
+  }
+}
+
+//Funcionando
 export const changeGeneralError = (status: boolean) => {
   return {
     type: GENERAL_ERROR,
     payload: status,
   };
 };
-
+//Funcionando
 export const deleteCity = (name: String) => {
   return {
     type: DELETE_CITY,
     payload: name,
   };
 };
-
+//Funcionando
 const changeStatusFav = (ciudad: string) => {
   return {
     type: CHANGE_STATUS_FAV,
     payload: ciudad,
   };
 };
-
+//Funcionando
 export const clearCityDetail = () => {
   return {
     type: CLEAR_CITY_DETAIL,

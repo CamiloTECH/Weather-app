@@ -9,9 +9,10 @@ interface State {
   cityDetail: {};
   user: {};
   statusFavorites: {};
-  statusLogin: {};
-  loading: boolean,
-  generalError: boolean,
+  statusLogin: { status: boolean; token?: string };
+  statusRegister: { status: boolean };
+  loading: { status: boolean; component: string };
+  generalError: boolean;
 }
 
 function Home() {

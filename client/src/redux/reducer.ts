@@ -9,6 +9,8 @@ import {
   LOADING,
   GENERAL_ERROR,
   CLEAR_CITY_DETAIL,
+  SING_IN,
+  SING_UP,
 } from "./action";
 
 interface State {
@@ -16,8 +18,9 @@ interface State {
   cityDetail: {};
   user: {};
   statusFavorites: {};
-  statusLogin: {};
-  loading: {status:boolean, component:string};
+  statusLogin: { status: boolean; token?: string };
+  statusRegister: { status: boolean };
+  loading: { status: boolean; component: string };
   generalError: boolean;
 }
 interface actionTypes {
@@ -30,8 +33,9 @@ const inicialState: State = {
   cityDetail: {},
   user: {},
   statusFavorites: {},
-  statusLogin: {},
-  loading:  {status:false, component:""},
+  statusLogin: { status: false },
+  statusRegister: { status: true },
+  loading: { status: false, component: "" },
   generalError: false,
 };
 
@@ -102,6 +106,18 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       return {
         ...state,
         cityDetail: action.payload,
+      };
+
+    case SING_IN:
+      return {
+        ...state,
+        statusLogin: action.payload,
+      };
+
+    case SING_UP:
+      return {
+        ...state,
+        statusRegister: action.payload,
       };
     default:
       return state;

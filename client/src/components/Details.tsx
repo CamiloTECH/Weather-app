@@ -14,10 +14,12 @@ interface State {
   cityDetail: any;
   user: {};
   statusFavorites: {};
-  statusLogin: {};
+  statusLogin: { status: boolean; token?: string };
+  statusRegister: { status: boolean };
   loading: { status: boolean; component: string };
   generalError: boolean;
 }
+
 
 function Details() {
   const { cityDetail, loading, generalError } = useSelector(

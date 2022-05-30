@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import { citys } from "../models/citys";
 import { users } from "../models/users";
 import axios, { AxiosResponse } from "axios";
+import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
+import {generateToken} from "../helpers/token"
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ export const getFavCitys = async (req: Request, res: Response) => {
   const userCitys: AxiosResponse[] = [];
 
   const responseDb = await users.findOne({
-    where: { name },
+    where: { userName: name },
     attributes: ["name"],
     include: {
       model: citys,
@@ -29,7 +31,7 @@ export const getFavCitys = async (req: Request, res: Response) => {
             process.env.API_KEY
           }&units=metric`
         );
-        response.data.fav=true
+        response.data.fav = true;
         userCitys.push(response.data);
       }
     }
@@ -47,7 +49,7 @@ export const getCity = async (req: Request, res: Response) => {
     const response = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}&units=metric`
     );
-    response.data.fav=false
+    response.data.fav = false;
     res.json(response.data);
   } catch (error) {
     res.json({});
@@ -111,41 +113,33 @@ export const deleteFavorites = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
   interface Body {
-    name: string;
+    userName: string;
+    email: string;
+    password: string;
   }
-  const { name } = req.body as Body;
-
-  const [newUser, created] = await users.findOrCreate({ where: { name } });
-
-  if (created) {
-    res.json({
-      status: created,
-      id: newUser.id,
-      name: newUser.name,
-    });
-  } else {
-    res.json({ status: created });
-  }
+  const { userName, password, email } = req.body as Body;
+  const passwordHast = await bcryptjs.hash(password, 10);
+  const [newUser, created] = await users.findOrCreate({
+    where: { userName, email, password: passwordHast },
+  });
+  res.json({status: created,});
 };
 
 export const loginUser = async (req: Request, res: Response) => {
   interface Body {
-    name: string;
+    email: string;
+    password:string
   }
-  const { name } = req.body as Body;
+  const { email,password } = req.body as Body;
 
-  const user = await users.findOne({ where: { name } });
+  const user = await users.findOne({ where: { email } });
+  const correctPassword=user ? await bcryptjs.compare(password,user.password):false
 
-  if (user) {
-    res.json({
-      status: true,
-      id: user.id,
-      name: user.name,
-    });
+  if (correctPassword) {
+    const token=generateToken({id:user?.id})
+    res.json({status: true,token});
   } else {
-    res.json({
-      status: false,
-    });
+    res.json({status: false});
   }
 };
 
