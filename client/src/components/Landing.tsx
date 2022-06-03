@@ -1,122 +1,17 @@
 import "../Css/Landing.css";
-import { useState, SyntheticEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useState } from "react";
 import ValidationEmail from "./Login/ValidationEmail";
 import LoginGoogle from "./Login/LoginGoogle";
 import SignUp from "./Login/SignUp";
 import Login from "./Login/Login";
 
 function Landing() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [forgotPassword, setForgotPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
-  // useEffect(() => {
-  //   if (window.localStorage.getItem("token")) {
-  //     const token = window.localStorage.getItem("token")
-  //     dispatch(roleUser(token))
-  //     if (role.admin) {
-  //       navigate("/home/admin/dashboard")
-  //     }
-  //     else if (role.admin === false) {
-  //       navigate("/home")
-  //     }
-  //   }
-  //   else {
-  //     if (loginUser.error) {
-  //       setSignInUp({
-  //         ...SigInUp,
-  //         login: true
-  //       })
-  //       setLoading({
-  //         ...loading,
-  //         login: false
-  //       })
-  //       setValidation(true)
-  //     }
-  //     else if (loginUser.token) {
-  //       window.localStorage.setItem("token", loginUser.token)
-  //       setLoading({
-  //         ...loading,
-  //         login: false
-  //       })
-  //       Swal.fire({
-  //         position: 'center',
-  //         icon: 'success',
-  //         title: 'Successfully logged-in',
-  //         showConfirmButton: false,
-  //         timer: 1200
-  //       })
-  //       if (loginUser.admin) {
-  //         navigate("/home/admin/dashboard")
-  //       }
-  //       else {
-  //         navigate("/home")
-  //       }
-  //     }
-  //     else if (registerUser.status) {
-  //       setLoading({
-  //         ...loading,
-  //         register: false
-  //       })
-  //       Swal.fire({
-  //         position: 'center',
-  //         icon: 'success',
-  //         title: 'You have successfully registered Now Login',
-  //         showConfirmButton: false,
-  //         timer: 1800
-  //       })
-  //       handleSignUp()
-  //     }
-  //     else if (registerUser.status === false) {
-  //       setLoading({
-  //         ...loading,
-  //         register: false
-  //       })
-  //       setSignInUp({
-  //         ...SigInUp,
-  //         register: true
-  //       })
-  //       setState({
-  //         email: "",
-  //         password: "",
-  //         user: ""
-  //       })
-  //     }
-  //   }
-  //return () => dispatch(clearUser())
-
-  // }, [registerUser, loginUser, role])
 
   const handleSignUp = (boolean: boolean) => {
-    signUp ? setSignUp(boolean) : setSignUp(boolean);
+    setSignUp(boolean)
     setForgotPassword(false);
-  };
-
-  const hanldeSubmit = (e: SyntheticEvent) => {
-    // e.preventDefault();
-    // if (e.currentTarget.id === "login") {
-    //   // dispatch(loginUsers({
-    //   //   email: state.email,
-    //   //   password: state.password,
-    //   // }))
-    //   setLoading({
-    //     ...loading,
-    //     login: true,
-    //   });
-    // } else if (e.currentTarget.id === "signUp") {
-    //   // dispatch(registerUsers({
-    //   //   email: state.email,
-    //   //   password: state.password,
-    //   //   userName: state.user.trim()
-    //   // }))
-    //   setLoading({
-    //     ...loading,
-    //     register: true,
-    //   });
-    // }
   };
 
   return (

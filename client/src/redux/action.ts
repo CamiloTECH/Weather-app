@@ -138,5 +138,3 @@ export const clearCityDetail = () => {
     payload: {},
   };
 };
-
-//Terminar de hacer todos lo actions register y loguin

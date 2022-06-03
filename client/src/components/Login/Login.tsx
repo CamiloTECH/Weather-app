@@ -1,14 +1,14 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { singIn } from "../../redux/action";
+import Swal from "sweetalert2"
 
 interface State {
   citys: [];
   cityDetail: {};
-  user: {};
   statusFavorites: {};
-  statusLogin: { status: boolean; token?: string };
-  statusRegister: { status: boolean };
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
   generalError: boolean;
 }
@@ -35,11 +35,21 @@ function Login() {
   }, [error, inputs]);
 
   useEffect(() => {
-    if(statusLogin){
-      console.log("bien")
+    if(statusLogin.status){
+      Swal.fire({
+        title: 'Auto close alert!',
+        text: 'I will close in 2 seconds.',
+        timer: 2000
+      })
+      setLoading(false)
     }
-    else{
-      console.log("mal")
+    else if(statusLogin.status===false){
+      setLoading(false)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops an error occurred!',
+        text: "Wrong password or email, please check",
+      }).then(()=>setInputs({ email: "", password: "" }))
     }
   }, [statusLogin]);
 

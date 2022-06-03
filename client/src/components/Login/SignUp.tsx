@@ -1,5 +1,15 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
+interface State {
+  citys: [];
+  cityDetail: {};
+  statusFavorites: {};
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
+  loading: { status: boolean; component: string };
+  generalError: boolean;
+}
+
 function SignUp() {
   const [loading, setLoading] = useState(false);
   const [validation, setValidation] = useState(true);

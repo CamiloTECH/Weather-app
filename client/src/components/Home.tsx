@@ -7,7 +7,6 @@ import { changeGeneralError } from "../redux/action";
 interface State {
   citys: any;
   cityDetail: {};
-  user: {};
   statusFavorites: {};
   statusLogin: { status: boolean; token?: string };
   statusRegister: { status: boolean };

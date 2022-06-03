@@ -16,10 +16,9 @@ import {
 interface State {
   citys: [];
   cityDetail: {};
-  user: {};
   statusFavorites: {};
-  statusLogin: { status: boolean; token?: string };
-  statusRegister: { status: boolean };
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
   generalError: boolean;
 }
@@ -31,10 +30,9 @@ interface actionTypes {
 const inicialState: State = {
   citys: [],
   cityDetail: {},
-  user: {},
   statusFavorites: {},
-  statusLogin: { status: false },
-  statusRegister: { status: true },
+  statusLogin: { status: undefined },
+  statusRegister: { status: undefined },
   loading: { status: false, component: "" },
   generalError: false,
 };

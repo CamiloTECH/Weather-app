@@ -3,7 +3,6 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
-//import {loginGoogle} from "../redux/actions/Loginregister";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 

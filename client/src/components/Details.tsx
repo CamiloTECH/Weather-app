@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 interface State {
   citys: [];
   cityDetail: any;
-  user: {};
   statusFavorites: {};
   statusLogin: { status: boolean; token?: string };
   statusRegister: { status: boolean };
