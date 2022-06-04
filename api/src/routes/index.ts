@@ -5,7 +5,7 @@ import { getCity, getCityDetails, getFavCitys, addFavorites, deleteFavorites, re
 
 const routes = Router();
 
-routes.get("/user/:name",getFavCitys);
+routes.get("/userFav",getFavCitys);
 routes.get("/city/:city",getCity);
 routes.get("/details",getCityDetails);
 

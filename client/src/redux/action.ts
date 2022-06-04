@@ -14,14 +14,16 @@ export const GET_FAVORITES: string = "getFavorites",
 
 const URL = "http://localhost:3001";
 
-export const getFavorites = (name: string) => {
+export const getFavorites = (token: string) => {
   return async function (dispatch: Dispatch) {
-    const response = await fetch(`${URL}/user/${name}`);
-    const result: [] = await response.json();
-    return dispatch({
-      type: GET_FAVORITES,
-      payload: result,
+    dispatch({ type: LOADING, payload: { status: true, component: "home" } });
+    const response = await fetch(`${URL}/userFav`,{
+      headers: { "Authorization": `bearer ${token}` },
     });
+    const result: [] = await response.json();
+    
+    dispatch({ type: LOADING, payload: { status: false, component: "home" } });
+    return dispatch({ type: GET_FAVORITES, payload: result });
   };
 };
 //Funcionando

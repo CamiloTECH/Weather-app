@@ -45,9 +45,12 @@ function Landing() {
         if (statusLogin.status && statusLogin.token) {
           window.localStorage.setItem("token", statusLogin.token);
           Swal.fire({
-            title: "You logged in successfully!",
-            timer: 1500,
-          });
+            position: 'center',
+            icon: 'success',
+            title: 'You logged in successfully!',
+            showConfirmButton: false,
+            timer: 1500
+          })
           navigate("/home");
         } else if (statusLogin.status === false) {
           Swal.fire({

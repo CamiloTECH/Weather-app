@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
@@ -22,6 +22,10 @@ function SearchBar() {
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
   const { loading } = useSelector((state: State) => state);
+
+  useEffect(()=>{
+    if(!window.localStorage.getItem("token")) navigate("/")
+  },[])
 
   const handleSubmit = () => {
     if (country.trim().length > 0){

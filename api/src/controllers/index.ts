@@ -4,35 +4,36 @@ import { users } from "../models/users";
 import axios, { AxiosResponse } from "axios";
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
-import {generateToken} from "../helpers/token"
+import { generateToken } from "../helpers/token";
+import { verifyToken } from "../helpers/verifyToken";
 
 dotenv.config();
 
 //Retorna todas las ciudades que el usuario añadio como favoritas, retorna un arreglo con toda la info
 //del clima de las ciudades
 export const getFavCitys = async (req: Request, res: Response) => {
-  const { name } = req.params;
   const userCitys: AxiosResponse[] = [];
-
-  const responseDb = await users.findOne({
-    where: { userName: name },
-    attributes: ["name"],
-    include: {
-      model: citys,
-      attributes: ["name"],
-      through: { attributes: [] },
-    },
-  });
+  const verifyUser = await verifyToken(req);
   try {
-    if (responseDb) {
-      for (const city of responseDb.citys) {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city.name.trim()}&appid=${
-            process.env.API_KEY
-          }&units=metric`
-        );
-        response.data.fav = true;
-        userCitys.push(response.data);
+    if (verifyUser) {
+      const user = await users.findByPk(verifyUser.id, {
+        attributes: [],
+        include: {
+          model: citys,
+          attributes: ["name"],
+          through: { attributes: [] },
+        },
+      });
+      if (user) {
+        for (const city of user.citys) {
+          const response = await axios.get(
+            `https://api.openweathermap.org/data/2.5/weather?q=${city.name.trim()}&appid=${
+              process.env.API_KEY
+            }&units=metric`
+          );
+          response.data.fav = true;
+          userCitys.push(response.data);
+        }
       }
     }
     res.json(userCitys);
@@ -72,45 +73,44 @@ export const getCityDetails = async (req: Request, res: Response) => {
 //Añadir a la DB la ciudad que el usuario quiera añadir a favoritos, para que pueda ser mostrada luego
 export const addFavorites = async (req: Request, res: Response) => {
   interface Body {
-    id: number;
     ciudad: string;
   }
-  const { id, ciudad } = req.body as Body;
+  const { ciudad } = req.body as Body;
+  const verifyUser = await verifyToken(req);
 
-  const user = await users.findByPk(id);
-  const [city, created] = await citys.findOrCreate({
-    where: { name: ciudad.trim() },
-  });
+  if (verifyUser) {
+    const user = await users.findByPk(verifyUser.id);
+    const [city, created] = await citys.findOrCreate({
+      where: { name: ciudad.trim() },
+    });
 
-  const asociacion = await user?.$add("citys", city.id);
-  if (asociacion) {
-    res.json({ status: true });
-  } else {
-    res.json({ status: false });
-  }
+    const asociacion = await user?.$add("citys", city.id);
+    asociacion ? res.json({ status: true }) : res.json({ status: false });
+  } else res.json({ status: false });
 };
 
 //Eliminar de la DB una ciudad que el usuario ya no quiera tener en favoritos
 export const deleteFavorites = async (req: Request, res: Response) => {
   interface Body {
-    id: string;
     ciudad: string;
   }
-  const { id, ciudad } = req.body as Body;
+  const { ciudad } = req.body as Body;
+  const verifyUser = await verifyToken(req);
 
-  const user = await users.findByPk(id);
-  const city = await citys.findOne({
-    where: { name: ciudad.trim() },
-  });
+  if (verifyUser) {
+    const user = await users.findByPk(verifyUser.id);
+    const city = await citys.findOne({
+      where: { name: ciudad.trim() },
+    });
 
-  if (user && city) {
-    const remover = await user.$remove("citys", city.id);
-    remover == 1 ? res.json({ status: true }) : res.json({ status: false });
-  } else {
-    res.json({ status: false });
-  }
+    if (user && city) {
+      const remover = await user.$remove("citys", city.id);
+      remover == 1 ? res.json({ status: true }) : res.json({ status: false });
+    } else res.json({ status: false });
+  } else res.json({ status: false });
 };
 
+//Registra a los usuarios en la base de datos 
 export const registerUser = async (req: Request, res: Response) => {
   interface Body {
     userName: string;
@@ -124,30 +124,27 @@ export const registerUser = async (req: Request, res: Response) => {
     defaults: {
       email,
       userName,
-      password:passwordHast
-    }
+      password: passwordHast,
+    },
   });
-  res.json({status: created,});
+  res.json({ status: created });
 };
 
+//Crea el token para poder logear a los usuarios
 export const loginUser = async (req: Request, res: Response) => {
   interface Body {
     email: string;
-    password:string
+    password: string;
   }
-  const { email,password } = req.body as Body;
+  const { email, password } = req.body as Body;
 
   const user = await users.findOne({ where: { email } });
-  const correctPassword=user ? await bcryptjs.compare(password,user.password):false
+  const correctPassword = user
+    ? await bcryptjs.compare(password, user.password)
+    : false;
 
-  if (correctPassword) {
-    const token=generateToken({id:user?.id})
-    res.json({status: true,token});
-  } else {
-    res.json({status: false});
-  }
+  if (correctPassword && user) {
+    const token = generateToken({ id: user.id });
+    res.json({ status: true, token });
+  } else res.json({ status: false });
 };
-
-/*
-Hacer la autenticacion
-*/
