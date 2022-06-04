@@ -1,4 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { singUp } from "../../redux/action"
 
 interface State {
   citys: [];
@@ -11,9 +13,10 @@ interface State {
 }
 
 function SignUp() {
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch()
   const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
+  const loading = useSelector((state: State) => state.loading);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -41,7 +44,11 @@ function SignUp() {
     }
   }, [error, inputs]);
 
-  const handleSubmit = (e: SyntheticEvent) => {};
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    dispatch(singUp(inputs))
+    setInputs({ email: "", password: "", userName: "" })
+  };
 
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
@@ -239,7 +246,7 @@ function SignUp() {
           name="SignUp"
           disabled={validation}
         >
-          {loading ? (
+          {loading.status && loading.component==="SignUp" ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Sign Up"

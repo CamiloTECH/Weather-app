@@ -120,7 +120,12 @@ export const registerUser = async (req: Request, res: Response) => {
   const { userName, password, email } = req.body as Body;
   const passwordHast = await bcryptjs.hash(password, 10);
   const [newUser, created] = await users.findOrCreate({
-    where: { userName, email, password: passwordHast },
+    where: { email },
+    defaults: {
+      email,
+      userName,
+      password:passwordHast
+    }
   });
   res.json({status: created,});
 };

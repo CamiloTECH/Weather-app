@@ -1,16 +1,67 @@
 import "../Css/Landing.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ValidationEmail from "./Login/ValidationEmail";
 import LoginGoogle from "./Login/LoginGoogle";
 import SignUp from "./Login/SignUp";
 import Login from "./Login/Login";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
+interface State {
+  citys: [];
+  cityDetail: {};
+  statusFavorites: {};
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
+  loading: { status: boolean; component: string };
+  generalError: boolean;
+}
 
 function Landing() {
-  const [forgotPassword, setForgotPassword] = useState(false);
+  const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
+  const { statusLogin, statusRegister } = useSelector((state: State) => state);
+
+  useEffect(() => {
+    if (window.localStorage.getItem("token")) navigate("/home");
+    else {
+      if (signUp) {
+        if (statusRegister.status) {
+          Swal.fire({
+            icon: "success",
+            title: "You registered successfully!",
+            text: "Now, you can login!",
+          }).then(() => setSignUp(false));
+        } else if (statusRegister.status === false) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "This email already exists, please put another email or login",
+          });
+        }
+      } else {
+        if (statusLogin.status && statusLogin.token) {
+          window.localStorage.setItem("token", statusLogin.token);
+          Swal.fire({
+            title: "You logged in successfully!",
+            timer: 1500,
+          });
+          navigate("/home");
+        } else if (statusLogin.status === false) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "Wrong password or email, please check",
+          });
+        }
+      }
+    }
+  }, [statusLogin, statusRegister]);
 
   const handleSignUp = (boolean: boolean) => {
-    setSignUp(boolean)
+    setSignUp(boolean);
     setForgotPassword(false);
   };
 

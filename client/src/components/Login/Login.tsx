@@ -1,7 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { singIn } from "../../redux/action";
-import Swal from "sweetalert2"
 
 interface State {
   citys: [];
@@ -15,11 +14,10 @@ interface State {
 
 function Login() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const statusLogin = useSelector((state: State) => state.statusLogin);
+  const loading = useSelector((state: State) => state.loading);
   const [error, setError] = useState({
     email: false,
     password: false,
@@ -34,29 +32,10 @@ function Login() {
     }
   }, [error, inputs]);
 
-  useEffect(() => {
-    if(statusLogin.status){
-      Swal.fire({
-        title: 'Auto close alert!',
-        text: 'I will close in 2 seconds.',
-        timer: 2000
-      })
-      setLoading(false)
-    }
-    else if(statusLogin.status===false){
-      setLoading(false)
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops an error occurred!',
-        text: "Wrong password or email, please check",
-      }).then(()=>setInputs({ email: "", password: "" }))
-    }
-  }, [statusLogin]);
-
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(singIn(inputs));
-    setLoading(true);
+    setInputs({ email: "", password: "" })
   };
 
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
@@ -194,7 +173,7 @@ function Login() {
           name="login"
           disabled={validation}
         >
-          {loading ? (
+          {loading.status && loading.component==="Login" ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Login"

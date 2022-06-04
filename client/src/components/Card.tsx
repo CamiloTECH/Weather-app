@@ -31,12 +31,12 @@ function Card({
   },[])
 
   const addFav = () => {
-    dispatch(addFavorites({ id: 2, ciudad: name }));
+    dispatch(addFavorites({token: "2", ciudad: name }));
     setFav(true);
   };
 
   const deleteFav = () => {
-    dispatch(deleteFavorites({ id: 2, ciudad: name }));
+    dispatch(deleteFavorites({ token: "2", ciudad: name }));
     setFav(false);
   };
 
