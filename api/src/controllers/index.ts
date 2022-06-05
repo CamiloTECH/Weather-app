@@ -6,6 +6,7 @@ import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import { generateToken } from "../helpers/token";
 import { verifyToken } from "../helpers/verifyToken";
+import { sendEmail } from "../helpers/sendMail"
 
 dotenv.config();
 
@@ -110,7 +111,7 @@ export const deleteFavorites = async (req: Request, res: Response) => {
   } else res.json({ status: false });
 };
 
-//Registra a los usuarios en la base de datos 
+//Registra a los usuarios en la base de datos
 export const registerUser = async (req: Request, res: Response) => {
   interface Body {
     userName: string;
@@ -147,4 +148,21 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = generateToken({ id: user.id });
     res.json({ status: true, token });
   } else res.json({ status: false });
+};
+
+export const validationEmail = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    const userExists = await users.findOne({ where: { email } });
+    if (userExists) {
+      //userExists.token = simpleToken()
+      await userExists.save();
+      //await sendEmail( email, userExists.token, userExists.userName )
+
+      res.json({ status: true });
+    } else res.json({ status: false });
+  } catch (error) {
+    res.json({ status: false });
+  }
 };
