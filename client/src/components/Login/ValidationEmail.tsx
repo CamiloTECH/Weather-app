@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { validationEmail } from "../../redux/action";
-import Swal from "sweetalert2";
 
 interface State {
   citys: [];
@@ -28,27 +27,6 @@ function ValidationEmail({ login }: { login: (boolean: boolean) => void }) {
     }
   }, [email, error]);
 
-  // useEffect(() => {
-  //   if (changePasswort.status) {
-  //     Swal.fire({
-  //       position: 'center',
-  //       icon: 'error',
-  //       title: 'This email does not exist, please enter another email or register',
-  //       showConfirmButton: false,
-  //       timer: 2000
-  //     }).then(()=>login(false))
-  //   }
-  //   else if (changePasswort.status === false) {
-  //      Swal.fire({
-  //       position: 'center',
-  //       icon: 'success',
-  //       title: 'Check your email',
-  //       showConfirmButton: false,
-  //       timer: 2000
-  //     })
-  //   }
-  // }, [changePasswort])
-
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
@@ -60,7 +38,8 @@ function ValidationEmail({ login }: { login: (boolean: boolean) => void }) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(validationEmail(email))
+    dispatch(validationEmail({email}))
+    setEmail("")
   };
 
   return (

@@ -137,11 +137,17 @@ export const singUp = (info: {
   };
 };
 
-export const validationEmail = (email:string)=>{
-  
-  return {
-    type: VALIDATION_EMAIL,
-    payload:""
+export const validationEmail = (email:{email:string})=>{
+  return async (dispatch:Dispatch) =>{
+    dispatch({ type: LOADING, payload: { status: true, component: "validationEmail" },});
+    const response= await fetch(`${URL}/validationEmail`,{
+      method:"POST",
+      body:JSON.stringify(email),
+      headers: { "Content-Type": "application/json" },
+    })
+    const result= await response.json()
+    dispatch({ type: LOADING, payload: { status: false, component: "validationEmail" },});
+    return dispatch({ type: VALIDATION_EMAIL, payload:result })
   }
 }
 

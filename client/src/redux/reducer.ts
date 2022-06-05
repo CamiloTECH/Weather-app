@@ -11,7 +11,8 @@ import {
   CLEAR_CITY_DETAIL,
   SING_IN,
   SING_UP,
-  CLEAR_USER
+  CLEAR_USER,
+  VALIDATION_EMAIL
 } from "./action";
 
 interface State {
@@ -20,6 +21,7 @@ interface State {
   statusFavorites: {};
   statusLogin: { status: boolean | undefined; token?: string };
   statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined };
   loading: { status: boolean; component: string };
   generalError: string;
 }
@@ -34,6 +36,7 @@ const inicialState: State = {
   statusFavorites: {},
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
+  statusChangePassword:{ status: undefined },
   loading: { status: false, component: "" },
   generalError: "",
 };
@@ -128,6 +131,12 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusLogin: action.payload,
         statusRegister:action.payload,
+      }
+
+    case VALIDATION_EMAIL:
+      return {
+        ...state,
+        statusChangePassword:action.payload,
       }
     default:
       return state;

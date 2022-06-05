@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer"
 
-export const sendEmail = async (email:string, token:number, userName:string) => {
+export const sendEmail = async (email:string, token:string, userName:string) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -12,12 +12,14 @@ export const sendEmail = async (email:string, token:number, userName:string) => 
     from: process.env.EMAIL,
   })
   await transporter.sendMail({
-    from: process.env.EMAIL,
+    from: `"Weather App"   <${process.env.EMAIL}>`,
     to: email,
-    subject: "Weather App ",
-    text: `Hello ${userName}: You have requested to reset your password.`,
-    html: `  <p>Follow the next link to generate your new password:
-             <a rel="noopener noreferrer" target="_blank" href="http://localhost:3000/home/forgotPassword/${token}">http://localhost:3000/home/forgotPassword/${token}</a></p>
-             <p>If you didn't request this, ignore this message</p>`,
+    subject: "Forgot password 🌤️",
+    html: ` 
+            <img src="https://images.squarespace-cdn.com/content/v1/5572b7b4e4b0a20071d407d4/1487090874274-FH2ZNWOTRU90UAF5TA2B/Weather+Targeting" style="width: 100px;"/>
+            <h3>Hello ${userName}: You have requested to reset your password.</h3>
+            <p>Follow the next link to generate your new password:
+            <a rel="noopener noreferrer" target="_blank" href="http://localhost:3000/forgotPassword/${token}">http://localhost:3000/home/forgotPassword/${token}</a></p>
+            <p><strong>If you didn't request this, ignore this message</strong></p>`,
   })
 }

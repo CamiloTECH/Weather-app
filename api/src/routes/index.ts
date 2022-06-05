@@ -7,6 +7,8 @@ import {
   deleteFavorites,
   registerUser,
   loginUser,
+  validationEmail,
+  changePassword,
 } from "../controllers/index";
 import { validationUser } from "../helpers/validationUser";
 
@@ -21,5 +23,8 @@ routes.delete("/deleteFavorites", validationUser, deleteFavorites);
 
 routes.post("/registerUser", registerUser);
 routes.post("/loginUser", loginUser);
+
+routes.post("/validationEmail", validationEmail);
+routes.post("/changePassword/:token", changePassword);
 
 export default routes;

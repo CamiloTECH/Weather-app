@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { generateToken } from "../helpers/token";
 import { verifyToken } from "../helpers/verifyToken";
 import { sendEmail } from "../helpers/sendMail"
+import tokenEmail from "../helpers/tokenEmail"
 
 dotenv.config();
 
@@ -152,13 +153,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const validationEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
-
+  
   try {
     const userExists = await users.findOne({ where: { email } });
     if (userExists) {
-      //userExists.token = simpleToken()
+      userExists.token = tokenEmail()
       await userExists.save();
-      //await sendEmail( email, userExists.token, userExists.userName )
+      await sendEmail( email, userExists.token, userExists.userName )
 
       res.json({ status: true });
     } else res.json({ status: false });
@@ -166,3 +167,7 @@ export const validationEmail = async (req: Request, res: Response) => {
     res.json({ status: false });
   }
 };
+
+export const changePassword = async (req:Request, res:Response) =>{
+  
+}

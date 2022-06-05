@@ -15,20 +15,40 @@ interface State {
   statusFavorites: {};
   statusLogin: { status: boolean | undefined; token?: string };
   statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined };
   loading: { status: boolean; component: string };
   generalError: string;
 }
 
 function Landing() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
-  const dispatch = useDispatch();
   const [forgotPassword, setForgotPassword] = useState(false);
-  const { statusLogin, statusRegister } = useSelector((state: State) => state);
+  const { statusLogin, statusRegister, statusChangePassword } = useSelector(
+    (state: State) => state
+  );
 
   useEffect((): any => {
     if (window.localStorage.getItem("token")) navigate("/home");
-    else {
+    else if (forgotPassword) {
+      if (statusChangePassword.status) {
+        Swal.fire({
+          icon: "success",
+          title: "The mail was sent!",
+          text: "Please check your e-mail",
+        }).then(() => {
+          setForgotPassword(false)
+          setSignUp(false)
+        });
+      } else if (statusChangePassword.status === false) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops an error occurred!",
+          text: "This email doesn't exist, please enter another email or register",
+        })
+      }
+    } else {
       if (signUp) {
         if (statusRegister.status) {
           Swal.fire({
@@ -53,7 +73,7 @@ function Landing() {
             title: "You logged in successfully!",
             showConfirmButton: false,
             timer: 1500,
-          }).then(()=>navigate("/home"));
+          }).then(() => navigate("/home"));
         } else if (statusLogin.status === false) {
           Swal.fire({
             icon: "error",
@@ -63,7 +83,7 @@ function Landing() {
         }
       }
     }
-  }, [statusLogin, statusRegister]);
+  }, [statusLogin, statusRegister, statusChangePassword]);
 
   const handleSignUp = (boolean: boolean) => {
     setSignUp(boolean);

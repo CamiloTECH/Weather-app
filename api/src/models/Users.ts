@@ -18,6 +18,7 @@ interface User{
   userName:string,
   email:string,
   password:string
+  token?:string
   creationDate?:Date,
   updatedOn?:Date
 }
@@ -40,6 +41,9 @@ export class users extends Model<User> {
   @Unique(false)
   @Column(DataType.TEXT)
   password!: string;
+
+  @Column(DataType.STRING)
+  token!:string
 
   @CreatedAt
   @Column(DataType.DATE)
