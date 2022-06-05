@@ -11,6 +11,7 @@ import {
   CLEAR_CITY_DETAIL,
   SING_IN,
   SING_UP,
+  CLEAR_USER
 } from "./action";
 
 interface State {
@@ -42,7 +43,8 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
     case GET_FAVORITES:
       return {
         ...state,
-        citys: action.payload,
+        statusLogin:action.payload.status,
+        citys: action.payload.citys,
       };
 
     case GET_CITY:
@@ -117,6 +119,13 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusRegister: action.payload,
       };
+
+    case CLEAR_USER:
+      return {
+        ...state,
+        statusLogin: action.payload,
+        statusRegister:action.payload,
+      }
     default:
       return state;
   }

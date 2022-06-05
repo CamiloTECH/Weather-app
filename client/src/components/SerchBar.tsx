@@ -3,7 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getCity } from "../redux/action";
+import { changeGeneralError, getCity } from "../redux/action";
+import Swal from "sweetalert2"
 
 interface State {
   citys: [];
@@ -21,16 +22,31 @@ function SearchBar() {
   const navigate=useNavigate()
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const { loading } = useSelector((state: State) => state);
+  const { loading,generalError } = useSelector((state: State) => state);
 
   useEffect(()=>{
     if(!window.localStorage.getItem("token")) navigate("/")
-  },[])
+    else if (generalError) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "The city was not found! Check that the name is correct",
+      }).then(() => dispatch(changeGeneralError(false)));
+    }
+  },[generalError])
+
+  const logout=()=>{
+    window.localStorage.removeItem("token")
+    navigate("/")
+  }
 
   const handleSubmit = () => {
     if (country.trim().length > 0){
-      if(window.location.pathname!=="/home") navigate("/home")
-      dispatch(getCity(country.trim()))
+      const token=window.localStorage.getItem("token")
+      if(token){
+        if(window.location.pathname!=="/home") navigate("/home")
+        dispatch(getCity(country.trim(),token))
+      }
     }
     setCountry("");
   };
@@ -100,6 +116,9 @@ function SearchBar() {
                 }
               </button>
             </div>
+              <button className="btn btn-info fw-bold ms-0 ms-lg-5 py-0 px-2 mt-3 mt-lg-0" title="Logout" onClick={logout}>
+                <i className="bi bi-box-arrow-right fs-4 m"></i>                
+              </button>
           </div>
         </Collapse>
       </div>

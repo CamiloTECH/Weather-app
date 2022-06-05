@@ -33,7 +33,11 @@ function Details() {
   const lon = query.get("lon");
 
   useEffect((): any => {
-    if (lat && lon) dispatch(getCityDetails(lat, lon));
+    const token=window.localStorage.getItem("token")
+
+    if (lat && lon ){
+      if(token) dispatch(getCityDetails(lat, lon, token));
+    }
     else navigate("/home");
 
     return () => dispatch(clearCityDetail());

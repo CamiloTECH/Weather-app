@@ -25,26 +25,29 @@ function Card({
 }) {
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
+  const token=window.localStorage.getItem("token")
 
   useEffect(()=>{
     setFav(favorite)
   },[])
 
   const addFav = () => {
-    dispatch(addFavorites({token: "2", ciudad: name }));
-    setFav(true);
+    if(token){
+      dispatch(addFavorites({ ciudad: name },token));
+      setFav(true);
+    }
   };
 
   const deleteFav = () => {
-    dispatch(deleteFavorites({ token: "2", ciudad: name }));
-    setFav(false);
+    if(token){ 
+      dispatch(deleteFavorites({ ciudad: name },token));
+      setFav(false);
+    }
   };
 
-  const deleteCurrentCity=()=>{
+  const deleteCurrentCity= () =>{
     dispatch(deleteCity(name))
-    if(fav){
-      //dispatch(deleteFavorites({ id: 2, ciudad: name }))
-    }
+    if(fav && token) dispatch(deleteFavorites({ ciudad: name },token))
   }
 
   return (

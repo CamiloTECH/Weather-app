@@ -4,9 +4,10 @@ import ValidationEmail from "./Login/ValidationEmail";
 import LoginGoogle from "./Login/LoginGoogle";
 import SignUp from "./Login/SignUp";
 import Login from "./Login/Login";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { clearUser } from "../redux/action";
 
 interface State {
   citys: [];
@@ -21,10 +22,11 @@ interface State {
 function Landing() {
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
+  const dispatch = useDispatch();
   const [forgotPassword, setForgotPassword] = useState(false);
   const { statusLogin, statusRegister } = useSelector((state: State) => state);
 
-  useEffect(() => {
+  useEffect((): any => {
     if (window.localStorage.getItem("token")) navigate("/home");
     else {
       if (signUp) {
@@ -44,14 +46,14 @@ function Landing() {
       } else {
         if (statusLogin.status && statusLogin.token) {
           window.localStorage.setItem("token", statusLogin.token);
+          dispatch(clearUser());
           Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'You logged in successfully!',
+            position: "center",
+            icon: "success",
+            title: "You logged in successfully!",
             showConfirmButton: false,
-            timer: 1500
-          })
-          navigate("/home");
+            timer: 1500,
+          }).then(()=>navigate("/home"));
         } else if (statusLogin.status === false) {
           Swal.fire({
             icon: "error",

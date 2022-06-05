@@ -1,36 +1,45 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cards from "./Cards";
-import Swal from "sweetalert2";
-import { changeGeneralError } from "../redux/action";
+import { getFavorites } from "../redux/action";
 
 interface State {
-  citys: any;
+  citys: [];
   cityDetail: {};
   statusFavorites: {};
-  statusLogin: { status: boolean; token?: string };
-  statusRegister: { status: boolean };
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
   generalError: boolean;
 }
 
 function Home() {
-  const { citys, generalError } = useSelector((state: State) => state);
+  const { citys, loading,statusLogin } = useSelector((state: State) => state);
   const dispatch = useDispatch();
+  const token=window.localStorage.getItem("token")
 
   useEffect(() => {
-    if (generalError) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "The city was not found! Check that the name is correct",
-      }).then(() => dispatch(changeGeneralError(false)));
+    if(token && !statusLogin.status){
+      dispatch(getFavorites(token))
     }
-  }, [generalError]);
+  }, []);
 
   return (
     <>
-      {citys.length > 0 ? (
+      {loading.status && loading.component === "home" ? (
+        <div className="text-center">
+          <span
+            className="spinner-border text-warning"
+            style={{
+              height: "100px",
+              width: "100px",
+              marginTop: "20vh",
+              borderWidth: "8px",
+            }}
+            role="status"
+          ></span>
+        </div>
+      ) : citys.length > 0 ? (
         <Cards citys={citys} />
       ) : (
         <h1 className="text-center text-white mt-5">
