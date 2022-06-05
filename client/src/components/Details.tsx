@@ -13,10 +13,10 @@ interface State {
   citys: [];
   cityDetail: any;
   statusFavorites: {};
-  statusLogin: { status: boolean; token?: string };
-  statusRegister: { status: boolean };
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
-  generalError: boolean;
+  generalError: string;
 }
 
 
@@ -44,13 +44,13 @@ function Details() {
   }, []);
 
   useEffect(() => {
-    if (generalError) {
+    if (generalError==="notFound") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "The city was not found! Check that the coordinates are correct",
       }).then(() => {
-        dispatch(changeGeneralError(false));
+        dispatch(changeGeneralError(""));
         navigate("/home");
       });
     }

@@ -21,7 +21,7 @@ interface State {
   statusLogin: { status: boolean | undefined; token?: string };
   statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
-  generalError: boolean;
+  generalError: string;
 }
 interface actionTypes {
   type: string;
@@ -35,7 +35,7 @@ const inicialState: State = {
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
   loading: { status: false, component: "" },
-  generalError: false,
+  generalError: "",
 };
 
 function rootReducer(state: State = inicialState, action: actionTypes) {
@@ -52,7 +52,10 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         (city: any) => city.id === action.payload.id
       );
       return existCity
-        ? state
+        ? {
+          ...state,
+          generalError:"exist" ,
+        }
         : {
             ...state,
             citys: [action.payload, ...state.citys],

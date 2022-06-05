@@ -1,27 +1,24 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-  Dispatch,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { validationEmail } from "../../redux/action";
 import Swal from "sweetalert2";
 
-function ValidationEmail({
-  signIn,
-  register,
-}: {
-  signIn: React.Dispatch<SetStateAction<boolean>>;
-  register: React.Dispatch<SetStateAction<boolean>>;
-}): JSX.Element {
+interface State {
+  citys: [];
+  cityDetail: {};
+  statusFavorites: {};
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
+  loading: { status: boolean; component: string };
+  generalError: string;
+}
+
+function ValidationEmail({ login }: { login: (boolean: boolean) => void }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [validation, setValidation] = useState(false);
-  const [errorSendEmail, setErrorSendEmail] = useState(false);
+  const { loading } = useSelector((state: State) => state);
 
   useEffect(() => {
     if (!error && email) {
@@ -31,46 +28,39 @@ function ValidationEmail({
     }
   }, [email, error]);
 
-  useEffect(() => {
-    //return () => dispatch(clearPassword())
-  }, []);
-
   // useEffect(() => {
   //   if (changePasswort.status) {
   //     Swal.fire({
+  //       position: 'center',
+  //       icon: 'error',
+  //       title: 'This email does not exist, please enter another email or register',
+  //       showConfirmButton: false,
+  //       timer: 2000
+  //     }).then(()=>login(false))
+  //   }
+  //   else if (changePasswort.status === false) {
+  //      Swal.fire({
   //       position: 'center',
   //       icon: 'success',
   //       title: 'Check your email',
   //       showConfirmButton: false,
   //       timer: 2000
   //     })
-  //     signIn(false)
-  //     register(false)
-  //     setLoading(false)
-  //   }
-  //   else if (changePasswort.status === false) {
-  //     setErrorSendEmail(true)
-  //     setLoading(false)
-  //     setValidation(true)
-  //     setEmail("")
   //   }
   // }, [changePasswort])
-
 
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
     const value = e.target.value;
     setEmail(value.trim());
-    setErrorSendEmail(false);
 
     regexEmail.test(value.trim()) ? setError(false) : setError(true);
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //dispatch(forgottenPassword(email))
-    setLoading(true);
+    dispatch(validationEmail(email))
   };
 
   return (
@@ -100,22 +90,14 @@ function ValidationEmail({
           className="form-control"
           onChange={handleValidationEmail}
         />
-        {errorSendEmail ? (
-          <label
-            htmlFor="sendEmail"
-            className="col form-label text-danger fw-bold text-start mt-3"
-          >
-            This email does not exist, please enter another email or register.
-          </label>
-        ) : null}
-        <div className={errorSendEmail ? "mt-2 d-grid" : "mt-4 d-grid"}>
+        <div className="mt-4 d-grid">
           <button
             type="submit"
             className="btn btn-primary"
             name="validation"
             disabled={validation}
           >
-            {loading ? (
+            {loading.status && loading.component === "validationEmail" ? (
               <span className="spinner-border text-info" role="status"></span>
             ) : (
               "Send validation"

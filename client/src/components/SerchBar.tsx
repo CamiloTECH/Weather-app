@@ -9,12 +9,11 @@ import Swal from "sweetalert2"
 interface State {
   citys: [];
   cityDetail: {};
-  user: {};
   statusFavorites: {};
-  statusLogin: { status: boolean; token?: string };
-  statusRegister: { status: boolean };
+  statusLogin: { status: boolean | undefined; token?: string };
+  statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
-  generalError: boolean;
+  generalError: string;
 }
 
 function SearchBar() {
@@ -26,12 +25,19 @@ function SearchBar() {
 
   useEffect(()=>{
     if(!window.localStorage.getItem("token")) navigate("/")
-    else if (generalError) {
+    else if (generalError==="notFound") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "The city was not found! Check that the name is correct",
-      }).then(() => dispatch(changeGeneralError(false)));
+      }).then(() => dispatch(changeGeneralError("")));
+    }
+    else if (generalError==="exist") {
+      Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: "This city already exists in the list!",
+      }).then(() => dispatch(changeGeneralError("")));
     }
   },[generalError])
 

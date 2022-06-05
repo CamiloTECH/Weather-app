@@ -11,7 +11,8 @@ export const GET_FAVORITES: string = "getFavorites",
   CLEAR_CITY_DETAIL: string = "clearCityDetail",
   SING_IN: string = "singIn",
   SING_UP: string = "singUp",
-  CLEAR_USER: string = "clearUser";
+  CLEAR_USER: string = "clearUser",
+  VALIDATION_EMAIL:string ="validationEmail"
 
 const URL = "http://localhost:3001";
 interface Info {
@@ -38,13 +39,14 @@ export const getCity = (name: string, token: string) => {
       headers: { Authorization: `bearer ${token}` },
     });
     const result: any = await response.json();
+    
     dispatch({
       type: LOADING,
       payload: { status: false, component: "search" },
     });
     return result.id
       ? dispatch({ type: GET_CITY, payload: result })
-      : dispatch(changeGeneralError(true));
+      : dispatch(changeGeneralError("notFound"));
   };
 };
 
@@ -58,7 +60,7 @@ export const getCityDetails = (lat: string, lon: string, token: string) => {
 
     result.lat
       ? dispatch({ type: GET_CITY_DETAILS, payload: result })
-      : dispatch(changeGeneralError(true));
+      : dispatch(changeGeneralError("notFound"));
     dispatch({
       type: LOADING,
       payload: { status: false, component: "detail" },
@@ -135,7 +137,15 @@ export const singUp = (info: {
   };
 };
 
-export const changeGeneralError = (status: boolean) => {
+export const validationEmail = (email:string)=>{
+  
+  return {
+    type: VALIDATION_EMAIL,
+    payload:""
+  }
+}
+
+export const changeGeneralError = (status: string) => {
   return {
     type: GENERAL_ERROR,
     payload: status,

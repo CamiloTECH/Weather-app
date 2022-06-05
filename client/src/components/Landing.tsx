@@ -16,7 +16,7 @@ interface State {
   statusLogin: { status: boolean | undefined; token?: string };
   statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
-  generalError: boolean;
+  generalError: string;
 }
 
 function Landing() {
@@ -75,7 +75,7 @@ function Landing() {
       className="container d-flex justify-content-center"
       style={{
         marginTop: signUp ? "1rem" : "4rem",
-        marginBottom: signUp ? "0rem" : "3rem",
+        marginBottom: signUp ? "1rem" : "3rem",
       }}
     >
       <div className="row shadow-lg rounded rounded-3 align-items-stretch contenido">
@@ -97,7 +97,7 @@ function Landing() {
           <h2 className="fw-bold text-center pt-3 mb-5">Welcome</h2>
 
           {forgotPassword ? (
-            <ValidationEmail signIn={setForgotPassword} register={setSignUp} />
+            <ValidationEmail login={handleSignUp} />
           ) : signUp ? (
             <SignUp />
           ) : (

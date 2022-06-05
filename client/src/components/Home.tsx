@@ -10,7 +10,7 @@ interface State {
   statusLogin: { status: boolean | undefined; token?: string };
   statusRegister: { status: boolean | undefined };
   loading: { status: boolean; component: string };
-  generalError: boolean;
+  generalError: string;
 }
 
 function Home() {
