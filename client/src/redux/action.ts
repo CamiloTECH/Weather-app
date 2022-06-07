@@ -12,7 +12,8 @@ export const GET_FAVORITES: string = "getFavorites",
   SING_IN: string = "singIn",
   SING_UP: string = "singUp",
   CLEAR_USER: string = "clearUser",
-  VALIDATION_EMAIL:string ="validationEmail"
+  VALIDATION_EMAIL:string ="validationEmail",
+  CHANGE_PASSWORD:string = "changePassword"
 
 const URL = "http://localhost:3001";
 interface Info {
@@ -148,6 +149,13 @@ export const validationEmail = (email:{email:string})=>{
     const result= await response.json()
     dispatch({ type: LOADING, payload: { status: false, component: "validationEmail" },});
     return dispatch({ type: VALIDATION_EMAIL, payload:result })
+  }
+}
+
+export const changePassword = (email:{email:string})=>{
+  return {
+    type: CHANGE_PASSWORD,
+    payload: email
   }
 }
 

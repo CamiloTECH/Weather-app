@@ -9,7 +9,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing key={"landing"} />} />
-
+      <Route path="/:token" element={<Landing key={"landing"} />} />
+      
       <Route
         path="/home"
         element={[<SearchBar key={"SearchBar"} />, <Home key={"home"} />]}

@@ -18,14 +18,10 @@ function Login() {
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const loading = useSelector((state: State) => state.loading);
-  const [error, setError] = useState({
-    email: false,
-    password: false,
-    send: false,
-  });
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!error.email && !error.password && inputs.email && inputs.password) {
+    if (!error && inputs.email && inputs.password) {
       setValidation(false);
     } else {
       setValidation(true);
@@ -35,7 +31,7 @@ function Login() {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(singIn(inputs));
-    setInputs({ email: "", password: "" })
+    setInputs({ email: "", password: "" });
   };
 
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,17 +53,7 @@ function Login() {
           email: value.trim(),
         });
 
-        if (regexEmail.test(value)) {
-          setError({
-            ...error,
-            email: false,
-          });
-        } else {
-          setError({
-            ...error,
-            email: true,
-          });
-        }
+        regexEmail.test(value) ? setError(false) : setError(true);
         break;
       default:
         break;
@@ -81,7 +67,7 @@ function Login() {
           <label htmlFor="email" className="col form-label">
             Email:
           </label>
-          {error.email ? (
+          {error ? (
             <label
               htmlFor="email"
               className="col form-label text-danger fw-bold text-end"
@@ -100,22 +86,12 @@ function Login() {
         />
       </div>
 
-      <div className={error.password ? "mb-2" : "mb-4"}>
-        <div className="row">
-          <label htmlFor="password" className="col form-label">
-            Password:
-          </label>
-          {error.password ? (
-            <label
-              htmlFor="email"
-              className="col form-label text-danger fw-bold text-end"
-            >
-              Invalid Password
-            </label>
-          ) : null}
-        </div>
+      <div className="mb-4">
+        <label htmlFor="password" className="form-label">
+          Password:
+        </label>
 
-        <div className="row ms-1 gap-0">
+        <div className="row ms-0 gap-0">
           <input
             type={viewPassword ? "text" : "password"}
             name="password"
@@ -155,17 +131,6 @@ function Login() {
         </div>
       </div>
 
-      <div className="mb-2">
-        {error.send ? (
-          <label
-            htmlFor="login"
-            className="col form-label text-danger fw-bold text-end fs-5"
-          >
-            Invalid email or password
-          </label>
-        ) : null}
-      </div>
-
       <div className="d-grid">
         <button
           type="submit"
@@ -173,7 +138,7 @@ function Login() {
           name="login"
           disabled={validation}
         >
-          {loading.status && loading.component==="Login" ? (
+          {loading.status && loading.component === "Login" ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Login"

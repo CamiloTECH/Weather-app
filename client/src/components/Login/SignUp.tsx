@@ -26,7 +26,6 @@ function SignUp() {
     email: false,
     password: false,
     userName: false,
-    send: false,
   });
 
   useEffect(() => {
@@ -164,7 +163,7 @@ function SignUp() {
         />
       </div>
 
-      <div className={"mb-2"}>
+      <div className="mb-2">
         <div className="row">
           <label htmlFor="password" className="col form-label">
             Password:
@@ -178,7 +177,7 @@ function SignUp() {
             </label>
           ) : null}
         </div>
-        <div className="row ms-1 gap-0">
+        <div className="row ms-0 gap-0">
           <input
             type={viewPassword ? "text" : "password"}
             name="password"
@@ -226,17 +225,6 @@ function SignUp() {
           The password must have a minimum of 5 characters and a maximum of 15
           characters and at least one lowercase.
         </label>
-      </div>
-
-      <div className="mb-2">
-        {error.send ? (
-          <label
-            htmlFor="register"
-            className="col form-label text-danger fw-bold text-start fs-5"
-          >
-            This email already exists, please put another email or login
-          </label>
-        ) : null}
       </div>
 
       <div className="d-grid">

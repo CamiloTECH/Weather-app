@@ -12,7 +12,7 @@ interface State {
   generalError: string;
 }
 
-function ValidationEmail({ login }: { login: (boolean: boolean) => void }) {
+function ValidationEmail() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
@@ -20,11 +20,7 @@ function ValidationEmail({ login }: { login: (boolean: boolean) => void }) {
   const { loading } = useSelector((state: State) => state);
 
   useEffect(() => {
-    if (!error && email) {
-      setValidation(false);
-    } else {
-      setValidation(true);
-    }
+    !error && email ? setValidation(false) : setValidation(true);
   }, [email, error]);
 
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {

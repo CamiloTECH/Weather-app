@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import ValidationEmail from "./Login/ValidationEmail";
 import LoginGoogle from "./Login/LoginGoogle";
 import SignUp from "./Login/SignUp";
+import ChangePassword from "./Login/ChangePassword";
 import Login from "./Login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { clearUser } from "../redux/action";
 
 interface State {
@@ -22,8 +23,10 @@ interface State {
 
 function Landing() {
   const dispatch = useDispatch();
+  const { token } = useParams();
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
+  const [changePassword, setChangePassword] = useState(false);
   const [forgotPassword, setForgotPassword] = useState(false);
   const { statusLogin, statusRegister, statusChangePassword } = useSelector(
     (state: State) => state
@@ -31,22 +34,25 @@ function Landing() {
 
   useEffect((): any => {
     if (window.localStorage.getItem("token")) navigate("/home");
-    else if (forgotPassword) {
+    else if (token) {
+      if (changePassword) {
+      } else setChangePassword(true);
+    } else if (forgotPassword) {
       if (statusChangePassword.status) {
         Swal.fire({
           icon: "success",
           title: "The mail was sent!",
           text: "Please check your e-mail",
         }).then(() => {
-          setForgotPassword(false)
-          setSignUp(false)
+          setForgotPassword(false);
+          setSignUp(false);
         });
       } else if (statusChangePassword.status === false) {
         Swal.fire({
           icon: "error",
           title: "Oops an error occurred!",
           text: "This email doesn't exist, please enter another email or register",
-        })
+        });
       }
     } else {
       if (signUp) {
@@ -116,17 +122,41 @@ function Landing() {
           </div>
           <h2 className="fw-bold text-center pt-3 mb-5">Welcome</h2>
 
-          {forgotPassword ? (
-            <ValidationEmail login={handleSignUp} />
+          {changePassword ? (
+            <ChangePassword />
+          ) : forgotPassword ? (
+            <ValidationEmail />
           ) : signUp ? (
             <SignUp />
           ) : (
             <Login />
           )}
 
-          <div className="mt-4">
-            {forgotPassword ? (
-              <>
+          {token ? null : (
+            <div className="mt-4">
+              {forgotPassword ? (
+                <>
+                  <span>
+                    You don't have an account?{" "}
+                    <button
+                      onClick={() => handleSignUp(true)}
+                      className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"
+                    >
+                      Sign up
+                    </button>
+                  </span>
+                  <br />
+                  <span>
+                    You have an account?{" "}
+                    <button
+                      onClick={() => handleSignUp(false)}
+                      className="bg-transparent border-0 text-primary text-decoration-underline"
+                    >
+                      Login
+                    </button>
+                  </span>
+                </>
+              ) : !signUp ? (
                 <span>
                   You don't have an account?{" "}
                   <button
@@ -136,7 +166,7 @@ function Landing() {
                     Sign up
                   </button>
                 </span>
-                <br />
+              ) : (
                 <span>
                   You have an account?{" "}
                   <button
@@ -146,44 +176,23 @@ function Landing() {
                     Login
                   </button>
                 </span>
-              </>
-            ) : !signUp ? (
-              <span>
-                You don't have an account?{" "}
-                <button
-                  onClick={() => handleSignUp(true)}
-                  className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"
-                >
-                  Sign up
-                </button>
-              </span>
-            ) : (
-              <span>
-                You have an account?{" "}
-                <button
-                  onClick={() => handleSignUp(false)}
-                  className="bg-transparent border-0 text-primary text-decoration-underline"
-                >
-                  Login
-                </button>
-              </span>
-            )}
+              )}
 
-            <br />
-            {!signUp && !forgotPassword ? (
-              <span>
-                Forgot your password?{" "}
-                <button
-                  className="bg-transparent border-0 text-primary text-decoration-underline"
-                  onClick={() => setForgotPassword(true)}
-                >
-                  Recover password
-                </button>
-              </span>
-            ) : null}
-          </div>
-
-          <LoginGoogle />
+              <br />
+              {!signUp && !forgotPassword ? (
+                <span>
+                  Forgot your password?{" "}
+                  <button
+                    className="bg-transparent border-0 text-primary text-decoration-underline"
+                    onClick={() => setForgotPassword(true)}
+                  >
+                    Recover password
+                  </button>
+                </span>
+              ) : null}
+            </div>
+          )}
+          {token ? null : <LoginGoogle />}
         </div>
       </div>
     </div>

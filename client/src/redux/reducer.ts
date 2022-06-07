@@ -12,7 +12,8 @@ import {
   SING_IN,
   SING_UP,
   CLEAR_USER,
-  VALIDATION_EMAIL
+  VALIDATION_EMAIL,
+  CHANGE_PASSWORD
 } from "./action";
 
 interface State {
@@ -132,7 +133,8 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         statusLogin: action.payload,
         statusRegister:action.payload,
       }
-
+    
+    case CHANGE_PASSWORD:
     case VALIDATION_EMAIL:
       return {
         ...state,
