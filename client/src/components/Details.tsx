@@ -117,7 +117,7 @@ function Details() {
                     <img
                       src={`http://openweathermap.org/img/wn/${cityDetail.current.weather[0].icon}@2x.png`}
                       className="col col-6 col-xl-6"
-                      style={{ filter: "drop-shadow(0px 0px 20px #0dcaf0)" }}
+                      style={{ filter: "drop-shadow(0px 0px 8px #ffffff)" }}
                       alt="Logo"
                     />
                     <h1 className=" mb-4 m-sm-0 temp">

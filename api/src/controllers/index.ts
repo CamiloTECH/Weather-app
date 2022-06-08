@@ -11,8 +11,6 @@ import tokenEmail from "../helpers/tokenEmail";
 
 dotenv.config();
 
-//Retorna todas las ciudades que el usuario añadio como favoritas, retorna un arreglo con toda la info
-//del clima de las ciudades
 export const getFavCitys = async (req: Request, res: Response) => {
   const userCitys: AxiosResponse[] = [];
   const verifyUser = await verifyToken(req);
@@ -44,7 +42,6 @@ export const getFavCitys = async (req: Request, res: Response) => {
   }
 };
 
-//Optiene la informacion de una ciudad en especifico
 export const getCity = async (req: Request, res: Response) => {
   const { city } = req.params;
 
@@ -59,7 +56,6 @@ export const getCity = async (req: Request, res: Response) => {
   }
 };
 
-//Optiene informacion mas detallada de una ciudad, para saber el clima por horas
 export const getCityDetails = async (req: Request, res: Response) => {
   const { lat, lon } = req.query;
   try {
@@ -72,7 +68,6 @@ export const getCityDetails = async (req: Request, res: Response) => {
   }
 };
 
-//Añadir a la DB la ciudad que el usuario quiera añadir a favoritos, para que pueda ser mostrada luego
 export const addFavorites = async (req: Request, res: Response) => {
   interface Body {
     ciudad: string;
@@ -91,7 +86,6 @@ export const addFavorites = async (req: Request, res: Response) => {
   } else res.json({ status: false });
 };
 
-//Eliminar de la DB una ciudad que el usuario ya no quiera tener en favoritos
 export const deleteFavorites = async (req: Request, res: Response) => {
   interface Body {
     ciudad: string;
@@ -112,7 +106,6 @@ export const deleteFavorites = async (req: Request, res: Response) => {
   } else res.json({ status: false });
 };
 
-//Registra a los usuarios en la base de datos
 export const registerUser = async (req: Request, res: Response) => {
   interface Body {
     userName: string;
@@ -132,7 +125,6 @@ export const registerUser = async (req: Request, res: Response) => {
   res.json({ status: created });
 };
 
-//Crea el token para poder logear a los usuarios
 export const loginUser = async (req: Request, res: Response) => {
   interface Body {
     email: string;
@@ -151,12 +143,37 @@ export const loginUser = async (req: Request, res: Response) => {
   } else res.json({ status: false });
 };
 
+export const loginGoogle = async (req: Request, res: Response) => {
+  const { email, userName } = req.body;
+  let token: string = "";
+  try {
+    const user = await users.findOne({ where: { email } });
+    if (user) {
+      if (user.password.length === 0) {
+        token = generateToken({ id: user.id });
+      } else {
+        throw new Error("Usuario existente");
+      }
+    } else {
+      const newUser = await users.create({
+        email,
+        userName: userName,
+        password: "",
+      });
+      token = generateToken({ id: newUser.id });
+    }
+    res.json({ status: true, token });
+  } catch (error) {
+    res.json({ status: false });
+  }
+};
+
 export const validationEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   try {
     const userExists = await users.findOne({ where: { email } });
-    if (userExists) {
+    if (userExists && userExists.password.length > 0) {
       userExists.token = tokenEmail();
       await userExists.save();
       await sendEmail(email, userExists.token, userExists.userName);
@@ -173,7 +190,7 @@ export const changePassword = async (req: Request, res: Response) => {
   const { password } = req.body;
 
   try {
-    if (token && typeof token=== "string") {
+    if (token && typeof token === "string") {
       const user = await users.findOne({ where: { token } });
       if (user) {
         const saltRounds = 10;
