@@ -6,8 +6,8 @@ import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import { generateToken } from "../helpers/token";
 import { verifyToken } from "../helpers/verifyToken";
-import { sendEmail } from "../helpers/sendMail"
-import tokenEmail from "../helpers/tokenEmail"
+import { sendEmail } from "../helpers/sendMail";
+import tokenEmail from "../helpers/tokenEmail";
 
 dotenv.config();
 
@@ -153,13 +153,13 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const validationEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
-  
+
   try {
     const userExists = await users.findOne({ where: { email } });
     if (userExists) {
-      userExists.token = tokenEmail()
+      userExists.token = tokenEmail();
       await userExists.save();
-      await sendEmail( email, userExists.token, userExists.userName )
+      await sendEmail(email, userExists.token, userExists.userName);
 
       res.json({ status: true });
     } else res.json({ status: false });
@@ -168,6 +168,25 @@ export const validationEmail = async (req: Request, res: Response) => {
   }
 };
 
-export const changePassword = async (req:Request, res:Response) =>{
-  
-}
+export const changePassword = async (req: Request, res: Response) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    if (token && typeof token=== "string") {
+      const user = await users.findOne({ where: { token } });
+      if (user) {
+        const saltRounds = 10;
+        const passwordHash = await bcryptjs.hash(password, saltRounds);
+
+        user.token = "";
+        user.password = passwordHash;
+        await user.save();
+
+        res.json({ status: true });
+      } else res.json({ status: false });
+    } else res.json({ status: false });
+  } catch (error) {
+    res.json({ status: false });
+  }
+};

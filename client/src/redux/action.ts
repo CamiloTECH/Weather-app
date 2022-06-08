@@ -152,10 +152,18 @@ export const validationEmail = (email:{email:string})=>{
   }
 }
 
-export const changePassword = (email:{email:string})=>{
-  return {
-    type: CHANGE_PASSWORD,
-    payload: email
+export const changePassword = (password:{password:string}, token:string)=>{
+  return async (dispatch:Dispatch)=>{ 
+    dispatch({ type: LOADING, payload: { status: true, component: "changePassword" },});
+    const response= await fetch(`${URL}/changePassword/${token}`,{
+      method:"PUT",
+      body: JSON.stringify(password),
+      headers: { "Content-Type": "application/json" },
+    })
+    const result= await response.json()
+
+    dispatch({ type: LOADING, payload: { status: false, component: "changePassword" },});
+    return dispatch({type: CHANGE_PASSWORD, payload: result})
   }
 }
 

@@ -36,6 +36,19 @@ function Landing() {
     if (window.localStorage.getItem("token")) navigate("/home");
     else if (token) {
       if (changePassword) {
+        if (statusChangePassword.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Password changed successfully!",
+            text: "Now you can login successfully",
+          }).then(() => navigate("/"));
+        } else if (statusChangePassword.status === false) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "An error occurred in the shipment",
+          }).then(() => navigate("/"));
+        }
       } else setChangePassword(true);
     } else if (forgotPassword) {
       if (statusChangePassword.status) {
@@ -122,8 +135,8 @@ function Landing() {
           </div>
           <h2 className="fw-bold text-center pt-3 mb-5">Welcome</h2>
 
-          {changePassword ? (
-            <ChangePassword />
+          {changePassword && token ? (
+            <ChangePassword token={token} />
           ) : forgotPassword ? (
             <ValidationEmail />
           ) : signUp ? (

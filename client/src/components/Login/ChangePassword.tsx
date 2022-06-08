@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { changePassword } from "../../redux/action";
 
 interface State {
   citys: [];
@@ -11,7 +12,7 @@ interface State {
   generalError: string;
 }
 
-function ChangePassword() {
+function ChangePassword({token}:{token:string}) {
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
@@ -56,7 +57,7 @@ function ChangePassword() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //dispatch(validationEmail({email}))
+    dispatch(changePassword({password},token))
     setPassword("");
     setConfirmPassword("");
   };

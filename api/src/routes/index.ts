@@ -25,6 +25,6 @@ routes.post("/registerUser", registerUser);
 routes.post("/loginUser", loginUser);
 
 routes.post("/validationEmail", validationEmail);
-routes.post("/changePassword/:token", changePassword);
+routes.put("/changePassword/:token", changePassword);
 
 export default routes;
