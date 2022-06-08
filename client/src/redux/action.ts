@@ -12,8 +12,8 @@ export const GET_FAVORITES: string = "getFavorites",
   SING_IN: string = "singIn",
   SING_UP: string = "singUp",
   CLEAR_USER: string = "clearUser",
-  VALIDATION_EMAIL:string ="validationEmail",
-  CHANGE_PASSWORD:string = "changePassword"
+  VALIDATION_EMAIL: string = "validationEmail",
+  CHANGE_PASSWORD: string = "changePassword";
 
 const URL = "http://localhost:3001";
 interface Info {
@@ -29,7 +29,10 @@ export const getFavorites = (token: string) => {
     const result: [] = await response.json();
 
     dispatch({ type: LOADING, payload: { status: false, component: "home" } });
-    return dispatch({ type: GET_FAVORITES, payload: {citys:result, status:{ status: true }} });
+    return dispatch({
+      type: GET_FAVORITES,
+      payload: { citys: result, status: { status: true } },
+    });
   };
 };
 
@@ -40,7 +43,7 @@ export const getCity = (name: string, token: string) => {
       headers: { Authorization: `bearer ${token}` },
     });
     const result: any = await response.json();
-    
+
     dispatch({
       type: LOADING,
       payload: { status: false, component: "search" },
@@ -138,34 +141,61 @@ export const singUp = (info: {
   };
 };
 
-export const validationEmail = (email:{email:string})=>{
-  return async (dispatch:Dispatch) =>{
-    dispatch({ type: LOADING, payload: { status: true, component: "validationEmail" },});
-    const response= await fetch(`${URL}/validationEmail`,{
-      method:"POST",
-      body:JSON.stringify(email),
+export const singInGoogle = (info: { email: string; userName: string }) => {
+  return async (dispatch: Dispatch) => {
+    const response = await fetch(`${URL}/logingoogle`, {
+      method: "POST",
+      body: JSON.stringify(info),
       headers: { "Content-Type": "application/json" },
-    })
-    const result= await response.json()
-    dispatch({ type: LOADING, payload: { status: false, component: "validationEmail" },});
-    return dispatch({ type: VALIDATION_EMAIL, payload:result })
-  }
-}
+    });
+    const result = await response.json();
+    dispatch({ type: SING_IN, payload: result });
+  };
+};
 
-export const changePassword = (password:{password:string}, token:string)=>{
-  return async (dispatch:Dispatch)=>{ 
-    dispatch({ type: LOADING, payload: { status: true, component: "changePassword" },});
-    const response= await fetch(`${URL}/changePassword/${token}`,{
-      method:"PUT",
+export const validationEmail = (email: { email: string }) => {
+  return async (dispatch: Dispatch) => {
+    dispatch({
+      type: LOADING,
+      payload: { status: true, component: "validationEmail" },
+    });
+    const response = await fetch(`${URL}/validationEmail`, {
+      method: "POST",
+      body: JSON.stringify(email),
+      headers: { "Content-Type": "application/json" },
+    });
+    const result = await response.json();
+    dispatch({
+      type: LOADING,
+      payload: { status: false, component: "validationEmail" },
+    });
+    return dispatch({ type: VALIDATION_EMAIL, payload: result });
+  };
+};
+
+export const changePassword = (
+  password: { password: string },
+  token: string
+) => {
+  return async (dispatch: Dispatch) => {
+    dispatch({
+      type: LOADING,
+      payload: { status: true, component: "changePassword" },
+    });
+    const response = await fetch(`${URL}/changePassword/${token}`, {
+      method: "PUT",
       body: JSON.stringify(password),
       headers: { "Content-Type": "application/json" },
-    })
-    const result= await response.json()
+    });
+    const result = await response.json();
 
-    dispatch({ type: LOADING, payload: { status: false, component: "changePassword" },});
-    return dispatch({type: CHANGE_PASSWORD, payload: result})
-  }
-}
+    dispatch({
+      type: LOADING,
+      payload: { status: false, component: "changePassword" },
+    });
+    return dispatch({ type: CHANGE_PASSWORD, payload: result });
+  };
+};
 
 export const changeGeneralError = (status: string) => {
   return {

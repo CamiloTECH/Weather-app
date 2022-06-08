@@ -14,9 +14,13 @@ interface State {
   citys: [];
   cityDetail: {};
   statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
   statusRegister: { status: boolean | undefined };
-  statusChangePassword: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
   loading: { status: boolean; component: string };
   generalError: string;
 }
@@ -61,7 +65,16 @@ function Landing() {
           setSignUp(false);
         });
       } else if (statusChangePassword.status === false) {
-        Swal.fire({
+        statusChangePassword.message==="googleEmail"
+        ?Swal.fire({
+          icon: "error",
+          title: "Oops an error occurred!",
+          text: "This email can't change the password, because you signed up with google",
+        }).then(() => {
+          setForgotPassword(false);
+          setSignUp(false);
+        })
+        :Swal.fire({
           icon: "error",
           title: "Oops an error occurred!",
           text: "This email doesn't exist, please enter another email or register",
@@ -94,11 +107,17 @@ function Landing() {
             timer: 1500,
           }).then(() => navigate("/home"));
         } else if (statusLogin.status === false) {
-          Swal.fire({
+          statusLogin.message==="login"
+          ?Swal.fire({
             icon: "error",
             title: "Oops an error occurred!",
-            text: "Wrong password or email, please check",
-          });
+            text: "Wrong password or email. Please check!",
+          })
+          :Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "You can't login with google, this email was registered in another way, you must login in another way",
+          })
         }
       }
     }
@@ -113,7 +132,7 @@ function Landing() {
     <div
       className="container d-flex justify-content-center"
       style={{
-        marginTop: signUp ? "1rem" : "4rem",
+        marginTop: signUp ? "3rem" : "4rem",
         marginBottom: signUp ? "1rem" : "3rem",
       }}
     >
@@ -205,7 +224,7 @@ function Landing() {
               ) : null}
             </div>
           )}
-          {token ? null : <LoginGoogle />}
+          {token || signUp || forgotPassword ? null : <LoginGoogle />}
         </div>
       </div>
     </div>

@@ -140,7 +140,7 @@ export const loginUser = async (req: Request, res: Response) => {
   if (correctPassword && user) {
     const token = generateToken({ id: user.id });
     res.json({ status: true, token });
-  } else res.json({ status: false });
+  } else res.json({ status: false, message: "login" });
 };
 
 export const loginGoogle = async (req: Request, res: Response) => {
@@ -164,7 +164,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
     }
     res.json({ status: true, token });
   } catch (error) {
-    res.json({ status: false });
+    res.json({ status: false, message: "loginGoogle" });
   }
 };
 
@@ -173,15 +173,18 @@ export const validationEmail = async (req: Request, res: Response) => {
 
   try {
     const userExists = await users.findOne({ where: { email } });
-    if (userExists && userExists.password.length > 0) {
-      userExists.token = tokenEmail();
-      await userExists.save();
-      await sendEmail(email, userExists.token, userExists.userName);
+    if (userExists) {
+      if (userExists.password.length > 0) {
+        userExists.token = tokenEmail();
+        await userExists.save();
+        await sendEmail(email, userExists.token, userExists.userName);
+        res.json({ status: true });
+        
+      } else res.json({ status: false, message: "googleEmail" });
 
-      res.json({ status: true });
-    } else res.json({ status: false });
+    } else res.json({ status: false, message: "normalEmail" });
   } catch (error) {
-    res.json({ status: false });
+    res.json({ status: false, message: "normalEmail" });
   }
 };
 

@@ -1,22 +1,18 @@
-import {
-  GoogleLogin,
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import { singInGoogle } from "../../redux/action";
 
 function LoginGoogle() {
   const dispatch = useDispatch();
 
-  const onSuccess = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ): void => {
-    // dispatch(
-    //   loginGoogle({
-    //     email: response.profileObj.email,
-    //     username: response.profileObj.name,
-    //   })
+  const onSuccess = (response: any): void => {
+    dispatch(
+      singInGoogle({
+        email: response.profileObj.email,
+        userName: response.profileObj.name,
+      })
+    );
   };
 
   const onFailure = () => {

@@ -13,16 +13,20 @@ import {
   SING_UP,
   CLEAR_USER,
   VALIDATION_EMAIL,
-  CHANGE_PASSWORD
+  CHANGE_PASSWORD,
 } from "./action";
 
 interface State {
   citys: [];
   cityDetail: {};
   statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
   statusRegister: { status: boolean | undefined };
-  statusChangePassword: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
   loading: { status: boolean; component: string };
   generalError: string;
 }
@@ -37,7 +41,7 @@ const inicialState: State = {
   statusFavorites: {},
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
-  statusChangePassword:{ status: undefined },
+  statusChangePassword: { status: undefined },
   loading: { status: false, component: "" },
   generalError: "",
 };
@@ -47,7 +51,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
     case GET_FAVORITES:
       return {
         ...state,
-        statusLogin:action.payload.status,
+        statusLogin: action.payload.status,
         citys: action.payload.citys,
       };
 
@@ -57,9 +61,9 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       );
       return existCity
         ? {
-          ...state,
-          generalError:"exist" ,
-        }
+            ...state,
+            generalError: "exist",
+          }
         : {
             ...state,
             citys: [action.payload, ...state.citys],
@@ -131,15 +135,15 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       return {
         ...state,
         statusLogin: action.payload,
-        statusRegister:action.payload,
-      }
-    
+        statusRegister: action.payload,
+      };
+
     case CHANGE_PASSWORD:
     case VALIDATION_EMAIL:
       return {
         ...state,
-        statusChangePassword:action.payload,
-      }
+        statusChangePassword: action.payload,
+      };
     default:
       return state;
   }
