@@ -13,7 +13,8 @@ export const GET_FAVORITES: string = "getFavorites",
   SING_UP: string = "singUp",
   CLEAR_USER: string = "clearUser",
   VALIDATION_EMAIL: string = "validationEmail",
-  CHANGE_PASSWORD: string = "changePassword";
+  CHANGE_PASSWORD: string = "changePassword",
+  UPDATE_STATUS:string= "updateStatus"
 
 const URL = "http://localhost:3001";
 interface Info {
@@ -36,20 +37,17 @@ export const getFavorites = (token: string) => {
   };
 };
 
-export const getCity = (name: string, token: string) => {
+export const getCity = (name: string, token: string, updateStatus:boolean) => {
   return async (dispatch: Dispatch) => {
-    dispatch({ type: LOADING, payload: { status: true, component: "search" } });
+    if(!updateStatus) dispatch({ type: LOADING, payload: { status: true, component: "search" } });
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`, {
       headers: { Authorization: `bearer ${token}` },
     });
     const result: any = await response.json();
 
-    dispatch({
-      type: LOADING,
-      payload: { status: false, component: "search" },
-    });
+    if(!updateStatus) dispatch({ type: LOADING, payload: { status: false, component: "search" } });
     return result.id
-      ? dispatch({ type: GET_CITY, payload: result })
+      ? dispatch({ type: updateStatus?UPDATE_STATUS:GET_CITY, payload: result })
       : dispatch(changeGeneralError("notFound"));
   };
 };
@@ -79,7 +77,7 @@ export const addFavorites = (info: Info, token: string) => {
       body: JSON.stringify(info),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `bearer ${token}`,
+        "Authorization": `bearer ${token}`,
       },
     });
     const result = await response.json();

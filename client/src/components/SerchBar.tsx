@@ -51,7 +51,7 @@ function SearchBar() {
       const token=window.localStorage.getItem("token")
       if(token){
         if(window.location.pathname!=="/home") navigate("/home")
-        dispatch(getCity(country.trim(),token))
+        dispatch(getCity(country.trim(),token,false))
       }
     }
     setCountry("");

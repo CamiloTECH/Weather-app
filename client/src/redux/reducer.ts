@@ -14,6 +14,7 @@ import {
   CLEAR_USER,
   VALIDATION_EMAIL,
   CHANGE_PASSWORD,
+  UPDATE_STATUS
 } from "./action";
 
 interface State {
@@ -136,6 +137,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusLogin: action.payload,
         statusRegister: action.payload,
+        statusChangePassword: action.payload
       };
 
     case CHANGE_PASSWORD:
@@ -144,6 +146,19 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusChangePassword: action.payload,
       };
+
+    case UPDATE_STATUS:
+      const updateCitys = state.citys.map((city: any) => {
+        if (city.name === action.payload.name){
+          action.payload.fav= city.fav 
+          return action.payload
+        } 
+        else return city;
+      });
+      return {
+        ...state,
+        citys: [...updateCitys]
+      }
     default:
       return state;
   }
