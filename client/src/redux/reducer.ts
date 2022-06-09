@@ -14,7 +14,8 @@ import {
   CLEAR_USER,
   VALIDATION_EMAIL,
   CHANGE_PASSWORD,
-  UPDATE_STATUS
+  UPDATE_STATUS,
+  LOAD_CITIES_LOCALSTORAGE
 } from "./action";
 
 interface State {
@@ -49,26 +50,34 @@ const inicialState: State = {
 
 function rootReducer(state: State = inicialState, action: actionTypes) {
   switch (action.type) {
+    case LOAD_CITIES_LOCALSTORAGE:
+      return{
+        ...state,
+        citys:action.payload
+      }
     case GET_FAVORITES:
+      window.localStorage.setItem("citys", JSON.stringify(action.payload));
       return {
         ...state,
-        statusLogin: action.payload.status,
-        citys: action.payload.citys,
+        citys: action.payload,
       };
 
     case GET_CITY:
       const existCity = state.citys.find(
         (city: any) => city.id === action.payload.id
       );
-      return existCity
-        ? {
-            ...state,
-            generalError: "exist",
-          }
-        : {
-            ...state,
-            citys: [action.payload, ...state.citys],
-          };
+      if (existCity) {
+        return {
+          ...state,
+          generalError: "exist",
+        };
+      } else {
+        window.localStorage.setItem("citys", JSON.stringify([action.payload, ...state.citys]));
+        return {
+          ...state,
+          citys: [action.payload, ...state.citys],
+        };
+      }
 
     case GET_CITY_DETAILS:
       return {
@@ -87,6 +96,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       const newCitys = state.citys.filter(
         (city: any) => city.name !== action.payload
       );
+      window.localStorage.setItem("citys", JSON.stringify(newCitys));
       return {
         ...state,
         citys: [...newCitys],
@@ -97,6 +107,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         if (city.name === action.payload) city.fav = !city.fav;
         return city;
       });
+      window.localStorage.setItem("citys", JSON.stringify(newCitysFav));
       return {
         ...state,
         citys: [...newCitysFav],
@@ -137,7 +148,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusLogin: action.payload,
         statusRegister: action.payload,
-        statusChangePassword: action.payload
+        statusChangePassword: action.payload,
       };
 
     case CHANGE_PASSWORD:
@@ -149,16 +160,16 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
 
     case UPDATE_STATUS:
       const updateCitys = state.citys.map((city: any) => {
-        if (city.name === action.payload.name){
-          action.payload.fav= city.fav 
-          return action.payload
-        } 
-        else return city;
+        if (city.name === action.payload.name) {
+          action.payload.fav = city.fav;
+          return action.payload;
+        } else return city;
       });
+      window.localStorage.setItem("citys", JSON.stringify(updateCitys));
       return {
         ...state,
-        citys: [...updateCitys]
-      }
+        citys: [...updateCitys],
+      };
     default:
       return state;
   }

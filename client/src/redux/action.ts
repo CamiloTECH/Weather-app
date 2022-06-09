@@ -14,7 +14,8 @@ export const GET_FAVORITES: string = "getFavorites",
   CLEAR_USER: string = "clearUser",
   VALIDATION_EMAIL: string = "validationEmail",
   CHANGE_PASSWORD: string = "changePassword",
-  UPDATE_STATUS:string= "updateStatus"
+  UPDATE_STATUS:string= "updateStatus",
+  LOAD_CITIES_LOCALSTORAGE:string="loadCitysLocalstorage"
 
 const URL = "http://localhost:3001";
 interface Info {
@@ -32,7 +33,7 @@ export const getFavorites = (token: string) => {
     dispatch({ type: LOADING, payload: { status: false, component: "home" } });
     return dispatch({
       type: GET_FAVORITES,
-      payload: { citys: result, status: { status: true } },
+      payload: result,
     });
   };
 };
@@ -219,3 +220,10 @@ export const clearCityDetail = () => {
 export const clearUser = () => {
   return { type: CLEAR_USER, payload: { status: null } };
 };
+
+export const loadCitysLocalstorage=(citys:[])=>{
+  return {
+    type:LOAD_CITIES_LOCALSTORAGE,
+    payload:citys
+  }
+}

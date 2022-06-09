@@ -43,6 +43,7 @@ function SearchBar() {
 
   const logout=()=>{
     window.localStorage.removeItem("token")
+    window.localStorage.removeItem("citys")
     navigate("/")
   }
 

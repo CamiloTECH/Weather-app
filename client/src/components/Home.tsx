@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cards from "./Cards";
-import { getFavorites } from "../redux/action";
+import { getFavorites,loadCitysLocalstorage } from "../redux/action";
 
 interface State {
   citys: [];
@@ -14,13 +14,16 @@ interface State {
 }
 
 function Home() {
-  const { citys, loading,statusLogin } = useSelector((state: State) => state);
+  const { citys, loading } = useSelector((state: State) => state);
   const dispatch = useDispatch();
-  const token=window.localStorage.getItem("token")
+  const token = window.localStorage.getItem("token");
 
   useEffect(() => {
-    if(token && !statusLogin.status){
-      dispatch(getFavorites(token))
+    if (token) {
+      const citysLocalStorage=window.localStorage.getItem("citys")
+      if (citysLocalStorage) {
+        if(citys.length===0) dispatch(loadCitysLocalstorage(JSON.parse(citysLocalStorage)))
+      } else dispatch(getFavorites(token));
     }
   }, []);
 

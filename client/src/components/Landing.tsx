@@ -65,20 +65,20 @@ function Landing() {
           setSignUp(false);
         });
       } else if (statusChangePassword.status === false) {
-        statusChangePassword.message==="googleEmail"
-        ?Swal.fire({
-          icon: "error",
-          title: "Oops an error occurred!",
-          text: "This email can't change the password, because you signed up with google",
-        }).then(() => {
-          setForgotPassword(false);
-          setSignUp(false);
-        })
-        :Swal.fire({
-          icon: "error",
-          title: "Oops an error occurred!",
-          text: "This email doesn't exist, please enter another email or register",
-        });
+        statusChangePassword.message === "googleEmail"
+          ? Swal.fire({
+              icon: "error",
+              title: "Oops an error occurred!",
+              text: "This email can't change the password, because you signed up with google",
+            }).then(() => {
+              setForgotPassword(false);
+              setSignUp(false);
+            })
+          : Swal.fire({
+              icon: "error",
+              title: "Oops an error occurred!",
+              text: "This email doesn't exist, please enter another email or register",
+            });
       }
     } else {
       if (signUp) {
@@ -107,17 +107,17 @@ function Landing() {
             timer: 1500,
           }).then(() => navigate("/home"));
         } else if (statusLogin.status === false) {
-          statusLogin.message==="login"
-          ?Swal.fire({
-            icon: "error",
-            title: "Oops an error occurred!",
-            text: "Wrong password or email. Please check!",
-          })
-          :Swal.fire({
-            icon: "error",
-            title: "Oops an error occurred!",
-            text: "You can't login with google, this email was registered in another way, you must login in another way",
-          })
+          statusLogin.message === "login"
+            ? Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "Wrong password or email. Please check!",
+              })
+            : Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "You can't login with google, this email was registered in another way, you must login in another way",
+              });
         }
       }
     }
@@ -132,7 +132,7 @@ function Landing() {
     <div
       className="container d-flex justify-content-center"
       style={{
-        marginTop: signUp ? "3rem" : "4rem",
+        marginTop: signUp ? "2rem" : "3rem",
         marginBottom: signUp ? "1rem" : "3rem",
       }}
     >
@@ -152,7 +152,15 @@ function Landing() {
               <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
             </svg>
           </div>
-          <h2 className="fw-bold text-center pt-3 mb-5">Welcome</h2>
+          <h2 className={`fw-bold text-center pt-3 ${forgotPassword?"mb-5":"mb-2"}`}>Welcome</h2>
+          {forgotPassword?null:
+           <label
+            htmlFor="register"
+            className="col form-label text-secondary fs-5 text-center fw-bold mb-4"
+          >
+            Login or sign up so you can know the weather of the most incredible
+            cities!
+          </label>}
 
           {changePassword && token ? (
             <ChangePassword token={token} />
