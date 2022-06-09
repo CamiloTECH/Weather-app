@@ -5,6 +5,14 @@
 .temp{
   font-size: 4rem;
 }
+.refresh{
+  color:#0dcaf0;
+  transition: color .5s;
+}
+
+.refresh:hover{
+  transition: color .5s;
+}
 
 .dia{
   font-size: 1.2rem;

@@ -19,7 +19,6 @@ interface State {
   generalError: string;
 }
 
-
 function Details() {
   const { cityDetail, loading, generalError } = useSelector(
     (state: State) => state
@@ -31,20 +30,19 @@ function Details() {
   const query = new URLSearchParams(location.search);
   const lat = query.get("lat");
   const lon = query.get("lon");
+  const token = window.localStorage.getItem("token");
 
   useEffect((): any => {
-    const token=window.localStorage.getItem("token")
 
-    if (lat && lon ){
-      if(token) dispatch(getCityDetails(lat, lon, token));
-    }
-    else navigate("/home");
+    if (lat && lon) {
+      if (token) dispatch(getCityDetails(lat, lon, token));
+    } else navigate("/home");
 
     return () => dispatch(clearCityDetail());
   }, []);
 
   useEffect(() => {
-    if (generalError==="notFound") {
+    if (generalError === "notFound") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -79,6 +77,10 @@ function Details() {
 
     return `${dayNumber} - ${weekday}`;
   };
+  
+  const refresState=()=>{
+    if(token && lat && lon) dispatch(getCityDetails(lat, lon, token));
+  }
 
   return (
     <>
@@ -104,7 +106,16 @@ function Details() {
                 style={{ borderRadius: "25px" }}
               >
                 <div className="text-white">
-                  <h1 className="">{name}</h1>
+                  <div className="d-flex justify-content-between">
+                    <h1 className="">{name}</h1>
+                    <button
+                      className="p-0 m-0 me-1 bg-transparent border-0 status"
+                      title="Update status" 
+                      onClick={refresState}
+                      >
+                      <i className="bi bi-arrow-clockwise refresh fs-1"></i>
+                    </button>
+                  </div>
                   <h1 className="fs-2">
                     {unixTimeNormalDate(cityDetail.current.dt, false)}
                   </h1>
@@ -130,7 +141,8 @@ function Details() {
                       {cityDetail.current.weather[0].description}
                     </p>
                     <p className="fs-3 fw-bold p-0 m-0">
-                      {cityDetail.current.feels_like}° / {cityDetail.current.dew_point}° 
+                      {cityDetail.current.feels_like}° /{" "}
+                      {cityDetail.current.dew_point}°
                     </p>
                     <p className="fs-3 fw-bold p-0 m-0">
                       Humidity {cityDetail.current.humidity}%
@@ -174,9 +186,7 @@ function Details() {
                 {cityDetail.daily.slice(1).map((day: any, index: number) => (
                   <div key={day.dt}>
                     {index !== 0 ? <hr className="text-white m-0 mb-2" /> : ""}
-                    <div
-                      className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row"
-                    >
+                    <div className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row">
                       <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
                         {weekDay(day.dt)}
                       </p>
