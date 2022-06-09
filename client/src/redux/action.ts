@@ -17,7 +17,7 @@ export const GET_FAVORITES: string = "getFavorites",
   UPDATE_STATUS:string= "updateStatus",
   LOAD_CITIES_LOCALSTORAGE:string="loadCitysLocalstorage"
 
-const URL = "http://localhost:3001";
+const URL ="http://localhost:3001";
 interface Info {
   ciudad: string;
 }

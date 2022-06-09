@@ -4,6 +4,6 @@ import { sequelize } from "./src/db"
 sequelize.sync({force:false, logging:false})
 .then(()=>{
   console.log("Base de datos conectada")
-  app.listen(3001,()=>console.log("Escuchando en 3001"))
+  app.listen(process.env.PORT,()=>console.log("Escuchando en 3001"))
 })
 .catch((err)=>console.log(err))
