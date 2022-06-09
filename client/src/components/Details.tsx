@@ -121,7 +121,7 @@ function Details() {
                   </h1>
                 </div>
 
-                <hr className="text-white" />
+                <hr className="text-info" />
 
                 <div className="row px-3" style={{ color: "#D0D3D4" }}>
                   <div className="col-md-6 col-lg-12 col-xl-6 d-flex flex-column flex-sm-row justify-content-center justify-content-xl-start align-items-center p-0 m-0">
@@ -185,7 +185,7 @@ function Details() {
               >
                 {cityDetail.daily.slice(1).map((day: any, index: number) => (
                   <div key={day.dt}>
-                    {index !== 0 ? <hr className="text-white m-0 mb-2" /> : ""}
+                    {index !== 0 ? <hr className="text-info m-0 mb-2" /> : ""}
                     <div className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row">
                       <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
                         {weekDay(day.dt)}
