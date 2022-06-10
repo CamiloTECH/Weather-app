@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const index_1 = require("../controllers/index");
+const validationUser_1 = require("../helpers/validationUser");
+const routes = (0, express_1.Router)();
+routes.get("/userFav", validationUser_1.validationUser, index_1.getFavCitys);
+routes.get("/city/:city", index_1.getCity);
+routes.get("/details", index_1.getCityDetails);
+routes.post("/saveFavorites", validationUser_1.validationUser, index_1.addFavorites);
+routes.delete("/deleteFavorites", validationUser_1.validationUser, index_1.deleteFavorites);
+routes.post("/registerUser", index_1.registerUser);
+routes.post("/loginUser", index_1.loginUser);
+routes.post("/logingoogle", index_1.loginGoogle);
+routes.post("/validationEmail", index_1.validationEmail);
+routes.put("/changePassword/:token", index_1.changePassword);
+exports.default = routes;
