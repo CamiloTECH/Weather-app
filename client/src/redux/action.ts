@@ -15,13 +15,13 @@ export const GET_FAVORITES: string = "getFavorites",
   VALIDATION_EMAIL: string = "validationEmail",
   CHANGE_PASSWORD: string = "changePassword",
   UPDATE_STATUS:string= "updateStatus",
-  LOAD_CITIES_LOCALSTORAGE:string="loadCitysLocalstorage"
+  LOAD_CITIES_LOCALSTORAGE:string="loadCitysLocalstorage",
+  CLEAR_CITYS:string="clearCitys"
 
-const URL ="http://localhost:3001";
+const URL = process.env.REACT_APP_URL || "http://localhost:3001";
 interface Info {
   ciudad: string;
 }
-
 export const getFavorites = (token: string) => {
   return async function (dispatch: Dispatch) {
     dispatch({ type: LOADING, payload: { status: true, component: "home" } });
@@ -226,4 +226,8 @@ export const loadCitysLocalstorage=(citys:[])=>{
     type:LOAD_CITIES_LOCALSTORAGE,
     payload:citys
   }
+}
+
+export const clearCitys = () =>{
+  return { type: CLEAR_CITYS, payload:[] };
 }

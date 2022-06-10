@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../Css/SerchBar.css";
 import { Button, Collapse } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { changeGeneralError, getCity } from "../redux/action";
+import { changeGeneralError, getCity, clearCitys } from "../redux/action";
 import Swal from "sweetalert2"
 
 interface State {
@@ -44,6 +44,7 @@ function SearchBar() {
   const logout=()=>{
     window.localStorage.removeItem("token")
     window.localStorage.removeItem("citys")
+    dispatch(clearCitys())
     navigate("/")
   }
 

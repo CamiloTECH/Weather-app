@@ -15,7 +15,8 @@ import {
   VALIDATION_EMAIL,
   CHANGE_PASSWORD,
   UPDATE_STATUS,
-  LOAD_CITIES_LOCALSTORAGE
+  LOAD_CITIES_LOCALSTORAGE,
+  CLEAR_CITYS,
 } from "./action";
 
 interface State {
@@ -51,10 +52,10 @@ const inicialState: State = {
 function rootReducer(state: State = inicialState, action: actionTypes) {
   switch (action.type) {
     case LOAD_CITIES_LOCALSTORAGE:
-      return{
+      return {
         ...state,
-        citys:action.payload
-      }
+        citys: action.payload,
+      };
     case GET_FAVORITES:
       window.localStorage.setItem("citys", JSON.stringify(action.payload));
       return {
@@ -72,7 +73,10 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
           generalError: "exist",
         };
       } else {
-        window.localStorage.setItem("citys", JSON.stringify([action.payload, ...state.citys]));
+        window.localStorage.setItem(
+          "citys",
+          JSON.stringify([action.payload, ...state.citys])
+        );
         return {
           ...state,
           citys: [action.payload, ...state.citys],
@@ -169,6 +173,12 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       return {
         ...state,
         citys: [...updateCitys],
+      };
+
+    case CLEAR_CITYS:
+      return {
+        ...state,
+        citys: action.payload,
       };
     default:
       return state;
