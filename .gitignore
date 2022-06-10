@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+build/
 /.pnp
 .pnp.js
 .env
@@ -10,7 +11,6 @@ node_modules/
 
 # package-lock.json
 package-lock.json
-nodemon.json
 
 # production
 /build
