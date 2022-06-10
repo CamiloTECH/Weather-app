@@ -1,6 +1,5 @@
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import { singInGoogle } from "../../redux/action";
 
 function LoginGoogle() {
@@ -15,14 +14,6 @@ function LoginGoogle() {
     );
   };
 
-  const onFailure = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "We couldn't login!",
-    });
-  };
-
   return (
     <div className="mt-4">
       <GoogleLogin
@@ -30,7 +21,6 @@ function LoginGoogle() {
         disabled={false}
         buttonText="Login"
         onSuccess={onSuccess}
-        onFailure={onFailure}
         theme={"dark"}
         cookiePolicy={"single_host_origin"}
       />
