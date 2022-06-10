@@ -6,7 +6,7 @@
   "scripts": {
     "traslate": "tsc",
     "dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
-    "start": "npm run traslate && node build/index.js"
+    "start": "npm run traslate && nodemon build/index.js"
   },
   "keywords": [],
   "author": "",
