@@ -1,6 +1,6 @@
 import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { citys } from "./citys";
-import { users } from "./users";
+import { Citys } from "./Citys";
+import { Users } from "./Users";
 
 interface UserCity{
   userId:number,
@@ -8,12 +8,12 @@ interface UserCity{
 }
 
 @Table
-export class usercitys extends Model<UserCity> {
-  @ForeignKey(() => users)
+export class Usercitys extends Model<UserCity> {
+  @ForeignKey(() => Users)
   @Column(DataType.INTEGER)
   userId!: number;
 
-  @ForeignKey(() => citys)
+  @ForeignKey(() => Citys)
   @Column(DataType.INTEGER)
   cityId!: number;
 }

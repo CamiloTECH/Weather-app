@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { citys } from "../models/citys";
-import { users } from "../models/users";
+import { Citys } from "../models/Citys";
+import { Users } from "../models/Users";
 import axios, { AxiosResponse } from "axios";
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
@@ -16,10 +16,10 @@ export const getFavCitys = async (req: Request, res: Response) => {
   const verifyUser = await verifyToken(req);
   try {
     if (verifyUser) {
-      const user = await users.findByPk(verifyUser.id, {
+      const user = await Users.findByPk(verifyUser.id, {
         attributes: [],
         include: {
-          model: citys,
+          model: Citys,
           attributes: ["name"],
           through: { attributes: [] },
         },
@@ -76,8 +76,8 @@ export const addFavorites = async (req: Request, res: Response) => {
   const verifyUser = await verifyToken(req);
 
   if (verifyUser) {
-    const user = await users.findByPk(verifyUser.id);
-    const [city, created] = await citys.findOrCreate({
+    const user = await Users.findByPk(verifyUser.id);
+    const [city, created] = await Citys.findOrCreate({
       where: { name: ciudad.trim() },
     });
 
@@ -94,8 +94,8 @@ export const deleteFavorites = async (req: Request, res: Response) => {
   const verifyUser = await verifyToken(req);
 
   if (verifyUser) {
-    const user = await users.findByPk(verifyUser.id);
-    const city = await citys.findOne({
+    const user = await Users.findByPk(verifyUser.id);
+    const city = await Citys.findOne({
       where: { name: ciudad.trim() },
     });
 
@@ -114,7 +114,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
   const { userName, password, email } = req.body as Body;
   const passwordHast = await bcryptjs.hash(password, 10);
-  const [newUser, created] = await users.findOrCreate({
+  const [newUser, created] = await Users.findOrCreate({
     where: { email },
     defaults: {
       email,
@@ -132,7 +132,7 @@ export const loginUser = async (req: Request, res: Response) => {
   }
   const { email, password } = req.body as Body;
 
-  const user = await users.findOne({ where: { email } });
+  const user = await Users.findOne({ where: { email } });
   const correctPassword = user
     ? await bcryptjs.compare(password, user.password)
     : false;
@@ -147,7 +147,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
   const { email, userName } = req.body;
   let token: string = "";
   try {
-    const user = await users.findOne({ where: { email } });
+    const user = await Users.findOne({ where: { email } });
     if (user) {
       if (user.password.length === 0) {
         token = generateToken({ id: user.id });
@@ -155,7 +155,7 @@ export const loginGoogle = async (req: Request, res: Response) => {
         throw new Error("Usuario existente");
       }
     } else {
-      const newUser = await users.create({
+      const newUser = await Users.create({
         email,
         userName: userName,
         password: "",
@@ -172,7 +172,7 @@ export const validationEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
 
   try {
-    const userExists = await users.findOne({ where: { email } });
+    const userExists = await Users.findOne({ where: { email } });
     if (userExists) {
       if (userExists.password.length > 0) {
         userExists.token = tokenEmail();
@@ -194,7 +194,7 @@ export const changePassword = async (req: Request, res: Response) => {
 
   try {
     if (token && typeof token === "string") {
-      const user = await users.findOne({ where: { token } });
+      const user = await Users.findOne({ where: { token } });
       if (user) {
         const saltRounds = 10;
         const passwordHash = await bcryptjs.hash(password, saltRounds);

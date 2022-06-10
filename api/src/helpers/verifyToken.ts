@@ -1,6 +1,6 @@
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import { users } from "../models/users";
+import { Users } from "../models/Users";
 
 export const verifyToken = async (req: Request) => {
   try {
@@ -14,7 +14,7 @@ export const verifyToken = async (req: Request) => {
       process.env.SECRET ? process.env.SECRET : ""
     );
 
-    const user = await users.findByPk(decodedToken.id, { attributes: ["id"] });
+    const user = await Users.findByPk(decodedToken.id, { attributes: ["id"] });
     return user;
   } catch (error) {
     return "";

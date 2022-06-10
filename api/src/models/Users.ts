@@ -10,8 +10,8 @@ import {
   PrimaryKey,
   AutoIncrement,
 } from "sequelize-typescript";
-import { citys } from "./citys";
-import { usercitys } from "./usercitys";
+import { Citys } from "./Citys";
+import { Usercitys } from "./Usercitys";
 
 interface User{
   id?:number,
@@ -24,7 +24,7 @@ interface User{
 }
 
 @Table
-export class users extends Model<User> {
+export class Users extends Model<User> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
@@ -53,6 +53,6 @@ export class users extends Model<User> {
   @Column(DataType.DATE)
   updatedOn!: Date;
 
-  @BelongsToMany(() => citys, () => usercitys)
-  citys!: Array<citys & { usercitys: usercitys }>;
+  @BelongsToMany(() => Citys, () => Usercitys)
+  citys!: Array<Citys & { usercitys: Usercitys }>;
 }

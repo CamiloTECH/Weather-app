@@ -10,8 +10,8 @@ import {
   Unique,
   UpdatedAt,
 } from "sequelize-typescript";
-import { usercitys } from "./usercitys";
-import { users } from "./users";
+import { Usercitys } from "./Usercitys";
+import { Users } from "./Users";
 
 interface City{
   id?:number,
@@ -21,7 +21,7 @@ interface City{
 }
 
 @Table
-export class citys extends Model<City> {
+export class Citys extends Model<City> {
   @PrimaryKey
   @AutoIncrement
   @Column(DataType.INTEGER)
@@ -39,6 +39,6 @@ export class citys extends Model<City> {
   @Column(DataType.DATE)
   updatedAt!: Date;
 
-  @BelongsToMany(() => users, () => usercitys)
-  users!: Array<users & { usercitys: usercitys }>;
+  @BelongsToMany(() => Users, () => Usercitys)
+  users!: Array<Users & { usercitys: Usercitys }>;
 }
