@@ -10,7 +10,7 @@ import {
   Unique,
   UpdatedAt,
 } from "sequelize-typescript";
-import { Usercitys } from "./Usercitys";
+import { UserCitys } from "./UserCitys";
 import { Users } from "./Users";
 
 interface City{
@@ -39,6 +39,6 @@ export class Citys extends Model<City> {
   @Column(DataType.DATE)
   updatedAt!: Date;
 
-  @BelongsToMany(() => Users, () => Usercitys)
-  users!: Array<Users & { usercitys: Usercitys }>;
+  @BelongsToMany(() => Users, () => UserCitys)
+  users!: Array<Users & { usercitys: UserCitys }>;
 }

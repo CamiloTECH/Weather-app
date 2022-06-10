@@ -8,7 +8,7 @@ interface UserCity{
 }
 
 @Table
-export class Usercitys extends Model<UserCity> {
+export class UserCitys extends Model<UserCity> {
   @ForeignKey(() => Users)
   @Column(DataType.INTEGER)
   userId!: number;
