@@ -1,28 +1,20 @@
-import "../Css/Detail.css";
+import "./Detail.css";
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import { ReducerState } from "../../models";
 import {
   changeGeneralError,
   clearCityDetail,
   getCityDetails
-} from "../redux/action";
-interface State {
-  citys: [];
-  cityDetail: any;
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
+} from "../../redux/action";
 
 function Details() {
   const { cityDetail, loading, generalError } = useSelector(
-    (state: State) => state
+    (state: ReducerState) => state
   );
   const { name } = useParams();
   const dispatch = useDispatch();
@@ -33,12 +25,18 @@ function Details() {
   const lon = query.get("lon");
   const token = window.localStorage.getItem("token");
 
-  useEffect((): any => {
+  useEffect(() => {
     if (lat && lon) {
-      if (token) dispatch(getCityDetails(lat, lon, token));
-    } else navigate("/home");
+      if (token) {
+        dispatch(getCityDetails(lat, lon, token));
+      }
+    } else {
+      navigate("/home");
+    }
 
-    return () => dispatch(clearCityDetail());
+    return () => {
+      dispatch(clearCityDetail());
+    };
   }, []);
 
   useEffect(() => {

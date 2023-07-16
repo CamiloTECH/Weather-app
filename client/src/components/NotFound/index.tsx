@@ -1,4 +1,4 @@
-import "../Css/NotFound.css";
+import "./NotFound.css";
 
 import { NavLink } from "react-router-dom";
 

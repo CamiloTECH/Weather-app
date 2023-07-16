@@ -1,4 +1,4 @@
-import "../Css/SerchBar.css";
+import "./SerchBar.css";
 
 import { useEffect, useState } from "react";
 import { Button, Collapse } from "react-bootstrap";
@@ -6,24 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { changeGeneralError, clearCitys, getCity } from "../redux/action";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
+import { ReducerState } from "../../models";
+import { changeGeneralError, clearCitys, getCity } from "../../redux/action";
 
 function SearchBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const { loading, generalError } = useSelector((state: State) => state);
+  const { loading, generalError } = useSelector((state: ReducerState) => state);
 
   useEffect(() => {
     if (!window.localStorage.getItem("token")) navigate("/");

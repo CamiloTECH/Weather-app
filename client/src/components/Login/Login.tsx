@@ -1,24 +1,15 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ReducerState } from "../../models";
 import { singIn } from "../../redux/action";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: boolean;
-}
 
 function Login() {
   const dispatch = useDispatch();
   const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const loading = useSelector((state: State) => state.loading);
+  const loading = useSelector((state: ReducerState) => state.loading);
   const [error, setError] = useState(false);
 
   useEffect(() => {

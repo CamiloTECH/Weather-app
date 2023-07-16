@@ -1,4 +1,4 @@
-import "../Css/Card.css";
+import "./Card.css";
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -9,7 +9,9 @@ import {
   deleteCity,
   deleteFavorites,
   getCity
-} from "../redux/action";
+} from "../../redux/action";
+
+
 function Card({
   name,
   logo,

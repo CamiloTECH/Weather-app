@@ -1,22 +1,25 @@
 import { Dispatch } from "redux";
-export const GET_FAVORITES: string = "getFavorites",
-  GET_CITY: string = "getCity",
-  GET_CITY_DETAILS: string = "getCityDetails",
-  ADD_FAVORITES: string = "addFavorites",
-  DELETE_FAVORITES: string = "deleteFavorites",
-  DELETE_CITY: string = "deleteCity",
-  CHANGE_STATUS_FAV: string = "changeStatusFav",
-  LOADING: string = "loading",
-  GENERAL_ERROR: string = "generalError",
-  CLEAR_CITY_DETAIL: string = "clearCityDetail",
-  SING_IN: string = "singIn",
-  SING_UP: string = "singUp",
-  CLEAR_USER: string = "clearUser",
-  VALIDATION_EMAIL: string = "validationEmail",
-  CHANGE_PASSWORD: string = "changePassword",
-  UPDATE_STATUS: string = "updateStatus",
-  LOAD_CITIES_LOCALSTORAGE: string = "loadCitysLocalstorage",
-  CLEAR_CITYS: string = "clearCitys";
+
+import {
+  ADD_FAVORITES,
+  CHANGE_PASSWORD,
+  CHANGE_STATUS_FAV,
+  CLEAR_CITY_DETAIL,
+  CLEAR_CITYS,
+  CLEAR_USER,
+  DELETE_CITY,
+  DELETE_FAVORITES,
+  GENERAL_ERROR,
+  GET_CITY,
+  GET_CITY_DETAILS,
+  GET_FAVORITES,
+  LOAD_CITIES_LOCALSTORAGE,
+  LOADING,
+  SING_IN,
+  SING_UP,
+  UPDATE_STATUS,
+  VALIDATION_EMAIL
+} from "./actionTypes";
 
 const URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
@@ -49,7 +52,7 @@ export const getCity = (name: string, token: string, updateStatus: boolean) => {
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`, {
       headers: { Authorization: `bearer ${token}` }
     });
-    const result: any = await response.json();
+    const result = await response.json();
 
     if (!updateStatus)
       dispatch({
@@ -71,7 +74,7 @@ export const getCityDetails = (lat: string, lon: string, token: string) => {
     const response = await fetch(`${URL}/details?lat=${lat}&lon=${lon}`, {
       headers: { Authorization: `bearer ${token}` }
     });
-    const result: any = await response.json();
+    const result = await response.json();
 
     result.lat
       ? dispatch({ type: GET_CITY_DETAILS, payload: result })
@@ -215,7 +218,7 @@ export const changeGeneralError = (status: string) => {
   };
 };
 
-export const deleteCity = (name: String) => {
+export const deleteCity = (name: string) => {
   return {
     type: DELETE_CITY,
     payload: name

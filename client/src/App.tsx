@@ -1,10 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
-import Details from "./components/Details";
-import Home from "./components/Home";
-import Landing from "./components/Landing";
-import NotFound from "./components/NotFound";
-import SearchBar from "./components/SerchBar";
+import { Details, Home, Landing, NotFound, SearchBar } from "./components";
 
 function App() {
   return (

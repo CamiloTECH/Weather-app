@@ -1,21 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getFavorites, loadCitysLocalstorage } from "../redux/action";
-import Cards from "./Cards";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
+import { ReducerState } from "../../models";
+import { getFavorites, loadCitysLocalstorage } from "../../redux/action";
+import Cards from "../Cards";
 
 function Home() {
-  const { citys, loading } = useSelector((state: State) => state);
+  const { citys, loading } = useSelector((state: ReducerState) => state);
   const dispatch = useDispatch();
   const token = window.localStorage.getItem("token");
 

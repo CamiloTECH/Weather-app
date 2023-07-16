@@ -1,17 +1,8 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ReducerState } from "../../models";
 import { changePassword } from "../../redux/action";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
 
 function ChangePassword({ token }: { token: string }) {
   const dispatch = useDispatch();
@@ -23,7 +14,7 @@ function ChangePassword({ token }: { token: string }) {
     confirmPassword: false
   });
   const [validation, setValidation] = useState(false);
-  const { loading } = useSelector((state: State) => state);
+  const { loading } = useSelector((state: ReducerState) => state);
 
   useEffect(() => {
     if (
@@ -130,7 +121,7 @@ function ChangePassword({ token }: { token: string }) {
               htmlFor="confirmPassword"
               className="col form-label text-danger fw-bold text-end ps-0"
             >
-              Don't match
+              Don`t match
             </label>
           ) : null}
         </div>

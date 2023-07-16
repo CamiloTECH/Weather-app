@@ -1,31 +1,13 @@
-import "../Css/Landing.css";
+import "./Landing.css";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { clearUser } from "../redux/action";
-import ChangePassword from "./Login/ChangePassword";
-import Login from "./Login/Login";
-// import LoginGoogle from "./Login/LoginGoogle";
-import SignUp from "./Login/SignUp";
-import ValidationEmail from "./Login/ValidationEmail";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: {
-    status: boolean | undefined;
-    token?: string;
-    message?: string;
-  };
-  statusRegister: { status: boolean | undefined };
-  statusChangePassword: { status: boolean | undefined; message?: string };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
+import { ReducerState } from "../../models";
+import { clearUser } from "../../redux/action";
+import { ChangePassword, Login, SignUp, ValidationEmail } from "../Login";
 
 function Landing() {
   const dispatch = useDispatch();
@@ -35,7 +17,7 @@ function Landing() {
   const [changePassword, setChangePassword] = useState(false);
   const [forgotPassword, setForgotPassword] = useState(false);
   const { statusLogin, statusRegister, statusChangePassword } = useSelector(
-    (state: State) => state
+    (state: ReducerState) => state
   );
 
   useEffect((): any => {
@@ -186,7 +168,7 @@ function Landing() {
               {forgotPassword ? (
                 <>
                   <span>
-                    You don't have an account?{" "}
+                    You don`t have an account?
                     <button
                       onClick={() => handleSignUp(true)}
                       className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"
@@ -207,7 +189,7 @@ function Landing() {
                 </>
               ) : !signUp ? (
                 <span>
-                  You don't have an account?{" "}
+                  You don`t have an account?{" "}
                   <button
                     onClick={() => handleSignUp(true)}
                     className="bg-transparent border-0 mb-3 text-primary text-decoration-underline"

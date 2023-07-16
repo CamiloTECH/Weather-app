@@ -1,44 +1,26 @@
+import { actionTypes, ReducerState } from "../models";
 import {
-  GET_FAVORITES,
+  ADD_FAVORITES,
+  CHANGE_PASSWORD,
+  CHANGE_STATUS_FAV,
+  CLEAR_CITY_DETAIL,
+  CLEAR_CITYS,
+  CLEAR_USER,
+  DELETE_CITY,
+  DELETE_FAVORITES,
+  GENERAL_ERROR,
   GET_CITY,
   GET_CITY_DETAILS,
-  ADD_FAVORITES,
-  DELETE_FAVORITES,
-  DELETE_CITY,
-  CHANGE_STATUS_FAV,
+  GET_FAVORITES,
+  LOAD_CITIES_LOCALSTORAGE,
   LOADING,
-  GENERAL_ERROR,
-  CLEAR_CITY_DETAIL,
   SING_IN,
   SING_UP,
-  CLEAR_USER,
-  VALIDATION_EMAIL,
-  CHANGE_PASSWORD,
   UPDATE_STATUS,
-  LOAD_CITIES_LOCALSTORAGE,
-  CLEAR_CITYS
-} from "./action";
+  VALIDATION_EMAIL
+} from "./actionTypes";
 
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: {
-    status: boolean | undefined;
-    token?: string;
-    message?: string;
-  };
-  statusRegister: { status: boolean | undefined };
-  statusChangePassword: { status: boolean | undefined; message?: string };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
-interface actionTypes {
-  type: string;
-  payload: any;
-}
-
-const inicialState: State = {
+const inicialState: ReducerState = {
   citys: [],
   cityDetail: {},
   statusFavorites: {},
@@ -49,7 +31,7 @@ const inicialState: State = {
   generalError: ""
 };
 
-function rootReducer(state: State = inicialState, action: actionTypes) {
+function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
   switch (action.type) {
     case LOAD_CITIES_LOCALSTORAGE:
       return {

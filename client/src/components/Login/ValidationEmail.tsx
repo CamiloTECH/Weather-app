@@ -1,24 +1,15 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ReducerState } from "../../models";
 import { validationEmail } from "../../redux/action";
-
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
 
 function ValidationEmail() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
   const [validation, setValidation] = useState(false);
-  const { loading } = useSelector((state: State) => state);
+  const { loading } = useSelector((state: ReducerState) => state);
 
   useEffect(() => {
     !error && email ? setValidation(false) : setValidation(true);
