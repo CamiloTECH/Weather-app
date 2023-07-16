@@ -1,7 +1,12 @@
+import { City } from "./CityType";
+import { DetailCity } from "./DetailCityType";
+
 export interface ReducerState {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
+  citys: City[];
+  cityDetail: DetailCity | undefined;
+  statusFavorites: {
+    status: boolean;
+  };
   statusLogin: {
     status: boolean | undefined;
     token?: string;

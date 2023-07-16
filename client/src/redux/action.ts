@@ -32,9 +32,10 @@ export const getFavorites = (token: string) => {
     const response = await fetch(`${URL}/userFav`, {
       headers: { Authorization: `bearer ${token}` }
     });
-    const result: [] = await response.json();
+    const result = await response.json();
 
     dispatch({ type: LOADING, payload: { status: false, component: "home" } });
+
     return dispatch({
       type: GET_FAVORITES,
       payload: result
@@ -44,21 +45,23 @@ export const getFavorites = (token: string) => {
 
 export const getCity = (name: string, token: string, updateStatus: boolean) => {
   return async (dispatch: Dispatch) => {
-    if (!updateStatus)
+    if (!updateStatus) {
       dispatch({
         type: LOADING,
         payload: { status: true, component: "search" }
       });
+    }
     const response = await fetch(`${URL}/city/${name.toLocaleLowerCase()}`, {
       headers: { Authorization: `bearer ${token}` }
     });
     const result = await response.json();
 
-    if (!updateStatus)
+    if (!updateStatus) {
       dispatch({
         type: LOADING,
         payload: { status: false, component: "search" }
       });
+    }
     return result.id
       ? dispatch({
           type: updateStatus ? UPDATE_STATUS : GET_CITY,
@@ -71,6 +74,7 @@ export const getCity = (name: string, token: string, updateStatus: boolean) => {
 export const getCityDetails = (lat: string, lon: string, token: string) => {
   return async (dispatch: Dispatch) => {
     dispatch({ type: LOADING, payload: { status: true, component: "detail" } });
+    
     const response = await fetch(`${URL}/details?lat=${lat}&lon=${lon}`, {
       headers: { Authorization: `bearer ${token}` }
     });

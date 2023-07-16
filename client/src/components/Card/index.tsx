@@ -1,8 +1,9 @@
 import "./Card.css";
 
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { Action, AnyAction, Dispatch } from "redux";
 
 import {
   addFavorites,
@@ -11,17 +12,7 @@ import {
   getCity
 } from "../../redux/action";
 
-
-function Card({
-  name,
-  logo,
-  description,
-  weather,
-  country,
-  temperature,
-  coord,
-  favorite
-}: {
+interface Props {
   name: string;
   logo: string;
   description: string;
@@ -30,7 +21,19 @@ function Card({
   temperature: number;
   coord: { lon: number; lat: number };
   favorite: boolean;
-}) {
+}
+
+const Card: FC<Props> = props => {
+  const {
+    coord,
+    country,
+    description,
+    favorite,
+    logo,
+    name,
+    temperature,
+    weather
+  } = props;
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
   const token = window.localStorage.getItem("token");
@@ -164,6 +167,6 @@ function Card({
       </div>
     </div>
   );
-}
+};
 
 export default Card;

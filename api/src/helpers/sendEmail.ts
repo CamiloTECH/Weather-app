@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
-export const sendEmail = async (email:string, token:string, userName:string) => {
+const sendEmail = async (email: string, token: string, userName: string) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -10,7 +10,7 @@ export const sendEmail = async (email:string, token:string, userName:string) => 
       pass: process.env.KEY,
     },
     from: process.env.EMAIL,
-  })
+  });
   await transporter.sendMail({
     from: `"Weather App"   <${process.env.EMAIL}>`,
     to: email,
@@ -21,5 +21,6 @@ export const sendEmail = async (email:string, token:string, userName:string) => 
             <p>Follow the next link to generate your new password:
             <a rel="noopener noreferrer" target="_blank" href="http://localhost:3000/${token}">Change Password</a></p>
             <p><strong>If you didn't request this, ignore this message</strong></p>`,
-  })
-}
+  });
+};
+export default sendEmail;

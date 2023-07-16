@@ -22,8 +22,10 @@ import {
 
 const inicialState: ReducerState = {
   citys: [],
-  cityDetail: {},
-  statusFavorites: {},
+  cityDetail: undefined,
+  statusFavorites: {
+    status: false
+  },
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
   statusChangePassword: { status: undefined },
@@ -33,22 +35,22 @@ const inicialState: ReducerState = {
 
 function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
   switch (action.type) {
-    case LOAD_CITIES_LOCALSTORAGE:
+    case LOAD_CITIES_LOCALSTORAGE: {
       return {
         ...state,
         citys: action.payload
       };
-    case GET_FAVORITES:
+    }
+    case GET_FAVORITES: {
       window.localStorage.setItem("citys", JSON.stringify(action.payload));
       return {
         ...state,
         citys: action.payload
       };
+    }
 
-    case GET_CITY:
-      const existCity = state.citys.find(
-        (city: any) => city.id === action.payload.id
-      );
+    case GET_CITY: {
+      const existCity = state.citys.find(city => city.id === action.payload.id);
       if (existCity) {
         return {
           ...state,
@@ -64,12 +66,14 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
           citys: [action.payload, ...state.citys]
         };
       }
+    }
 
-    case GET_CITY_DETAILS:
+    case GET_CITY_DETAILS: {
       return {
         ...state,
         cityDetail: action.payload
       };
+    }
 
     case ADD_FAVORITES:
     case DELETE_FAVORITES:
@@ -78,18 +82,16 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         statusFavorites: action.payload
       };
 
-    case DELETE_CITY:
-      const newCitys = state.citys.filter(
-        (city: any) => city.name !== action.payload
-      );
+    case DELETE_CITY: {
+      const newCitys = state.citys.filter(city => city.name !== action.payload);
       window.localStorage.setItem("citys", JSON.stringify(newCitys));
       return {
         ...state,
         citys: [...newCitys]
       };
-
-    case CHANGE_STATUS_FAV:
-      const newCitysFav = state.citys.map((city: any) => {
+    }
+    case CHANGE_STATUS_FAV: {
+      const newCitysFav = state.citys.map(city => {
         if (city.name === action.payload) city.fav = !city.fav;
         return city;
       });
@@ -98,44 +100,48 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         ...state,
         citys: [...newCitysFav]
       };
-
-    case LOADING:
+    }
+    case LOADING: {
       return {
         ...state,
         loading: action.payload
       };
-
-    case GENERAL_ERROR:
+    }
+    case GENERAL_ERROR: {
       return {
         ...state,
         generalError: action.payload
       };
+    }
 
-    case CLEAR_CITY_DETAIL:
+    case CLEAR_CITY_DETAIL: {
       return {
         ...state,
         cityDetail: action.payload
       };
+    }
 
-    case SING_IN:
+    case SING_IN: {
       return {
         ...state,
         statusLogin: action.payload
       };
+    }
 
-    case SING_UP:
+    case SING_UP: {
       return {
         ...state,
         statusRegister: action.payload
       };
-
-    case CLEAR_USER:
+    }
+    case CLEAR_USER: {
       return {
         ...state,
         statusLogin: action.payload,
         statusRegister: action.payload,
         statusChangePassword: action.payload
       };
+    }
 
     case CHANGE_PASSWORD:
     case VALIDATION_EMAIL:
@@ -144,24 +150,28 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         statusChangePassword: action.payload
       };
 
-    case UPDATE_STATUS:
-      const updateCitys = state.citys.map((city: any) => {
+    case UPDATE_STATUS: {
+      const updateCitys = state.citys.map(city => {
         if (city.name === action.payload.name) {
           action.payload.fav = city.fav;
           return action.payload;
-        } else return city;
+        } else {
+          return city;
+        }
       });
+
       window.localStorage.setItem("citys", JSON.stringify(updateCitys));
       return {
         ...state,
         citys: [...updateCitys]
       };
-
-    case CLEAR_CITYS:
+    }
+    case CLEAR_CITYS: {
       return {
         ...state,
         citys: action.payload
       };
+    }
     default:
       return state;
   }

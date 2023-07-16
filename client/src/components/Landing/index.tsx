@@ -20,7 +20,7 @@ function Landing() {
     (state: ReducerState) => state
   );
 
-  useEffect((): any => {
+  useEffect(() => {
     if (window.localStorage.getItem("token")) navigate("/home");
     else if (token) {
       if (changePassword) {

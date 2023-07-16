@@ -11,7 +11,7 @@ import {
   changePassword,
   loginGoogle,
 } from "../controllers/index";
-import { validationUser } from "../helpers/validationUser";
+import { validationUser } from "../helpers";
 
 const routes = Router();
 

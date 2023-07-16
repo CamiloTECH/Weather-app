@@ -4,10 +4,7 @@ import { Users } from "../models/Users";
 import axios, { AxiosResponse } from "axios";
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
-import { generateToken } from "../helpers/token";
-import { verifyToken } from "../helpers/verifyToken";
-import { sendEmail } from "../helpers/sendMail";
-import tokenEmail from "../helpers/tokenEmail";
+import { generateToken, tokenEmail, verifyToken, sendEmail } from "../helpers";
 
 dotenv.config();
 
@@ -179,9 +176,7 @@ export const validationEmail = async (req: Request, res: Response) => {
         await userExists.save();
         await sendEmail(email, userExists.token, userExists.userName);
         res.json({ status: true });
-        
       } else res.json({ status: false, message: "googleEmail" });
-
     } else res.json({ status: false, message: "normalEmail" });
   } catch (error) {
     res.json({ status: false, message: "normalEmail" });

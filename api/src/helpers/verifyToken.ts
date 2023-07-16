@@ -2,7 +2,7 @@ import { Request } from "express";
 import jwt from "jsonwebtoken";
 import { Users } from "../models/Users";
 
-export const verifyToken = async (req: Request) => {
+const verifyToken = async (req: Request) => {
   try {
     const authorization = req.get("Authorization");
 
@@ -20,3 +20,5 @@ export const verifyToken = async (req: Request) => {
     return "";
   }
 };
+
+export default verifyToken;

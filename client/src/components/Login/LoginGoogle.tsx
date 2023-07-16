@@ -1,4 +1,4 @@
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
 
 import { singInGoogle } from "../../redux/action";
@@ -17,14 +17,14 @@ function LoginGoogle() {
 
   return (
     <div className="mt-4">
-      <GoogleLogin
+      {/* <GoogleLogin
         clientId="931352466233-7mhmtsa47dv0p2bpi59fsaakomg8fng0.apps.googleusercontent.com"
         disabled={false}
         buttonText="Login"
         onSuccess={onSuccess}
         theme={"dark"}
         cookiePolicy={"single_host_origin"}
-      />
+      /> */}
     </div>
   );
 }

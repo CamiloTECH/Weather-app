@@ -1,9 +1,10 @@
+import { City } from "../../models";
 import Card from "../Card";
 
-function Cards({ citys }: { citys: [] }) {
+function Cards({ citys }: { citys: City[] }) {
   return (
     <div className="container d-flex flex-wrap justify-content-center align-items-center gap-5 my-5">
-      {citys.map((city: any) => (
+      {citys.map(city => (
         <Card
           key={city.id}
           name={city.name}
