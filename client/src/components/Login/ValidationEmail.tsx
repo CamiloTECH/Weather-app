@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { validationEmail } from "../../redux/action";
 
 interface State {
@@ -26,7 +27,7 @@ function ValidationEmail() {
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
+    const { value } = e.target;
     setEmail(value.trim());
 
     regexEmail.test(value.trim()) ? setError(false) : setError(true);
@@ -34,8 +35,8 @@ function ValidationEmail() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(validationEmail({email}))
-    setEmail("")
+    dispatch(validationEmail({ email }));
+    setEmail("");
   };
 
   return (

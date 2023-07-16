@@ -1,14 +1,15 @@
+import "../Css/Detail.css";
+
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import {
-  changeGeneralError,
-  getCityDetails,
-  clearCityDetail,
-} from "../redux/action";
-import "../Css/Detail.css";
 import Swal from "sweetalert2";
 
+import {
+  changeGeneralError,
+  clearCityDetail,
+  getCityDetails
+} from "../redux/action";
 interface State {
   citys: [];
   cityDetail: any;
@@ -33,7 +34,6 @@ function Details() {
   const token = window.localStorage.getItem("token");
 
   useEffect((): any => {
-
     if (lat && lon) {
       if (token) dispatch(getCityDetails(lat, lon, token));
     } else navigate("/home");
@@ -46,7 +46,7 @@ function Details() {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "The city was not found! Check that the coordinates are correct",
+        text: "The city was not found! Check that the coordinates are correct"
       }).then(() => {
         dispatch(changeGeneralError(""));
         navigate("/home");
@@ -63,7 +63,7 @@ function Details() {
     const hourt = dateObject.toLocaleString("en-US", {
       hour12: true,
       hour: "numeric",
-      minute: "numeric",
+      minute: "numeric"
     });
 
     return short ? hourt : `${weekday}.,${dayNumber} of ${month} ${hourt}`;
@@ -77,10 +77,10 @@ function Details() {
 
     return `${dayNumber} - ${weekday}`;
   };
-  
-  const refresState=()=>{
-    if(token && lat && lon) dispatch(getCityDetails(lat, lon, token));
-  }
+
+  const refresState = () => {
+    if (token && lat && lon) dispatch(getCityDetails(lat, lon, token));
+  };
 
   return (
     <>
@@ -92,7 +92,7 @@ function Details() {
               height: "100px",
               width: "100px",
               marginTop: "20vh",
-              borderWidth: "8px",
+              borderWidth: "8px"
             }}
             role="status"
           ></span>
@@ -110,9 +110,9 @@ function Details() {
                     <h1 className="">{name}</h1>
                     <button
                       className="p-0 m-0 me-1 bg-transparent border-0 status"
-                      title="Update status" 
+                      title="Update status"
                       onClick={refresState}
-                      >
+                    >
                       <i className="bi bi-arrow-clockwise refresh fs-1"></i>
                     </button>
                   </div>

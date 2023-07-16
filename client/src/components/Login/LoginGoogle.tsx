@@ -1,5 +1,6 @@
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
+
 import { singInGoogle } from "../../redux/action";
 
 function LoginGoogle() {
@@ -9,7 +10,7 @@ function LoginGoogle() {
     dispatch(
       singInGoogle({
         email: response.profileObj.email,
-        userName: response.profileObj.name,
+        userName: response.profileObj.name
       })
     );
   };

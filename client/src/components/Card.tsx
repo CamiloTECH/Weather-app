@@ -1,9 +1,15 @@
+import "../Css/Card.css";
+
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "../Css/Card.css";
-import { deleteCity, addFavorites, deleteFavorites, getCity } from "../redux/action";
 
+import {
+  addFavorites,
+  deleteCity,
+  deleteFavorites,
+  getCity
+} from "../redux/action";
 function Card({
   name,
   logo,
@@ -12,7 +18,7 @@ function Card({
   country,
   temperature,
   coord,
-  favorite,
+  favorite
 }: {
   name: string;
   logo: string;
@@ -50,14 +56,18 @@ function Card({
     if (fav && token) dispatch(deleteFavorites({ ciudad: name }, token));
   };
 
-  const refresState=()=>{
-    if(token) dispatch(getCity(name, token, true))
-  }
+  const refresState = () => {
+    if (token) dispatch(getCity(name, token, true));
+  };
 
   return (
     <div className="card p-2 shadow-lg bg-light" style={{ width: "20rem" }}>
       <div className="p-0 m-0 me-1 d-flex justify-content-between">
-        <button className="p-0 m-0 ms-1 bg-transparent border-0 status" title="Update status" onClick={refresState}>
+        <button
+          className="p-0 m-0 ms-1 bg-transparent border-0 status"
+          title="Update status"
+          onClick={refresState}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="36"

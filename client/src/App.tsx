@@ -1,16 +1,17 @@
-import { Routes, Route } from "react-router-dom";
-import Landing from "./components/Landing";
-import Home from "./components/Home";
-import SearchBar from "./components/SerchBar";
+import { Route, Routes } from "react-router-dom";
+
 import Details from "./components/Details";
+import Home from "./components/Home";
+import Landing from "./components/Landing";
 import NotFound from "./components/NotFound";
+import SearchBar from "./components/SerchBar";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing key={"landing"} />} />
       <Route path="/:token" element={<Landing key={"landing"} />} />
-      
+
       <Route
         path="/home"
         element={[<SearchBar key={"SearchBar"} />, <Home key={"home"} />]}

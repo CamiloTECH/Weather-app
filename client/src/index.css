@@ -1,19 +1,19 @@
-body{
-  background-image: url("../public/fondo.jpg");
+body {
+  background-image: url("/fondo.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
 }
 
-body::-webkit-scrollbar{
+body::-webkit-scrollbar {
   background-color: gray;
   width: 10px;
 }
 
-body::-webkit-scrollbar-thumb{
+body::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.856);
 }
 
-body::-webkit-scrollbar-thumb:hover{
-  background-color: #0dcaf0
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #0dcaf0;
 }

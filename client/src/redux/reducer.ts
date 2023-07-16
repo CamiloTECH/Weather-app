@@ -16,7 +16,7 @@ import {
   CHANGE_PASSWORD,
   UPDATE_STATUS,
   LOAD_CITIES_LOCALSTORAGE,
-  CLEAR_CITYS,
+  CLEAR_CITYS
 } from "./action";
 
 interface State {
@@ -46,7 +46,7 @@ const inicialState: State = {
   statusRegister: { status: undefined },
   statusChangePassword: { status: undefined },
   loading: { status: false, component: "" },
-  generalError: "",
+  generalError: ""
 };
 
 function rootReducer(state: State = inicialState, action: actionTypes) {
@@ -54,13 +54,13 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
     case LOAD_CITIES_LOCALSTORAGE:
       return {
         ...state,
-        citys: action.payload,
+        citys: action.payload
       };
     case GET_FAVORITES:
       window.localStorage.setItem("citys", JSON.stringify(action.payload));
       return {
         ...state,
-        citys: action.payload,
+        citys: action.payload
       };
 
     case GET_CITY:
@@ -70,7 +70,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       if (existCity) {
         return {
           ...state,
-          generalError: "exist",
+          generalError: "exist"
         };
       } else {
         window.localStorage.setItem(
@@ -79,21 +79,21 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         );
         return {
           ...state,
-          citys: [action.payload, ...state.citys],
+          citys: [action.payload, ...state.citys]
         };
       }
 
     case GET_CITY_DETAILS:
       return {
         ...state,
-        cityDetail: action.payload,
+        cityDetail: action.payload
       };
 
     case ADD_FAVORITES:
     case DELETE_FAVORITES:
       return {
         ...state,
-        statusFavorites: action.payload,
+        statusFavorites: action.payload
       };
 
     case DELETE_CITY:
@@ -103,7 +103,7 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       window.localStorage.setItem("citys", JSON.stringify(newCitys));
       return {
         ...state,
-        citys: [...newCitys],
+        citys: [...newCitys]
       };
 
     case CHANGE_STATUS_FAV:
@@ -114,37 +114,37 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       window.localStorage.setItem("citys", JSON.stringify(newCitysFav));
       return {
         ...state,
-        citys: [...newCitysFav],
+        citys: [...newCitysFav]
       };
 
     case LOADING:
       return {
         ...state,
-        loading: action.payload,
+        loading: action.payload
       };
 
     case GENERAL_ERROR:
       return {
         ...state,
-        generalError: action.payload,
+        generalError: action.payload
       };
 
     case CLEAR_CITY_DETAIL:
       return {
         ...state,
-        cityDetail: action.payload,
+        cityDetail: action.payload
       };
 
     case SING_IN:
       return {
         ...state,
-        statusLogin: action.payload,
+        statusLogin: action.payload
       };
 
     case SING_UP:
       return {
         ...state,
-        statusRegister: action.payload,
+        statusRegister: action.payload
       };
 
     case CLEAR_USER:
@@ -152,14 +152,14 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
         ...state,
         statusLogin: action.payload,
         statusRegister: action.payload,
-        statusChangePassword: action.payload,
+        statusChangePassword: action.payload
       };
 
     case CHANGE_PASSWORD:
     case VALIDATION_EMAIL:
       return {
         ...state,
-        statusChangePassword: action.payload,
+        statusChangePassword: action.payload
       };
 
     case UPDATE_STATUS:
@@ -172,13 +172,13 @@ function rootReducer(state: State = inicialState, action: actionTypes) {
       window.localStorage.setItem("citys", JSON.stringify(updateCitys));
       return {
         ...state,
-        citys: [...updateCitys],
+        citys: [...updateCitys]
       };
 
     case CLEAR_CITYS:
       return {
         ...state,
-        citys: action.payload,
+        citys: action.payload
       };
     default:
       return state;

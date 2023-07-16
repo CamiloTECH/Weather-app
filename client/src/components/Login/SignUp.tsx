@@ -1,6 +1,7 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { singUp } from "../../redux/action"
+
+import { singUp } from "../../redux/action";
 
 interface State {
   citys: [];
@@ -13,19 +14,19 @@ interface State {
 }
 
 function SignUp() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const loading = useSelector((state: State) => state.loading);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
-    userName: "",
+    userName: ""
   });
   const [error, setError] = useState({
     email: false,
     password: false,
-    userName: false,
+    userName: false
   });
 
   useEffect(() => {
@@ -45,31 +46,31 @@ function SignUp() {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singUp(inputs))
-    setInputs({ email: "", password: "", userName: "" })
+    dispatch(singUp(inputs));
+    setInputs({ email: "", password: "", userName: "" });
   };
 
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
-    const name = e.target.name;
+    const { value } = e.target;
+    const { name } = e.target;
 
     switch (name) {
       case "userName":
         setInputs({
           ...inputs,
-          userName: value,
+          userName: value
         });
         if (value.trim().length > 4) {
           setError({
             ...error,
-            userName: false,
+            userName: false
           });
         } else {
           setError({
             ...error,
-            userName: true,
+            userName: true
           });
         }
         break;
@@ -77,35 +78,35 @@ function SignUp() {
         const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
         setInputs({
           ...inputs,
-          password: value,
+          password: value
         });
         if (regexPass.test(value)) {
           setError({
             ...error,
-            password: false,
+            password: false
           });
         } else {
           setError({
             ...error,
-            password: true,
+            password: true
           });
         }
         break;
       case "email":
         setInputs({
           ...inputs,
-          email: value.trim(),
+          email: value.trim()
         });
 
         if (regexEmail.test(value)) {
           setError({
             ...error,
-            email: false,
+            email: false
           });
         } else {
           setError({
             ...error,
-            email: true,
+            email: true
           });
         }
         break;
@@ -234,7 +235,7 @@ function SignUp() {
           name="SignUp"
           disabled={validation}
         >
-          {loading.status && loading.component==="SignUp" ? (
+          {loading.status && loading.component === "SignUp" ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Sign Up"

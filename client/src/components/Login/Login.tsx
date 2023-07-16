@@ -1,5 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { singIn } from "../../redux/action";
 
 interface State {
@@ -37,20 +38,20 @@ function Login() {
   const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const regexEmail =
       /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
-    const name = e.target.name;
+    const { value } = e.target;
+    const { name } = e.target;
 
     switch (name) {
       case "password":
         setInputs({
           ...inputs,
-          password: value,
+          password: value
         });
         break;
       case "email":
         setInputs({
           ...inputs,
-          email: value.trim(),
+          email: value.trim()
         });
 
         regexEmail.test(value) ? setError(false) : setError(true);

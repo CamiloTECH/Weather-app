@@ -1,14 +1,16 @@
 import "../Css/Landing.css";
+
 import { useEffect, useState } from "react";
-import ValidationEmail from "./Login/ValidationEmail";
-import LoginGoogle from "./Login/LoginGoogle";
-import SignUp from "./Login/SignUp";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+
+import { clearUser } from "../redux/action";
 import ChangePassword from "./Login/ChangePassword";
 import Login from "./Login/Login";
-import { useDispatch, useSelector } from "react-redux";
-import Swal from "sweetalert2";
-import { useNavigate, useParams } from "react-router-dom";
-import { clearUser } from "../redux/action";
+// import LoginGoogle from "./Login/LoginGoogle";
+import SignUp from "./Login/SignUp";
+import ValidationEmail from "./Login/ValidationEmail";
 
 interface State {
   citys: [];
@@ -44,13 +46,13 @@ function Landing() {
           Swal.fire({
             icon: "success",
             title: "Password changed successfully!",
-            text: "Now you can login successfully",
+            text: "Now you can login successfully"
           }).then(() => navigate("/"));
         } else if (statusChangePassword.status === false) {
           Swal.fire({
             icon: "error",
             title: "Oops an error occurred!",
-            text: "An error occurred in the shipment",
+            text: "An error occurred in the shipment"
           }).then(() => navigate("/"));
         }
       } else setChangePassword(true);
@@ -59,7 +61,7 @@ function Landing() {
         Swal.fire({
           icon: "success",
           title: "The mail was sent!",
-          text: "Please check your e-mail",
+          text: "Please check your e-mail"
         }).then(() => {
           setForgotPassword(false);
           setSignUp(false);
@@ -69,7 +71,7 @@ function Landing() {
           ? Swal.fire({
               icon: "error",
               title: "Oops an error occurred!",
-              text: "This email can't change the password, because you signed up with google",
+              text: "This email can't change the password, because you signed up with google"
             }).then(() => {
               setForgotPassword(false);
               setSignUp(false);
@@ -77,7 +79,7 @@ function Landing() {
           : Swal.fire({
               icon: "error",
               title: "Oops an error occurred!",
-              text: "This email doesn't exist, please enter another email or register",
+              text: "This email doesn't exist, please enter another email or register"
             });
       }
     } else {
@@ -86,13 +88,13 @@ function Landing() {
           Swal.fire({
             icon: "success",
             title: "You registered successfully!",
-            text: "Now, you can login!",
+            text: "Now, you can login!"
           }).then(() => setSignUp(false));
         } else if (statusRegister.status === false) {
           Swal.fire({
             icon: "error",
             title: "Oops an error occurred!",
-            text: "This email already exists, please put another email or login",
+            text: "This email already exists, please put another email or login"
           });
         }
       } else {
@@ -104,19 +106,19 @@ function Landing() {
             icon: "success",
             title: "You logged in successfully!",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 1500
           }).then(() => navigate("/home"));
         } else if (statusLogin.status === false) {
           statusLogin.message === "login"
             ? Swal.fire({
                 icon: "error",
                 title: "Oops an error occurred!",
-                text: "Wrong password or email. Please check!",
+                text: "Wrong password or email. Please check!"
               })
             : Swal.fire({
                 icon: "error",
                 title: "Oops an error occurred!",
-                text: "You can't login with google, this email was registered in another way, you must login in another way",
+                text: "You can't login with google, this email was registered in another way, you must login in another way"
               });
         }
       }
@@ -133,7 +135,7 @@ function Landing() {
       className="container d-flex justify-content-center"
       style={{
         marginTop: signUp ? "2rem" : "3rem",
-        marginBottom: signUp ? "1rem" : "3rem",
+        marginBottom: signUp ? "1rem" : "3rem"
       }}
     >
       <div className="row shadow-lg rounded rounded-3 align-items-stretch contenido">
@@ -152,15 +154,22 @@ function Landing() {
               <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
             </svg>
           </div>
-          <h2 className={`fw-bold text-center pt-3 ${forgotPassword?"mb-5":"mb-2"}`}>Welcome</h2>
-          {forgotPassword?null:
-           <label
-            htmlFor="register"
-            className="col form-label text-secondary fs-5 text-center fw-bold mb-4"
+          <h2
+            className={`fw-bold text-center pt-3 ${
+              forgotPassword ? "mb-5" : "mb-2"
+            }`}
           >
-            Login or sign up so you can know the weather of the most incredible
-            cities!
-          </label>}
+            Welcome
+          </h2>
+          {forgotPassword ? null : (
+            <label
+              htmlFor="register"
+              className="col form-label text-secondary fs-5 text-center fw-bold mb-4"
+            >
+              Login or sign up so you can know the weather of the most
+              incredible cities!
+            </label>
+          )}
 
           {changePassword && token ? (
             <ChangePassword token={token} />
@@ -232,7 +241,7 @@ function Landing() {
               ) : null}
             </div>
           )}
-          {token || signUp || forgotPassword ? null : <LoginGoogle />}
+          {/* {token || signUp || forgotPassword ? null : <LoginGoogle />} */}
         </div>
       </div>
     </div>

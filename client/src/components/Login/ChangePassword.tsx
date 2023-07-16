@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { changePassword } from "../../redux/action";
 
 interface State {
@@ -12,14 +13,14 @@ interface State {
   generalError: string;
 }
 
-function ChangePassword({token}:{token:string}) {
+function ChangePassword({ token }: { token: string }) {
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState({
     password: false,
-    confirmPassword: false,
+    confirmPassword: false
   });
   const [validation, setValidation] = useState(false);
   const { loading } = useSelector((state: State) => state);
@@ -39,8 +40,8 @@ function ChangePassword({token}:{token:string}) {
 
   const handleValidationPassword = (e: ChangeEvent<HTMLInputElement>) => {
     const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-    const value = e.target.value;
-    const name = e.target.name;
+    const { value } = e.target;
+    const { name } = e.target;
     if (name === "password") {
       setPassword(value);
       setConfirmPassword("");
@@ -57,7 +58,7 @@ function ChangePassword({token}:{token:string}) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword({password},token))
+    dispatch(changePassword({ password }, token));
     setPassword("");
     setConfirmPassword("");
   };

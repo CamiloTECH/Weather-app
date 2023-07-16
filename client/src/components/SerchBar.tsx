@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
 import "../Css/SerchBar.css";
+
+import { useEffect, useState } from "react";
 import { Button, Collapse } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { changeGeneralError, getCity, clearCitys } from "../redux/action";
-import Swal from "sweetalert2"
+import { NavLink, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+import { changeGeneralError, clearCitys, getCity } from "../redux/action";
 
 interface State {
   citys: [];
@@ -18,42 +20,41 @@ interface State {
 
 function SearchBar() {
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [country, setCountry] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const { loading,generalError } = useSelector((state: State) => state);
+  const { loading, generalError } = useSelector((state: State) => state);
 
-  useEffect(()=>{
-    if(!window.localStorage.getItem("token")) navigate("/")
-    else if (generalError==="notFound") {
+  useEffect(() => {
+    if (!window.localStorage.getItem("token")) navigate("/");
+    else if (generalError === "notFound") {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "The city was not found! Check that the name is correct",
+        text: "The city was not found! Check that the name is correct"
       }).then(() => dispatch(changeGeneralError("")));
-    }
-    else if (generalError==="exist") {
+    } else if (generalError === "exist") {
       Swal.fire({
         icon: "info",
         title: "Oops...",
-        text: "This city already exists in the list!",
+        text: "This city already exists in the list!"
       }).then(() => dispatch(changeGeneralError("")));
     }
-  },[generalError])
+  }, [generalError]);
 
-  const logout=()=>{
-    window.localStorage.removeItem("token")
-    window.localStorage.removeItem("citys")
-    dispatch(clearCitys())
-    navigate("/")
-  }
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("citys");
+    dispatch(clearCitys());
+    navigate("/");
+  };
 
   const handleSubmit = () => {
-    if (country.trim().length > 0){
-      const token=window.localStorage.getItem("token")
-      if(token){
-        if(window.location.pathname!=="/home") navigate("/home")
-        dispatch(getCity(country.trim(),token,false))
+    if (country.trim().length > 0) {
+      const token = window.localStorage.getItem("token");
+      if (token) {
+        if (window.location.pathname !== "/home") navigate("/home");
+        dispatch(getCity(country.trim(), token, false));
       }
     }
     setCountry("");
@@ -111,22 +112,31 @@ function SearchBar() {
                 placeholder="Search"
                 aria-label="Search"
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={e => setCountry(e.target.value)}
               />
-              <button className="btn btn-outline-info" disabled={loading.status && loading.component==="search"} onClick={handleSubmit}>
-                {loading.status && loading.component==="search" ? (
+              <button
+                className="btn btn-outline-info"
+                disabled={loading.status && loading.component === "search"}
+                onClick={handleSubmit}
+              >
+                {loading.status && loading.component === "search" ? (
                   <span
                     className="spinner-border text-warning p-0 mx-3"
-                    style={{"height":"20px", "width":"20px"}}
+                    style={{ height: "20px", width: "20px" }}
                     role="status"
                   ></span>
-                ) : "Search"
-                }
+                ) : (
+                  "Search"
+                )}
               </button>
             </div>
-              <button className="btn btn-info fw-bold ms-0 ms-lg-5 py-0 px-2 mt-3 mt-lg-0" title="Logout" onClick={logout}>
-                <i className="bi bi-box-arrow-right fs-4 m"></i>                
-              </button>
+            <button
+              className="btn btn-info fw-bold ms-0 ms-lg-5 py-0 px-2 mt-3 mt-lg-0"
+              title="Logout"
+              onClick={logout}
+            >
+              <i className="bi bi-box-arrow-right fs-4 m"></i>
+            </button>
           </div>
         </Collapse>
       </div>

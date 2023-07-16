@@ -1,9 +1,9 @@
-.bg{
-  background-image: url("../../public/fondoLogin.jpg");
+.bg {
+  background-image: url("/fondoLogin.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
-.contenido{
+.contenido {
   width: 75%;
 }
 .logo {
@@ -19,14 +19,14 @@
   }
 }
 
-@media (max-width:1200px){
-  .contenido{
+@media (max-width: 1200px) {
+  .contenido {
     width: 80%;
   }
 }
 
-@media (max-width:770px){
-  .contenido{
+@media (max-width: 770px) {
+  .contenido {
     width: 100%;
   }
 }
