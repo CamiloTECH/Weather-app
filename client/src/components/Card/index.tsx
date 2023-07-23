@@ -3,14 +3,14 @@ import "./Card.css";
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { Action, AnyAction, Dispatch } from "redux";
 
 import {
   addFavorites,
   deleteCity,
   deleteFavorites,
-  getCity
-} from "../../redux/action";
+  getCity,
+  getCityDetails
+} from "../../redux/actions";
 
 interface Props {
   name: string;
@@ -63,6 +63,12 @@ const Card: FC<Props> = props => {
 
   const refresState = () => {
     if (token) dispatch(getCity(name, token, true));
+  };
+
+  const getDetail = () => {
+    if (token) {
+      dispatch(getCityDetails(coord.lat, coord.lon, token));
+    }
   };
 
   return (
@@ -139,6 +145,7 @@ const Card: FC<Props> = props => {
         <Link
           to={`/home/details/${name}?lat=${coord.lat}&lon=${coord.lon}`}
           className="btn btn-info fw-bold"
+          onClick={getDetail}
         >
           See more details
         </Link>

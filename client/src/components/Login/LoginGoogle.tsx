@@ -1,7 +1,7 @@
 // import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
 
-import { singInGoogle } from "../../redux/action";
+import { singInGoogle } from "../../redux/actions";
 
 function LoginGoogle() {
   const dispatch = useDispatch();

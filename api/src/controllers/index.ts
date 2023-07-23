@@ -66,10 +66,7 @@ export const getCityDetails = async (req: Request, res: Response) => {
 };
 
 export const addFavorites = async (req: Request, res: Response) => {
-  interface Body {
-    ciudad: string;
-  }
-  const { ciudad } = req.body as Body;
+  const { ciudad } = req.body;
   const verifyUser = await verifyToken(req);
 
   if (verifyUser) {

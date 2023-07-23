@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { ReducerState } from "../../models";
+import { DailyWeather, HourlyWeather, ReducerState } from "../../models";
 import {
-  changeGeneralError,
+  changeError,
   clearCityDetail,
   getCityDetails
-} from "../../redux/action";
+} from "../../redux/actions";
+import { unixTimeNormalDate, weekDay } from "./setTime";
 
 function Details() {
   const { cityDetail, loading, generalError } = useSelector(
@@ -25,12 +26,14 @@ function Details() {
   const lon = query.get("lon");
   const token = window.localStorage.getItem("token");
 
+  const refresState = () => {
+    if (token && lat && lon) {
+      dispatch(getCityDetails(lat, lon, token));
+    }
+  };
+
   useEffect(() => {
-    if (lat && lon) {
-      if (token) {
-        dispatch(getCityDetails(lat, lon, token));
-      }
-    } else {
+    if (!lat || !lon) {
       navigate("/home");
     }
 
@@ -46,39 +49,11 @@ function Details() {
         title: "Oops...",
         text: "The city was not found! Check that the coordinates are correct"
       }).then(() => {
-        dispatch(changeGeneralError(""));
+        dispatch(changeError(""));
         navigate("/home");
       });
     }
   }, [generalError]);
-
-  const unixTimeNormalDate = (unix: number, short: boolean): string => {
-    const milliseconds = unix * 1000;
-    const dateObject = new Date(milliseconds);
-    const weekday = dateObject.toLocaleString("en-US", { weekday: "short" });
-    const dayNumber = dateObject.toLocaleString("en-US", { day: "numeric" });
-    const month = dateObject.toLocaleString("en-US", { month: "short" });
-    const hourt = dateObject.toLocaleString("en-US", {
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric"
-    });
-
-    return short ? hourt : `${weekday}.,${dayNumber} of ${month} ${hourt}`;
-  };
-
-  const weekDay = (unix: number): string => {
-    const milliseconds = unix * 1000;
-    const dateObject = new Date(milliseconds);
-    const weekday = dateObject.toLocaleString("en-US", { weekday: "long" });
-    const dayNumber = dateObject.toLocaleString("en-US", { day: "numeric" });
-
-    return `${dayNumber} - ${weekday}`;
-  };
-
-  const refresState = () => {
-    if (token && lat && lon) dispatch(getCityDetails(lat, lon, token));
-  };
 
   return (
     <>
@@ -96,6 +71,7 @@ function Details() {
           ></span>
         </div>
       ) : (
+        cityDetail &&
         cityDetail.lat && (
           <div className="container my-5 py-2">
             <div className="row justify-content-center gap-5 ">
@@ -153,27 +129,31 @@ function Details() {
                   className="col-12 d-flex gap-3 text-white w-100 mt-4 pb-3 scroll"
                   style={{ overflowX: "scroll" }}
                 >
-                  {cityDetail.hourly.map((hora: any, index: number) => (
-                    <div key={index} className="w-100">
-                      <p className="m-0 text-center fw-bold fs-5">
-                        {unixTimeNormalDate(hora.dt, true)}
-                      </p>
-                      <img
-                        src={`http://openweathermap.org/img/wn/${hora.weather[0].icon}@2x.png`}
-                        style={{ filter: "drop-shadow(1px 1px 10px #ffFFFF)" }}
-                        alt="Logo"
-                      />
+                  {cityDetail.hourly.map(
+                    (hora: HourlyWeather, index: number) => (
+                      <div key={index} className="w-100">
+                        <p className="m-0 text-center fw-bold fs-5">
+                          {unixTimeNormalDate(hora.dt, true)}
+                        </p>
+                        <img
+                          src={`http://openweathermap.org/img/wn/${hora.weather[0].icon}@2x.png`}
+                          style={{
+                            filter: "drop-shadow(1px 1px 10px #ffFFFF)"
+                          }}
+                          alt="Logo"
+                        />
 
-                      <div className="d-flex justify-content-center gap-2">
-                        <i className="bi bi-thermometer-half text-warning"></i>
-                        <p className="text-center m-0 fs-6">{hora.temp}°</p>
+                        <div className="d-flex justify-content-center gap-2">
+                          <i className="bi bi-thermometer-half text-warning"></i>
+                          <p className="text-center m-0 fs-6">{hora.temp}°</p>
+                        </div>
+                        <div className="d-flex justify-content-center gap-2">
+                          <i className="bi bi-droplet-half text-primary"></i>
+                          <p className="text-center m-0">{hora.humidity} %</p>
+                        </div>
                       </div>
-                      <div className="d-flex justify-content-center gap-2">
-                        <i className="bi bi-droplet-half text-primary"></i>
-                        <p className="text-center m-0">{hora.humidity} %</p>
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </div>
 
@@ -181,34 +161,36 @@ function Details() {
                 className="col-10 col-lg-5 px-1 px-md-3 py-3 bg-black bg-opacity-75 shadow-lg"
                 style={{ borderRadius: "25px" }}
               >
-                {cityDetail.daily.slice(1).map((day: any, index: number) => (
-                  <div key={day.dt}>
-                    {index !== 0 ? <hr className="text-info m-0 mb-2" /> : ""}
-                    <div className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row">
-                      <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
-                        {weekDay(day.dt)}
-                      </p>
-                      <div className="d-flex align-items-center justify-content-evenly justify-content-md-evenly justify-content-xl-center gap-2 w-100">
-                        <div className="d-flex gap-0 gap-sm-2">
-                          <i className="bi bi-droplet-half text-primary"></i>
-                          <p className="text-center m-0">{day.humidity}%</p>
-                        </div>
+                {cityDetail.daily
+                  .slice(1)
+                  .map((day: DailyWeather, index: number) => (
+                    <div key={day.dt}>
+                      {index !== 0 && <hr className="text-info m-0 mb-2" />}
+                      <div className="w-100 text-white-50 d-flex flex-column flex-sm-row align-items-center flex-lg-column flex-xl-row">
+                        <p className="mb-2 ms-sm-3 m-sm-0  text-center text-xl-start text-lg-center text-sm-start  fw-bold text-white w-50 dia">
+                          {weekDay(day.dt)}
+                        </p>
+                        <div className="d-flex align-items-center justify-content-evenly justify-content-md-evenly justify-content-xl-center gap-2 w-100">
+                          <div className="d-flex gap-0 gap-sm-2">
+                            <i className="bi bi-droplet-half text-primary"></i>
+                            <p className="text-center m-0">{day.humidity}%</p>
+                          </div>
 
-                        <img
-                          src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
-                          className="imagen"
-                          alt="Logo"
-                        />
-                        <div className="d-flex gap-0 gap-sm-2">
-                          <i className="bi bi-thermometer-half text-warning  d-none d-sm-inline"></i>
-                          <p className="text-center m-0 fs-6 text-white">
-                            {day.temp.max}° / {day.temp.min}°
-                          </p>
+                          <img
+                            src={`http://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
+                            className="imagen"
+                            alt="Logo"
+                          />
+                          <div className="d-flex gap-0 gap-sm-2">
+                            <i className="bi bi-thermometer-half text-warning  d-none d-sm-inline"></i>
+                            <p className="text-center m-0 fs-6 text-white">
+                              {day.temp.max}° / {day.temp.min}°
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           </div>

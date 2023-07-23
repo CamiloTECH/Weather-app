@@ -1,38 +1,23 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReducerState } from "../../models";
-import { changePassword } from "../../redux/action";
+import { changePassword } from "../../redux/actions";
+import { regexPass } from "./RegexValidation";
 
 function ChangePassword({ token }: { token: string }) {
   const dispatch = useDispatch();
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { loading } = useSelector((state: ReducerState) => state);
   const [error, setError] = useState({
     password: false,
     confirmPassword: false
   });
-  const [validation, setValidation] = useState(false);
-  const { loading } = useSelector((state: ReducerState) => state);
-
-  useEffect(() => {
-    if (
-      !error.password &&
-      !error.confirmPassword &&
-      password &&
-      password === confirmPassword
-    ) {
-      setValidation(false);
-    } else {
-      setValidation(true);
-    }
-  }, [error]);
 
   const handleValidationPassword = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-    const { value } = e.target;
-    const { name } = e.target;
+    const { value, name } = e.target;
     if (name === "password") {
       setPassword(value);
       setConfirmPassword("");
@@ -49,7 +34,7 @@ function ChangePassword({ token }: { token: string }) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword({ password }, token));
+    dispatch(changePassword(password, token));
     setPassword("");
     setConfirmPassword("");
   };
@@ -146,7 +131,12 @@ function ChangePassword({ token }: { token: string }) {
             type="submit"
             className="btn btn-primary"
             name="validation"
-            disabled={validation}
+            disabled={
+              error.password ||
+              error.confirmPassword ||
+              !password ||
+              !confirmPassword
+            }
           >
             {loading.status && loading.component === "changePassword" ? (
               <span className="spinner-border text-info" role="status"></span>

@@ -1,4 +1,4 @@
-interface HourlyWeather {
+export interface HourlyWeather {
   dt: number;
   temp: number;
   feels_like: number;
@@ -25,7 +25,7 @@ interface HourlyWeather {
   };
 }
 
-interface DailyWeather {
+export interface DailyWeather {
   dt: number;
   sunrise: number;
   sunset: number;

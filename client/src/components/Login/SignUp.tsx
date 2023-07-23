@@ -1,12 +1,12 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReducerState } from "../../models";
-import { singUp } from "../../redux/action";
+import { singUp } from "../../redux/actions";
+import { regexEmail, regexPass } from "./RegexValidation";
 
 function SignUp() {
   const dispatch = useDispatch();
-  const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const loading = useSelector((state: ReducerState) => state.loading);
   const [inputs, setInputs] = useState({
@@ -20,90 +20,25 @@ function SignUp() {
     userName: false
   });
 
-  useEffect(() => {
-    if (
-      !error.email &&
-      !error.password &&
-      !error.userName &&
-      inputs.email &&
-      inputs.password &&
-      inputs.userName
-    ) {
-      setValidation(false);
+  const handleValidation = (e: ChangeEvent<HTMLInputElement>) => {
+    let validation = false;
+    const { value, name } = e.target;
+    setInputs({ ...inputs, [name]: value });
+
+    if (name === "userName") {
+      validation = value.trim().length <= 4;
+    } else if (name === "password") {
+      validation = !regexPass.test(value);
     } else {
-      setValidation(true);
+      validation = !regexEmail.test(value);
     }
-  }, [error, inputs]);
+    setError({ ...error, [name]: validation });
+  };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singUp(inputs));
+    dispatch(singUp({ ...inputs, email: inputs.email.trim() }));
     setInputs({ email: "", password: "", userName: "" });
-  };
-
-  const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const { value } = e.target;
-    const { name } = e.target;
-
-    switch (name) {
-      case "userName":
-        setInputs({
-          ...inputs,
-          userName: value
-        });
-        if (value.trim().length > 4) {
-          setError({
-            ...error,
-            userName: false
-          });
-        } else {
-          setError({
-            ...error,
-            userName: true
-          });
-        }
-        break;
-      case "password":
-        const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-        setInputs({
-          ...inputs,
-          password: value
-        });
-        if (regexPass.test(value)) {
-          setError({
-            ...error,
-            password: false
-          });
-        } else {
-          setError({
-            ...error,
-            password: true
-          });
-        }
-        break;
-      case "email":
-        setInputs({
-          ...inputs,
-          email: value.trim()
-        });
-
-        if (regexEmail.test(value)) {
-          setError({
-            ...error,
-            email: false
-          });
-        } else {
-          setError({
-            ...error,
-            email: true
-          });
-        }
-        break;
-      default:
-        break;
-    }
   };
 
   return (
@@ -128,7 +63,7 @@ function SignUp() {
           name="userName"
           autoFocus
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -151,7 +86,7 @@ function SignUp() {
           value={inputs.email}
           name="email"
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -175,7 +110,7 @@ function SignUp() {
             name="password"
             value={inputs.password}
             className="col form-control"
-            onChange={handleValidationInputs}
+            onChange={handleValidation}
           />
           {viewPassword ? (
             <svg
@@ -224,7 +159,14 @@ function SignUp() {
           type="submit"
           className="btn btn-primary"
           name="SignUp"
-          disabled={validation}
+          disabled={
+            error.email ||
+            error.password ||
+            error.userName ||
+            !inputs.email ||
+            !inputs.password ||
+            !inputs.userName
+          }
         >
           {loading.status && loading.component === "SignUp" ? (
             <span className="spinner-border text-info" role="status"></span>

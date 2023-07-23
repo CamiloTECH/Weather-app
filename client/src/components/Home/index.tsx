@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReducerState } from "../../models";
-import { getFavorites, loadCitysLocalstorage } from "../../redux/action";
+import { getFavorites, loadCitysLocalstorage } from "../../redux/actions";
 import Cards from "../Cards";
 
 function Home() {
@@ -14,8 +14,9 @@ function Home() {
     if (token) {
       const citysLocalStorage = window.localStorage.getItem("citys");
       if (citysLocalStorage) {
-        if (citys.length === 0)
+        if (citys.length === 0) {
           dispatch(loadCitysLocalstorage(JSON.parse(citysLocalStorage)));
+        }
       } else dispatch(getFavorites(token));
     }
   }, []);

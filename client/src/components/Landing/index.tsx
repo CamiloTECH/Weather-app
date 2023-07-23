@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import { ReducerState } from "../../models";
-import { clearUser } from "../../redux/action";
+import { clearUser } from "../../redux/actions";
 import { ChangePassword, Login, SignUp, ValidationEmail } from "../Login";
 
 function Landing() {
@@ -163,7 +163,7 @@ function Landing() {
             <Login />
           )}
 
-          {token ? null : (
+          {!token && (
             <div className="mt-4">
               {forgotPassword ? (
                 <>

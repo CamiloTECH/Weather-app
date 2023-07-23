@@ -1,55 +1,30 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ReducerState } from "../../models";
-import { singIn } from "../../redux/action";
+import { singIn } from "../../redux/actions";
+import { regexEmail } from "./RegexValidation";
 
 function Login() {
   const dispatch = useDispatch();
-  const [validation, setValidation] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const loading = useSelector((state: ReducerState) => state.loading);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (!error && inputs.email && inputs.password) {
-      setValidation(false);
-    } else {
-      setValidation(true);
+  const handleValidation = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = target;
+    setInputs({ ...inputs, [name]: value });
+
+    if (name === "email") {
+      regexEmail.test(value) ? setError(false) : setError(true);
     }
-  }, [error, inputs]);
+  };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singIn(inputs));
+    dispatch(singIn({ ...inputs, email: inputs.email.trim() }));
     setInputs({ email: "", password: "" });
-  };
-
-  const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const { value } = e.target;
-    const { name } = e.target;
-
-    switch (name) {
-      case "password":
-        setInputs({
-          ...inputs,
-          password: value
-        });
-        break;
-      case "email":
-        setInputs({
-          ...inputs,
-          email: value.trim()
-        });
-
-        regexEmail.test(value) ? setError(false) : setError(true);
-        break;
-      default:
-        break;
-    }
   };
 
   return (
@@ -74,7 +49,7 @@ function Login() {
           name="email"
           autoFocus
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -89,7 +64,7 @@ function Login() {
             name="password"
             value={inputs.password}
             className="col form-control"
-            onChange={handleValidationInputs}
+            onChange={handleValidation}
           />
           {viewPassword ? (
             <svg
@@ -97,7 +72,7 @@ function Login() {
               width="36"
               height="36"
               fill="currentColor"
-              className="bi bi-eye-fill col col-2 p-0"
+              className="bi bi-eye-fill col col-2 p-0 "
               viewBox="0 0 16 16"
               style={{ cursor: "pointer" }}
               onClick={() => setViewPassword(!viewPassword)}
@@ -128,7 +103,7 @@ function Login() {
           type="submit"
           className="btn btn-primary"
           name="login"
-          disabled={validation}
+          disabled={!inputs.email || !inputs.password || error}
         >
           {loading.status && loading.component === "Login" ? (
             <span className="spinner-border text-info" role="status"></span>

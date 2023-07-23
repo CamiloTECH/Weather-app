@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Button, Collapse } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
+import type {} from "redux-thunk/extend-redux";
 import Swal from "sweetalert2";
 
 import { ReducerState } from "../../models";
-import { changeGeneralError, clearCitys, getCity } from "../../redux/action";
+import { changeError, clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {
   const dispatch = useDispatch();
@@ -23,13 +24,13 @@ function SearchBar() {
         icon: "error",
         title: "Oops...",
         text: "The city was not found! Check that the name is correct"
-      }).then(() => dispatch(changeGeneralError("")));
+      }).then(() => dispatch(changeError("")));
     } else if (generalError === "exist") {
       Swal.fire({
         icon: "info",
         title: "Oops...",
         text: "This city already exists in the list!"
-      }).then(() => dispatch(changeGeneralError("")));
+      }).then(() => dispatch(changeError("")));
     }
   }, [generalError]);
 
