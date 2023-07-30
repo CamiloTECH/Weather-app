@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { token } from "../../accessibility";
 import { ReducerState } from "../../models";
 import { getFavorites, loadCitysLocalstorage } from "../../redux/actions";
 import Cards from "../Cards";
 
 function Home() {
-  const { citys, loading } = useSelector((state: ReducerState) => state);
   const dispatch = useDispatch();
-  const token = window.localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
+  const citys = useSelector((state: ReducerState) => state.citys);
 
   useEffect(() => {
     if (token) {
@@ -17,13 +18,17 @@ function Home() {
         if (citys.length === 0) {
           dispatch(loadCitysLocalstorage(JSON.parse(citysLocalStorage)));
         }
-      } else dispatch(getFavorites(token));
+      }
+      //  else {
+      //   setLoading(true);
+      //   dispatch(getFavorites(token)).finally(() => setLoading(false));
+      // }
     }
   }, []);
 
   return (
     <>
-      {loading.status && loading.component === "home" ? (
+      {loading ? (
         <div className="text-center">
           <span
             className="spinner-border text-warning"

@@ -7,32 +7,21 @@ import { NavLink, useNavigate } from "react-router-dom";
 import type {} from "redux-thunk/extend-redux";
 import Swal from "sweetalert2";
 
+import { token } from "../../accessibility";
 import { ReducerState } from "../../models";
-import { changeError, clearCitys, getCity } from "../../redux/actions";
+import { clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [country, setCountry] = useState("");
+  const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const { loading, generalError } = useSelector((state: ReducerState) => state);
+  const citys = useSelector((state: ReducerState) => state.citys);
 
   useEffect(() => {
-    if (!window.localStorage.getItem("token")) navigate("/");
-    else if (generalError === "notFound") {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "The city was not found! Check that the name is correct"
-      }).then(() => dispatch(changeError("")));
-    } else if (generalError === "exist") {
-      Swal.fire({
-        icon: "info",
-        title: "Oops...",
-        text: "This city already exists in the list!"
-      }).then(() => dispatch(changeError("")));
-    }
-  }, [generalError]);
+    if (!token) navigate("/");
+  }, []);
 
   const logout = () => {
     window.localStorage.removeItem("token");
@@ -42,14 +31,39 @@ function SearchBar() {
   };
 
   const handleSubmit = () => {
-    if (country.trim().length > 0) {
-      const token = window.localStorage.getItem("token");
+    const countryTrim = country.trim();
+    if (countryTrim.length > 0) {
       if (token) {
         if (window.location.pathname !== "/home") navigate("/home");
-        dispatch(getCity(country.trim(), token, false));
+        const existCity = citys.find(({ name }) => {
+          return name.trim().toLowerCase() === countryTrim.toLowerCase();
+        });
+
+        if (existCity) {
+          Swal.fire({
+            icon: "info",
+            title: "Oops...",
+            text: "This city already exists in the list!"
+          }).then(() => setCountry(""));
+        } else {
+          setLoading(true);
+          dispatch(getCity(countryTrim, token, false))
+            .then(({ payload }) => {
+              if (!payload.id) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "The city was not found! Check that the name is correct"
+                });
+              }
+            })
+            .finally(() => {
+              setCountry("");
+              setLoading(false);
+            });
+        }
       }
     }
-    setCountry("");
   };
 
   return (
@@ -108,10 +122,10 @@ function SearchBar() {
               />
               <button
                 className="btn btn-outline-info"
-                disabled={loading.status && loading.component === "search"}
+                disabled={loading || country.trim().length === 0}
                 onClick={handleSubmit}
               >
-                {loading.status && loading.component === "search" ? (
+                {loading ? (
                   <span
                     className="spinner-border text-warning p-0 mx-3"
                     style={{ height: "20px", width: "20px" }}

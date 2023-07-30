@@ -22,8 +22,6 @@ export interface ReducerState {
   };
   statusRegister: { status: boolean | undefined };
   statusChangePassword: { status: boolean | undefined; message?: string };
-  loading: { status: boolean; component: string };
-  generalError: string;
 }
 
 export interface actionTypes {

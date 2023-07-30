@@ -1,30 +1,25 @@
 import "./Detail.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
+import { token } from "../../accessibility";
 import { DailyWeather, HourlyWeather, ReducerState } from "../../models";
-import {
-  changeError,
-  clearCityDetail,
-  getCityDetails
-} from "../../redux/actions";
+import { clearCityDetail, getCityDetails } from "../../redux/actions";
 import { unixTimeNormalDate, weekDay } from "./setTime";
 
 function Details() {
-  const { cityDetail, loading, generalError } = useSelector(
-    (state: ReducerState) => state
-  );
   const { name } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const cityDetail = useSelector((state: ReducerState) => state.cityDetail);
   const query = new URLSearchParams(location.search);
   const lat = query.get("lat");
   const lon = query.get("lon");
-  const token = window.localStorage.getItem("token");
 
   const refresState = () => {
     if (token && lat && lon) {
@@ -35,6 +30,19 @@ function Details() {
   useEffect(() => {
     if (!lat || !lon) {
       navigate("/home");
+    } else {
+      setLoading(true);
+      dispatch(getCityDetails(lat, lon, token))
+        .then(({ payload }) => {
+          if (!payload?.lat) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "The city was not found! Check that the coordinates are correct"
+            }).then(() => navigate("/home"));
+          }
+        })
+        .finally(() => setLoading(false));
     }
 
     return () => {
@@ -42,22 +50,9 @@ function Details() {
     };
   }, []);
 
-  useEffect(() => {
-    if (generalError === "notFound") {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "The city was not found! Check that the coordinates are correct"
-      }).then(() => {
-        dispatch(changeError(""));
-        navigate("/home");
-      });
-    }
-  }, [generalError]);
-
   return (
     <>
-      {loading.status && loading.component === "detail" ? (
+      {loading ? (
         <div className="text-center">
           <span
             className="spinner-border text-warning"

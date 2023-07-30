@@ -8,12 +8,10 @@ import {
   CLEAR_USER,
   DELETE_CITY,
   DELETE_FAVORITES,
-  GENERAL_ERROR,
   GET_CITY,
   GET_CITY_DETAILS,
   GET_FAVORITES,
   LOAD_CITIES_LOCALSTORAGE,
-  LOADING,
   SING_IN,
   SING_UP,
   UPDATE_STATUS,
@@ -23,14 +21,10 @@ import {
 const inicialState: ReducerState = {
   citys: [],
   cityDetail: undefined,
-  statusFavorites: {
-    status: false
-  },
+  statusFavorites: { status: false },
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
-  statusChangePassword: { status: undefined },
-  loading: { status: false, component: "" },
-  generalError: ""
+  statusChangePassword: { status: undefined }
 };
 
 function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
@@ -50,13 +44,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
     }
 
     case GET_CITY: {
-      const existCity = state.citys.find(city => city.id === action.payload.id);
-      if (existCity) {
-        return {
-          ...state,
-          generalError: "exist"
-        };
-      } else {
+      if (action.payload?.id) {
         window.localStorage.setItem(
           "citys",
           JSON.stringify([action.payload, ...state.citys])
@@ -66,8 +54,8 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
           citys: [action.payload, ...state.citys]
         };
       }
+      return state;
     }
-
     case GET_CITY_DETAILS: {
       return {
         ...state,
@@ -99,18 +87,6 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
       return {
         ...state,
         citys: [...newCitysFav]
-      };
-    }
-    case LOADING: {
-      return {
-        ...state,
-        loading: action.payload
-      };
-    }
-    case GENERAL_ERROR: {
-      return {
-        ...state,
-        generalError: action.payload
       };
     }
 

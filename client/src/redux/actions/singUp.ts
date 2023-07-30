@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 
 import { Status } from "../../models";
-import { LOADING, SING_UP } from "../actionTypes";
+import { SING_UP } from "../actionTypes";
 import URL from "./url";
 
 interface Info {
@@ -12,7 +12,6 @@ interface Info {
 
 const singUp = (info: Info) => {
   return async (dispatch: Dispatch) => {
-    dispatch({ type: LOADING, payload: { status: true, component: "SignUp" } });
     const response = await fetch(`${URL}/registerUser`, {
       method: "POST",
       body: JSON.stringify(info),
@@ -20,10 +19,6 @@ const singUp = (info: Info) => {
     });
     const result: Status = await response.json();
 
-    dispatch({
-      type: LOADING,
-      payload: { status: false, component: "" }
-    });
     return dispatch({ type: SING_UP, payload: result });
   };
 };

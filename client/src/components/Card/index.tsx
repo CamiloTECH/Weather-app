@@ -4,12 +4,12 @@ import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { token } from "../../accessibility";
 import {
   addFavorites,
   deleteCity,
   deleteFavorites,
-  getCity,
-  getCityDetails
+  getCity
 } from "../../redux/actions";
 
 interface Props {
@@ -36,7 +36,6 @@ const Card: FC<Props> = props => {
   } = props;
   const dispatch = useDispatch();
   const [fav, setFav] = useState(false);
-  const token = window.localStorage.getItem("token");
 
   useEffect(() => {
     setFav(favorite);
@@ -62,12 +61,8 @@ const Card: FC<Props> = props => {
   };
 
   const refresState = () => {
-    if (token) dispatch(getCity(name, token, true));
-  };
-
-  const getDetail = () => {
     if (token) {
-      dispatch(getCityDetails(coord.lat, coord.lon, token));
+      dispatch(getCity(name, token, true));
     }
   };
 
@@ -145,7 +140,6 @@ const Card: FC<Props> = props => {
         <Link
           to={`/home/details/${name}?lat=${coord.lat}&lon=${coord.lon}`}
           className="btn btn-info fw-bold"
-          onClick={getDetail}
         >
           See more details
         </Link>

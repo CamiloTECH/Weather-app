@@ -3,16 +3,8 @@ import {
   CLEAR_CITYS,
   CLEAR_USER,
   DELETE_CITY,
-  GENERAL_ERROR,
   LOAD_CITIES_LOCALSTORAGE
 } from "../actionTypes";
-
-export const changeError = (status: string) => {
-  return {
-    type: GENERAL_ERROR,
-    payload: status
-  };
-};
 
 export const deleteCity = (name: string) => {
   return {
