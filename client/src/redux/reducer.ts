@@ -1,13 +1,11 @@
 import { actionTypes, ReducerState } from "../models";
 import {
-  ADD_FAVORITES,
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
   CLEAR_CITY_DETAIL,
   CLEAR_CITYS,
   CLEAR_USER,
   DELETE_CITY,
-  DELETE_FAVORITES,
   GET_CITY,
   GET_CITY_DETAILS,
   GET_FAVORITES,
@@ -21,7 +19,6 @@ import {
 const inicialState: ReducerState = {
   citys: [],
   cityDetail: undefined,
-  statusFavorites: { status: false },
   statusLogin: { status: undefined },
   statusRegister: { status: undefined },
   statusChangePassword: { status: undefined }
@@ -62,13 +59,6 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         cityDetail: action.payload
       };
     }
-
-    case ADD_FAVORITES:
-    case DELETE_FAVORITES:
-      return {
-        ...state,
-        statusFavorites: action.payload
-      };
 
     case DELETE_CITY: {
       const newCitys = state.citys.filter(city => city.name !== action.payload);

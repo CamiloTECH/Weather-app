@@ -23,7 +23,10 @@ function Details() {
 
   const refresState = () => {
     if (token && lat && lon) {
-      dispatch(getCityDetails(lat, lon, token));
+      setLoading(true);
+      dispatch(getCityDetails(lat, lon, token)).finally(() => {
+        setLoading(false);
+      });
     }
   };
 

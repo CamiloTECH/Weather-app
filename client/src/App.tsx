@@ -2,7 +2,8 @@ import { Route, Routes } from "react-router-dom";
 
 import { Details, Home, Landing, NotFound, SearchBar } from "./components";
 
-// Terminar de cuadrar la landing Page
+// Terminar de cuadrar todos los estados y el manejo de errores
+// Cuadrar la landing Page
 // Probar funcionamiento
 // Ajustar CSS
 // Ajustar Back

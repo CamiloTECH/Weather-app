@@ -1,6 +1,6 @@
 import "./Card.css";
 
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import {
   deleteFavorites,
   getCity
 } from "../../redux/actions";
+import { CHANGE_STATUS_FAV } from "../../redux/actionTypes";
 
 interface Props {
   name: string;
@@ -35,29 +36,24 @@ const Card: FC<Props> = props => {
     weather
   } = props;
   const dispatch = useDispatch();
-  const [fav, setFav] = useState(false);
-
-  useEffect(() => {
-    setFav(favorite);
-  }, []);
 
   const addFav = () => {
     if (token) {
-      dispatch(addFavorites({ ciudad: name }, token));
-      setFav(true);
+      dispatch(addFavorites(name, token));
+      dispatch({ type: CHANGE_STATUS_FAV, payload: name });
     }
   };
 
   const deleteFav = () => {
     if (token) {
-      dispatch(deleteFavorites({ ciudad: name }, token));
-      setFav(false);
+      dispatch(deleteFavorites(name, token));
+      dispatch({ type: CHANGE_STATUS_FAV, payload: name });
     }
   };
 
   const deleteCurrentCity = () => {
     dispatch(deleteCity(name));
-    if (fav && token) dispatch(deleteFavorites({ ciudad: name }, token));
+    if (favorite && token) dispatch(deleteFavorites(name, token));
   };
 
   const refresState = () => {
@@ -146,8 +142,8 @@ const Card: FC<Props> = props => {
 
         <button
           className="p-0 m-0 bg-transparent border-0"
-          title={fav ? "Delete to favorite" : "Add to favorite"}
-          onClick={fav ? deleteFav : addFav}
+          title={favorite ? "Delete to favorite" : "Add to favorite"}
+          onClick={favorite ? deleteFav : addFav}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -155,7 +151,7 @@ const Card: FC<Props> = props => {
             height="36"
             fill="currentColor"
             className={`bi bi-heart-fill animate__animated ${
-              fav ? "fav animate__heartBeat" : "logos animate__pulse"
+              favorite ? "fav animate__heartBeat" : "logos animate__pulse"
             } `}
             viewBox="0 0 16 16"
           >

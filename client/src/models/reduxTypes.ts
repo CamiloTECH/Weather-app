@@ -14,7 +14,6 @@ export interface StatusUser {
 export interface ReducerState {
   citys: City[];
   cityDetail: DetailCity | undefined;
-  statusFavorites: Status;
   statusLogin: {
     status: boolean | undefined;
     token?: string;
