@@ -8,7 +8,7 @@ const changePassword = (password: string, token: string) => {
   return async (dispatch: Dispatch) => {
     const response = await fetch(`${URL}/changePassword/${token}`, {
       method: "PUT",
-      body: JSON.stringify(password),
+      body: password,
       headers: { "Content-Type": "application/json" }
     });
     const result: Status = await response.json();

@@ -65,18 +65,20 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
       window.localStorage.setItem("citys", JSON.stringify(newCitys));
       return {
         ...state,
-        citys: [...newCitys]
+        citys: newCitys
       };
     }
     case CHANGE_STATUS_FAV: {
       const newCitysFav = state.citys.map(city => {
-        if (city.name === action.payload) city.fav = !city.fav;
+        if (city.name === action.payload) {
+          city.fav = !city.fav;
+        }
         return city;
       });
       window.localStorage.setItem("citys", JSON.stringify(newCitysFav));
       return {
         ...state,
-        citys: [...newCitysFav]
+        citys: newCitysFav
       };
     }
 
@@ -118,18 +120,17 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
 
     case UPDATE_STATUS: {
       const updateCitys = state.citys.map(city => {
-        if (city.name === action.payload.name) {
+        if (city.name === action.payload?.name) {
           action.payload.fav = city.fav;
           return action.payload;
         } else {
           return city;
         }
       });
-
       window.localStorage.setItem("citys", JSON.stringify(updateCitys));
       return {
         ...state,
-        citys: [...updateCitys]
+        citys: updateCitys
       };
     }
     case CLEAR_CITYS: {

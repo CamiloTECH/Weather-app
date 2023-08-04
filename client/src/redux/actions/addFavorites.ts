@@ -8,7 +8,7 @@ const addFavorites = (ciudad: string, token: string) => {
   return async (dispatch: Dispatch) => {
     const response = await fetch(`${URL}/saveFavorites`, {
       method: "POST",
-      body: JSON.stringify(ciudad),
+      body: ciudad,
       headers: {
         "Content-Type": "application/json",
         Authorization: `bearer ${token}`

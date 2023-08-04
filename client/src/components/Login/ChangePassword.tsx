@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { ReducerState } from "../../models";
 import { changePassword } from "../../redux/actions";
 import { regexPass } from "./RegexValidation";
 
@@ -10,7 +9,7 @@ function ChangePassword({ token }: { token: string }) {
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { loading } = useSelector((state: ReducerState) => state);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     password: false,
     confirmPassword: false
@@ -21,22 +20,21 @@ function ChangePassword({ token }: { token: string }) {
     if (name === "password") {
       setPassword(value);
       setConfirmPassword("");
-      regexPass.test(value)
-        ? setError({ ...error, password: false })
-        : setError({ ...error, password: true });
+      setError({ ...error, password: !regexPass.test(value) });
     } else if (name === "confirmPassword") {
       setConfirmPassword(value);
-      value === password
-        ? setError({ ...error, confirmPassword: false })
-        : setError({ ...error, confirmPassword: true });
+      setError({ ...error, confirmPassword: !(value === password) });
     }
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword(password, token));
-    setPassword("");
-    setConfirmPassword("");
+    setLoading(true);
+    dispatch(changePassword(password, token)).finally(() => {
+      setLoading(false);
+      setPassword("");
+      setConfirmPassword("");
+    });
   };
 
   return (
@@ -138,7 +136,7 @@ function ChangePassword({ token }: { token: string }) {
               !confirmPassword
             }
           >
-            {loading.status && loading.component === "changePassword" ? (
+            {loading ? (
               <span className="spinner-border text-info" role="status"></span>
             ) : (
               "Change Password"

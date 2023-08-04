@@ -25,6 +25,7 @@ export interface ReducerState {
 
 export interface actionTypes {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
 }
 

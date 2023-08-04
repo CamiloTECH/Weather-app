@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { ReducerState } from "../../models";
 import { validationEmail } from "../../redux/actions";
 import { regexEmail } from "./RegexValidation";
 
@@ -9,18 +8,21 @@ function ValidationEmail() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
-  const { loading } = useSelector((state: ReducerState) => state);
+  const [loading, setLoading] = useState(false);
 
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setEmail(value.trim());
-    regexEmail.test(value.trim()) ? setError(false) : setError(true);
+    setError(!regexEmail.test(value.trim()));
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(validationEmail({ email }));
-    setEmail("");
+    setLoading(true);
+    dispatch(validationEmail({ email })).finally(() => {
+      setLoading(false);
+      setEmail("");
+    });
   };
 
   return (
@@ -57,7 +59,7 @@ function ValidationEmail() {
             name="validation"
             disabled={error || !email}
           >
-            {loading.status && loading.component === "validationEmail" ? (
+            {loading ? (
               <span className="spinner-border text-info" role="status"></span>
             ) : (
               "Send validation"

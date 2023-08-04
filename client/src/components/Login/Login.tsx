@@ -1,7 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { ReducerState } from "../../models";
 import { singIn } from "../../redux/actions";
 import { regexEmail } from "./RegexValidation";
 
@@ -9,7 +8,7 @@ function Login() {
   const dispatch = useDispatch();
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const loading = useSelector((state: ReducerState) => state.loading);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const handleValidation = ({ target }: ChangeEvent<HTMLInputElement>) => {
@@ -17,14 +16,17 @@ function Login() {
     setInputs({ ...inputs, [name]: value });
 
     if (name === "email") {
-      regexEmail.test(value) ? setError(false) : setError(true);
+      setError(!regexEmail.test(value));
     }
   };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singIn({ ...inputs, email: inputs.email.trim() }));
-    setInputs({ email: "", password: "" });
+    setLoading(true);
+    dispatch(singIn({ ...inputs, email: inputs.email.trim() })).finally(() => {
+      setLoading(false);
+      setInputs({ email: "", password: "" });
+    });
   };
 
   return (
@@ -105,7 +107,7 @@ function Login() {
           name="login"
           disabled={!inputs.email || !inputs.password || error}
         >
-          {loading.status && loading.component === "Login" ? (
+          {loading ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Login"
