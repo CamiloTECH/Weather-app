@@ -1,11 +1,15 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import { changePassword } from "../../redux/actions";
 import { regexPass } from "./RegexValidation";
 
 function ChangePassword({ token }: { token: string }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,11 +34,27 @@ function ChangePassword({ token }: { token: string }) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(changePassword(password, token)).finally(() => {
-      setLoading(false);
-      setPassword("");
-      setConfirmPassword("");
-    });
+    dispatch(changePassword(password, token))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Password changed successfully!",
+            text: "Now you can login successfully"
+          }).then(() => navigate("/"));
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "An error occurred in the shipment"
+          }).then(() => navigate("/"));
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setPassword("");
+        setConfirmPassword("");
+      });
   };
 
   return (

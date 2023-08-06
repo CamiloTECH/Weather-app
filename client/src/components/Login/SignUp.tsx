@@ -1,10 +1,21 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  SyntheticEvent,
+  useState
+} from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
 import { singUp } from "../../redux/actions";
 import { regexEmail, regexPass } from "./RegexValidation";
 
-function SignUp() {
+interface Props {
+  setSignUp: Dispatch<SetStateAction<boolean>>;
+}
+const SignUp: FC<Props> = ({ setSignUp }) => {
   const dispatch = useDispatch();
   const [viewPassword, setViewPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,10 +48,26 @@ function SignUp() {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(singUp({ ...inputs, email: inputs.email.trim() })).finally(() => {
-      setLoading(false);
-      setInputs({ email: "", password: "", userName: "" });
-    });
+    dispatch(singUp({ ...inputs, email: inputs.email.trim() }))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "You registered successfully!",
+            text: "Now, you can login!"
+          }).then(() => setSignUp(false));
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "This email already exists, please put another email or login"
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setInputs({ email: "", password: "", userName: "" });
+      });
   };
 
   return (
@@ -179,6 +206,6 @@ function SignUp() {
       </div>
     </form>
   );
-}
+};
 
 export default SignUp;

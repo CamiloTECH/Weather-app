@@ -1,11 +1,14 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-import { singIn } from "../../redux/actions";
+import { clearUser, singIn } from "../../redux/actions";
 import { regexEmail } from "./RegexValidation";
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -23,10 +26,36 @@ function Login() {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(singIn({ ...inputs, email: inputs.email.trim() })).finally(() => {
-      setLoading(false);
-      setInputs({ email: "", password: "" });
-    });
+    dispatch(singIn({ ...inputs, email: inputs.email.trim() }))
+      .then(({ payload }) => {
+        if (payload.status && payload.token) {
+          window.localStorage.setItem("token", payload.token);
+          dispatch(clearUser());
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "You logged in successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => navigate("/home"));
+        } else {
+          payload.message === "login"
+            ? Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "Wrong password or email. Please check!"
+              })
+            : Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "You can't login with google, this email was registered in another way, you must login in another way"
+              });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setInputs({ email: "", password: "" });
+      });
   };
 
   return (

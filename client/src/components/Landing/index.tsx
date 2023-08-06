@@ -1,111 +1,24 @@
 import "./Landing.css";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
 
-import { ReducerState } from "../../models";
-import { clearUser } from "../../redux/actions";
 import { ChangePassword, Login, SignUp, ValidationEmail } from "../Login";
 
 function Landing() {
-  const dispatch = useDispatch();
   const { token } = useParams();
   const navigate = useNavigate();
   const [signUp, setSignUp] = useState(false);
   const [changePassword, setChangePassword] = useState(false);
   const [forgotPassword, setForgotPassword] = useState(false);
-  const { statusLogin, statusRegister, statusChangePassword } = useSelector(
-    (state: ReducerState) => state
-  );
 
   useEffect(() => {
-    if (window.localStorage.getItem("token")) navigate("/home");
-    else if (token) {
-      if (changePassword) {
-        if (statusChangePassword.status) {
-          Swal.fire({
-            icon: "success",
-            title: "Password changed successfully!",
-            text: "Now you can login successfully"
-          }).then(() => navigate("/"));
-        } else if (statusChangePassword.status === false) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops an error occurred!",
-            text: "An error occurred in the shipment"
-          }).then(() => navigate("/"));
-        }
-      } else setChangePassword(true);
-    } else if (forgotPassword) {
-      if (statusChangePassword.status) {
-        Swal.fire({
-          icon: "success",
-          title: "The mail was sent!",
-          text: "Please check your e-mail"
-        }).then(() => {
-          setForgotPassword(false);
-          setSignUp(false);
-        });
-      } else if (statusChangePassword.status === false) {
-        statusChangePassword.message === "googleEmail"
-          ? Swal.fire({
-              icon: "error",
-              title: "Oops an error occurred!",
-              text: "This email can't change the password, because you signed up with google"
-            }).then(() => {
-              setForgotPassword(false);
-              setSignUp(false);
-            })
-          : Swal.fire({
-              icon: "error",
-              title: "Oops an error occurred!",
-              text: "This email doesn't exist, please enter another email or register"
-            });
-      }
-    } else {
-      if (signUp) {
-        if (statusRegister.status) {
-          Swal.fire({
-            icon: "success",
-            title: "You registered successfully!",
-            text: "Now, you can login!"
-          }).then(() => setSignUp(false));
-        } else if (statusRegister.status === false) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops an error occurred!",
-            text: "This email already exists, please put another email or login"
-          });
-        }
-      } else {
-        if (statusLogin.status && statusLogin.token) {
-          window.localStorage.setItem("token", statusLogin.token);
-          dispatch(clearUser());
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "You logged in successfully!",
-            showConfirmButton: false,
-            timer: 1500
-          }).then(() => navigate("/home"));
-        } else if (statusLogin.status === false) {
-          statusLogin.message === "login"
-            ? Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "Wrong password or email. Please check!"
-              })
-            : Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "You can't login with google, this email was registered in another way, you must login in another way"
-              });
-        }
-      }
+    if (window.localStorage.getItem("token")) {
+      navigate("/home");
+    } else if (token && !changePassword) {
+      setChangePassword(true);
     }
-  }, [statusLogin, statusRegister, statusChangePassword]);
+  }, []);
 
   const handleSignUp = (boolean: boolean) => {
     setSignUp(boolean);
@@ -156,9 +69,12 @@ function Landing() {
           {changePassword && token ? (
             <ChangePassword token={token} />
           ) : forgotPassword ? (
-            <ValidationEmail />
+            <ValidationEmail
+              setForgotPassword={setForgotPassword}
+              setSignUp={setSignUp}
+            />
           ) : signUp ? (
-            <SignUp />
+            <SignUp setSignUp={setSignUp} />
           ) : (
             <Login />
           )}

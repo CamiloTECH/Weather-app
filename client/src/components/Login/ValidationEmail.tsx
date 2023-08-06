@@ -1,10 +1,23 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  FormEvent,
+  SetStateAction,
+  useState
+} from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
 import { validationEmail } from "../../redux/actions";
 import { regexEmail } from "./RegexValidation";
 
-function ValidationEmail() {
+interface Props {
+  setForgotPassword: Dispatch<SetStateAction<boolean>>;
+  setSignUp: Dispatch<SetStateAction<boolean>>;
+}
+
+const ValidationEmail: FC<Props> = ({ setForgotPassword, setSignUp }) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
@@ -19,10 +32,38 @@ function ValidationEmail() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(validationEmail({ email })).finally(() => {
-      setLoading(false);
-      setEmail("");
-    });
+    dispatch(validationEmail({ email }))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "The mail was sent!",
+            text: "Please check your e-mail"
+          }).then(() => {
+            setForgotPassword(false);
+            setSignUp(false);
+          });
+        } else {
+          payload.message === "googleEmail"
+            ? Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "This email can't change the password, because you signed up with google"
+              }).then(() => {
+                setForgotPassword(false);
+                setSignUp(false);
+              })
+            : Swal.fire({
+                icon: "error",
+                title: "Oops an error occurred!",
+                text: "This email doesn't exist, please enter another email or register"
+              });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setEmail("");
+      });
   };
 
   return (
@@ -69,6 +110,6 @@ function ValidationEmail() {
       </form>
     </>
   );
-}
+};
 
 export default ValidationEmail;
