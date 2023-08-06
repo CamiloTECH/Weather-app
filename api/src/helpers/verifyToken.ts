@@ -9,10 +9,7 @@ const verifyToken = async (req: Request) => {
     const token = authorization?.toLowerCase().startsWith("bearer")
       ? authorization.substring(7)
       : "";
-    const decodedToken: any = jwt.verify(
-      token,
-      process.env.SECRET ? process.env.SECRET : ""
-    );
+    const decodedToken: any = jwt.verify(token, process.env.SECRET || "");
 
     const user = await Users.findByPk(decodedToken.id, { attributes: ["id"] });
     return user;

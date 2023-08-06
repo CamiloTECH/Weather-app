@@ -2,6 +2,9 @@ import express, { Application } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import routes from "./routes";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app: Application = express();
 
