@@ -44,20 +44,11 @@ const ValidationEmail: FC<Props> = ({ setForgotPassword, setSignUp }) => {
             setSignUp(false);
           });
         } else {
-          payload.message === "googleEmail"
-            ? Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "This email can't change the password, because you signed up with google"
-              }).then(() => {
-                setForgotPassword(false);
-                setSignUp(false);
-              })
-            : Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "This email doesn't exist, please enter another email or register"
-              });
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "This email doesn't exist, please enter another email or register"
+          });
         }
       })
       .finally(() => {

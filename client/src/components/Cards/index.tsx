@@ -6,6 +6,7 @@ function Cards({ citys }: { citys: City[] }) {
     <div className="container d-flex flex-wrap justify-content-center align-items-center gap-5 my-5">
       {citys.map(city => (
         <Card
+          id={city.id}
           key={city.id}
           name={city.name}
           logo={city.weather[0].icon}

@@ -9,9 +9,8 @@ import {
   loginUser,
   validationEmail,
   changePassword,
-  loginGoogle,
 } from "../controllers/index";
-import { validationUser } from "../helpers";
+import { validationUser } from "../helpers/index";
 
 const routes = Router();
 
@@ -24,7 +23,6 @@ routes.delete("/deleteFavorites", validationUser, deleteFavorites);
 
 routes.post("/registerUser", registerUser);
 routes.post("/loginUser", loginUser);
-routes.post("/logingoogle", loginGoogle);
 
 routes.post("/validationEmail", validationEmail);
 routes.put("/changePassword/:token", changePassword);

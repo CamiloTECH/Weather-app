@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { verifyToken } from "../helpers";
-import { Citys, Users } from "../models";
+import { Citys } from "../models/Citys";
+import { Users } from "../models/Users";
+import { verifyToken } from "../helpers/index";
 
 const addFavorites = async (req: Request, res: Response) => {
   try {

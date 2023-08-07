@@ -3,6 +3,7 @@ import "./Landing.css";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import getToken from "../../accessibility";
 import { ChangePassword, Login, SignUp, ValidationEmail } from "../Login";
 
 function Landing() {
@@ -13,7 +14,7 @@ function Landing() {
   const [forgotPassword, setForgotPassword] = useState(false);
 
   useEffect(() => {
-    if (window.localStorage.getItem("token")) {
+    if (getToken()) {
       navigate("/home");
     } else if (token && !changePassword) {
       setChangePassword(true);
@@ -139,7 +140,6 @@ function Landing() {
               ) : null}
             </div>
           )}
-          {/* {token || signUp || forgotPassword ? null : <LoginGoogle />} */}
         </div>
       </div>
     </div>

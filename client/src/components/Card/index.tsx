@@ -4,7 +4,7 @@ import { FC } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { token } from "../../accessibility";
+import getToken from "../../accessibility";
 import {
   addFavorites,
   deleteCity,
@@ -14,6 +14,7 @@ import {
 import { CHANGE_STATUS_FAV } from "../../redux/actionTypes";
 
 interface Props {
+  id: number;
   name: string;
   logo: string;
   description: string;
@@ -26,6 +27,7 @@ interface Props {
 
 const Card: FC<Props> = props => {
   const {
+    id,
     coord,
     country,
     description,
@@ -35,24 +37,25 @@ const Card: FC<Props> = props => {
     temperature,
     weather
   } = props;
+  const token = getToken();
   const dispatch = useDispatch();
 
   const addFav = () => {
     if (token) {
       dispatch(addFavorites(name, token));
-      dispatch({ type: CHANGE_STATUS_FAV, payload: name });
+      dispatch({ type: CHANGE_STATUS_FAV, payload: id });
     }
   };
 
   const deleteFav = () => {
     if (token) {
       dispatch(deleteFavorites(name, token));
-      dispatch({ type: CHANGE_STATUS_FAV, payload: name });
+      dispatch({ type: CHANGE_STATUS_FAV, payload: id });
     }
   };
 
   const deleteCurrentCity = () => {
-    dispatch(deleteCity(name));
+    dispatch(deleteCity(id));
     if (favorite && token) dispatch(deleteFavorites(name, token));
   };
 

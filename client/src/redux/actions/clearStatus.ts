@@ -6,10 +6,10 @@ import {
   LOAD_CITIES_LOCALSTORAGE
 } from "../actionTypes";
 
-export const deleteCity = (name: string) => {
+export const deleteCity = (id: number) => {
   return {
     type: DELETE_CITY,
-    payload: name
+    payload: id
   };
 };
 

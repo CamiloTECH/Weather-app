@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { token } from "../../accessibility";
+import getToken from "../../accessibility";
 import { ReducerState } from "../../models";
 import { getFavorites, loadCitysLocalstorage } from "../../redux/actions";
 import Cards from "../Cards";
@@ -12,17 +12,17 @@ function Home() {
   const citys = useSelector((state: ReducerState) => state.citys);
 
   useEffect(() => {
+    const token = getToken();
     if (token) {
       const citysLocalStorage = window.localStorage.getItem("citys");
       if (citysLocalStorage) {
         if (citys.length === 0) {
           dispatch(loadCitysLocalstorage(JSON.parse(citysLocalStorage)));
         }
+      } else {
+        setLoading(true);
+        dispatch(getFavorites(token)).finally(() => setLoading(false));
       }
-      //  else {
-      //   setLoading(true);
-      //   dispatch(getFavorites(token)).finally(() => setLoading(false));
-      // }
     }
   }, []);
 

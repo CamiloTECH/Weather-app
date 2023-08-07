@@ -39,17 +39,11 @@ function Login() {
             timer: 1500
           }).then(() => navigate("/home"));
         } else {
-          payload.message === "login"
-            ? Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "Wrong password or email. Please check!"
-              })
-            : Swal.fire({
-                icon: "error",
-                title: "Oops an error occurred!",
-                text: "You can't login with google, this email was registered in another way, you must login in another way"
-              });
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "Wrong password or email. Please check!"
+          });
         }
       })
       .finally(() => {

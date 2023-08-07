@@ -5,12 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { token } from "../../accessibility";
+import getToken from "../../accessibility";
 import { DailyWeather, HourlyWeather, ReducerState } from "../../models";
 import { clearCityDetail, getCityDetails } from "../../redux/actions";
 import { unixTimeNormalDate, weekDay } from "./setTime";
 
 function Details() {
+  const token = getToken();
   const { name } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,18 +35,22 @@ function Details() {
     if (!lat || !lon) {
       navigate("/home");
     } else {
-      setLoading(true);
-      dispatch(getCityDetails(lat, lon, token))
-        .then(({ payload }) => {
-          if (!payload?.lat) {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "The city was not found! Check that the coordinates are correct"
-            }).then(() => navigate("/home"));
-          }
-        })
-        .finally(() => setLoading(false));
+      if (token) {
+        setLoading(true);
+        dispatch(getCityDetails(lat, lon, token))
+          .then(({ payload }) => {
+            if (!payload?.lat) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "The city was not found! Check that the coordinates are correct"
+              }).then(() => navigate("/home"));
+            }
+          })
+          .finally(() => setLoading(false));
+      } else {
+        navigate("/");
+      }
     }
 
     return () => {

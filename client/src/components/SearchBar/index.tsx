@@ -7,11 +7,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import type {} from "redux-thunk/extend-redux";
 import Swal from "sweetalert2";
 
-import { token } from "../../accessibility";
+import getToken from "../../accessibility";
 import { ReducerState } from "../../models";
 import { clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {
+  const token = getToken();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [country, setCountry] = useState("");
@@ -20,7 +21,9 @@ function SearchBar() {
   const citys = useSelector((state: ReducerState) => state.citys);
 
   useEffect(() => {
-    if (!token) navigate("/");
+    if (!token) {
+      navigate("/");
+    }
   }, []);
 
   const logout = () => {
@@ -35,33 +38,33 @@ function SearchBar() {
     if (countryTrim.length > 0) {
       if (token) {
         if (window.location.pathname !== "/home") navigate("/home");
-        const existCity = citys.find(({ name }) => {
-          return name.trim().toLowerCase() === countryTrim.toLowerCase();
-        });
 
-        if (existCity) {
-          Swal.fire({
-            icon: "info",
-            title: "Oops...",
-            text: "This city already exists in the list!"
-          }).then(() => setCountry(""));
-        } else {
-          setLoading(true);
-          dispatch(getCity(countryTrim, token, false))
-            .then(({ payload }) => {
-              if (!payload.id) {
+        setLoading(true);
+        dispatch(getCity(countryTrim, token, false))
+          .then(({ payload }) => {
+            if (payload.id) {
+              const existCity = citys.find(({ id }) => {
+                return payload.id === id;
+              });
+              if (existCity) {
                 Swal.fire({
-                  icon: "error",
+                  icon: "info",
                   title: "Oops...",
-                  text: "The city was not found! Check that the name is correct"
-                });
+                  text: "This city already exists in the list!"
+                }).then(() => setCountry(""));
               }
-            })
-            .finally(() => {
-              setCountry("");
-              setLoading(false);
-            });
-        }
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "The city was not found! Check that the name is correct"
+              });
+            }
+          })
+          .finally(() => {
+            setCountry("");
+            setLoading(false);
+          });
       }
     }
   };

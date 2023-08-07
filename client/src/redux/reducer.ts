@@ -42,6 +42,12 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
 
     case GET_CITY: {
       if (action.payload?.id) {
+        const existCity = state.citys.find(({ id }) => {
+          return action.payload.id === id;
+        });
+        if (existCity) {
+          return state;
+        }
         window.localStorage.setItem(
           "citys",
           JSON.stringify([action.payload, ...state.citys])
@@ -61,7 +67,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
     }
 
     case DELETE_CITY: {
-      const newCitys = state.citys.filter(city => city.name !== action.payload);
+      const newCitys = state.citys.filter(({ id }) => id !== action.payload);
       window.localStorage.setItem("citys", JSON.stringify(newCitys));
       return {
         ...state,
@@ -70,7 +76,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
     }
     case CHANGE_STATUS_FAV: {
       const newCitysFav = state.citys.map(city => {
-        if (city.name === action.payload) {
+        if (city.id === action.payload) {
           city.fav = !city.fav;
         }
         return city;
@@ -120,7 +126,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
 
     case UPDATE_STATUS: {
       const updateCitys = state.citys.map(city => {
-        if (city.name === action.payload?.name) {
+        if (city.id === action.payload?.id) {
           action.payload.fav = city.fav;
           return action.payload;
         } else {

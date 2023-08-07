@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Users } from "../models";
-import { generateToken } from "../helpers";
 import bcryptjs from "bcryptjs";
+import { Users } from "../models/Users";
+import { generateToken } from "../helpers/index";
 
 const loginUser = async (req: Request, res: Response) => {
   try {
@@ -14,10 +14,9 @@ const loginUser = async (req: Request, res: Response) => {
 
     if (correctPassword && user) {
       const token = generateToken({ id: user.id });
-      res.json({ status: true, token });
-    } else {
-      throw Error;
+      return res.json({ status: true, token });
     }
+    throw Error;
   } catch {
     res.json({ status: false, message: "login" });
   }

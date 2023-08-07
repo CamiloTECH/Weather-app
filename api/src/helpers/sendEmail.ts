@@ -19,7 +19,7 @@ const sendEmail = async (email: string, token: string, userName: string) => {
             <img src="https://images.squarespace-cdn.com/content/v1/5572b7b4e4b0a20071d407d4/1487090874274-FH2ZNWOTRU90UAF5TA2B/Weather+Targeting" style="width: 100px;"/>
             <h3>Hello ${userName}: You have requested to reset your password.</h3>
             <p>Follow the next link to generate your new password:
-            <a rel="noopener noreferrer" target="_blank" href="http://localhost:3000/${token}">Change Password</a></p>
+            <a rel="noopener noreferrer" target="_blank" href="${process.env.FRONT_URL}/${token}">Change Password</a></p>
             <p><strong>If you didn't request this, ignore this message</strong></p>`,
   });
 };

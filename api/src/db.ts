@@ -1,7 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
 dotenv.config();
-
 export const sequelize = process.env.DATABASE_URL
   ? new Sequelize(process.env.DATABASE_URL, {
       storage: ":memory:",

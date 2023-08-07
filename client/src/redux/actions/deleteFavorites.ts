@@ -8,7 +8,7 @@ const deleteFavorites = (ciudad: string, token: string) => {
   return async (dispatch: Dispatch) => {
     const response = await fetch(`${URL}/deleteFavorites`, {
       method: "DELETE",
-      body: ciudad,
+      body: JSON.stringify({ ciudad }),
       headers: {
         "Content-Type": "application/json",
         Authorization: `bearer ${token}`

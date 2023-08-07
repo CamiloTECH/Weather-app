@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Users } from "../models";
-import { sendEmail, tokenEmail } from "../helpers";
+import { Users } from "../models/Users";
+import { sendEmail, tokenEmail } from "../helpers/index";
 
 const validationEmail = async (req: Request, res: Response) => {
   try {
@@ -11,13 +11,10 @@ const validationEmail = async (req: Request, res: Response) => {
         userExists.token = tokenEmail();
         await userExists.save();
         await sendEmail(email, userExists.token, userExists.userName);
-        res.json({ status: true });
-      } else {
-        res.json({ status: false, message: "googleEmail" });
+        return res.json({ status: true });
       }
-    } else {
-      throw Error;
     }
+    throw Error;
   } catch {
     res.json({ status: false, message: "normalEmail" });
   }

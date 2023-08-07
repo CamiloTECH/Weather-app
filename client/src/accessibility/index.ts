@@ -1,1 +1,5 @@
-export const token = window.localStorage.getItem("token") || "token";
+const getToken = () => {
+  return window.localStorage.getItem("token");
+};
+
+export default getToken;
