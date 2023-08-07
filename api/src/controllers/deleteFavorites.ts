@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { Users } from "../models/Users";
-import { Citys } from "../models/Citys";
+import { Users, Citys } from "../models/index";
 import { verifyToken } from "../helpers/index";
 
 export const deleteFavorites = async (req: Request, res: Response) => {

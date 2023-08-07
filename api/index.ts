@@ -9,4 +9,4 @@ sequelize
       console.log("Escuchando en " + process.env.PORT);
     });
   })
-  .catch((err) => console.log("error", err));
+  .catch((err) => console.log(err));

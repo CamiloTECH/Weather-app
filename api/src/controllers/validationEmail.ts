@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Users } from "../models/Users";
+import { Users } from "../models/index";
 import { sendEmail, tokenEmail } from "../helpers/index";
 
 const validationEmail = async (req: Request, res: Response) => {

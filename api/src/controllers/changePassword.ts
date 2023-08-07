@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
-import { Users } from "../models/Users";
+import { Users } from "../models/index";
 
 const changePassword = async (req: Request, res: Response) => {
   try {

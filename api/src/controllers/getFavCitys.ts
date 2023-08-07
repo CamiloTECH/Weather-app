@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Request, Response } from "express";
-import { Citys } from "../models/Citys";
-import { Users } from "../models/Users";
+import { Citys, Users } from "../models/index";
 import { verifyToken } from "../helpers/index";
 
 const getFavCitys = async (req: Request, res: Response) => {
