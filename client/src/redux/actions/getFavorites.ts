@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 
-import { City } from "../../models";
 import { GET_FAVORITES } from "../actionTypes";
 import URL from "./url";
 
@@ -9,7 +8,7 @@ const getFavorites = (token: string) => {
     const response = await fetch(`${URL}/userFav`, {
       headers: { Authorization: `bearer ${token}` }
     });
-    const result: City[] = await response.json();
+    const result = await response.json();
 
     return dispatch({
       type: GET_FAVORITES,

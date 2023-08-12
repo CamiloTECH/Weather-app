@@ -15,8 +15,8 @@ import { validationUser } from "../helpers/index";
 const routes = Router();
 
 routes.get("/userFav", validationUser, getFavCitys);
-routes.get("/city/:city", getCity);
-routes.get("/details", getCityDetails);
+routes.get("/city/:city", validationUser, getCity);
+routes.get("/details", validationUser, getCityDetails);
 
 routes.post("/saveFavorites", validationUser, addFavorites);
 routes.delete("/deleteFavorites", validationUser, deleteFavorites);

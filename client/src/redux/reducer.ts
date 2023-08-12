@@ -32,12 +32,17 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         citys: action.payload
       };
     }
+
     case GET_FAVORITES: {
-      window.localStorage.setItem("citys", JSON.stringify(action.payload));
-      return {
-        ...state,
-        citys: action.payload
-      };
+      if (action.payload?.error) {
+        return state;
+      } else {
+        window.localStorage.setItem("citys", JSON.stringify(action.payload));
+        return {
+          ...state,
+          citys: action.payload
+        };
+      }
     }
 
     case GET_CITY: {
@@ -59,11 +64,16 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
       }
       return state;
     }
+
     case GET_CITY_DETAILS: {
-      return {
-        ...state,
-        cityDetail: action.payload
-      };
+      if (action.payload?.error) {
+        return state;
+      } else {
+        return {
+          ...state,
+          cityDetail: action.payload
+        };
+      }
     }
 
     case DELETE_CITY: {
@@ -74,6 +84,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         citys: newCitys
       };
     }
+
     case CHANGE_STATUS_FAV: {
       const newCitysFav = state.citys.map(city => {
         if (city.id === action.payload) {
@@ -108,6 +119,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         statusRegister: action.payload
       };
     }
+    
     case CLEAR_USER: {
       return {
         ...state,
@@ -125,21 +137,27 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
       };
 
     case UPDATE_STATUS: {
-      const updateCitys = state.citys.map(city => {
-        if (city.id === action.payload?.id) {
-          action.payload.fav = city.fav;
-          return action.payload;
-        } else {
-          return city;
-        }
-      });
-      window.localStorage.setItem("citys", JSON.stringify(updateCitys));
-      return {
-        ...state,
-        citys: updateCitys
-      };
+      if (action.payload?.id) {
+        const updateCitys = state.citys.map(city => {
+          if (city.id === action.payload.id) {
+            action.payload.fav = city.fav;
+            return action.payload;
+          } else {
+            return city;
+          }
+        });
+        window.localStorage.setItem("citys", JSON.stringify(updateCitys));
+        return {
+          ...state,
+          citys: updateCitys
+        };
+      } else {
+        return state;
+      }
     }
     case CLEAR_CITYS: {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("citys");
       return {
         ...state,
         citys: action.payload

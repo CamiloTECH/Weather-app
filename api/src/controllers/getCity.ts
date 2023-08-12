@@ -10,7 +10,7 @@ const getCity = async (req: Request, res: Response) => {
 
     response.data.fav = false;
     res.json(response.data);
-  } catch (error) {
+  } catch {
     res.json({});
   }
 };

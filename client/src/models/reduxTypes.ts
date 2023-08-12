@@ -3,6 +3,7 @@ import { DetailCity } from "./DetailCityType";
 
 export interface Status {
   status: boolean;
+  error?: string;
 }
 
 export interface StatusUser {

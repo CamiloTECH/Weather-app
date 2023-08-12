@@ -9,10 +9,9 @@ import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
 import { ReducerState } from "../../models";
-import { clearCitys, getCity } from "../../redux/actions";
+import { clearCityDetail, clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {
-  const token = getToken();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [country, setCountry] = useState("");
@@ -21,28 +20,35 @@ function SearchBar() {
   const citys = useSelector((state: ReducerState) => state.citys);
 
   useEffect(() => {
+    const token = getToken();
     if (!token) {
       navigate("/");
     }
   }, []);
 
   const logout = () => {
-    window.localStorage.removeItem("token");
-    window.localStorage.removeItem("citys");
     dispatch(clearCitys());
+    dispatch(clearCityDetail());
     navigate("/");
   };
 
   const handleSubmit = () => {
     const countryTrim = country.trim();
     if (countryTrim.length > 0) {
+      const token = getToken();
       if (token) {
         if (window.location.pathname !== "/home") navigate("/home");
 
         setLoading(true);
         dispatch(getCity(countryTrim, token, false))
           .then(({ payload }) => {
-            if (payload.id) {
+            if (payload?.error) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Invalid User"
+              }).then(() => logout());
+            } else if (payload.id) {
               const existCity = citys.find(({ id }) => {
                 return payload.id === id;
               });
@@ -65,6 +71,12 @@ function SearchBar() {
             setCountry("");
             setLoading(false);
           });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid User"
+        }).then(() => logout());
       }
     }
   };

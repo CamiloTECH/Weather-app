@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 
-import { DetailCity } from "../../models";
 import { GET_CITY_DETAILS } from "../actionTypes";
 import URL from "./url";
 
@@ -13,8 +12,7 @@ const getCityDetails = (
     const response = await fetch(`${URL}/details?lat=${lat}&lon=${lon}`, {
       headers: { Authorization: `bearer ${token}` }
     });
-    const result: DetailCity = await response.json();
-
+    const result = await response.json();
     return dispatch({ type: GET_CITY_DETAILS, payload: result });
   };
 };

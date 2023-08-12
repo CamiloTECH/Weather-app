@@ -2,11 +2,14 @@ import "./Card.css";
 
 import { FC } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
 import {
   addFavorites,
+  clearCityDetail,
+  clearCitys,
   deleteCity,
   deleteFavorites,
   getCity
@@ -37,32 +40,75 @@ const Card: FC<Props> = props => {
     temperature,
     weather
   } = props;
-  const token = getToken();
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const invalidUser = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Invalid User"
+    }).then(() => {
+      dispatch(clearCitys());
+      dispatch(clearCityDetail());
+      navigate("/");
+    });
+  };
 
   const addFav = () => {
+    const token = getToken();
     if (token) {
-      dispatch(addFavorites(name, token));
+      dispatch(addFavorites(name, token)).then(({ payload }) => {
+        if (payload?.error) {
+          invalidUser();
+        }
+      });
       dispatch({ type: CHANGE_STATUS_FAV, payload: id });
+    } else {
+      invalidUser();
     }
   };
 
   const deleteFav = () => {
+    const token = getToken();
     if (token) {
-      dispatch(deleteFavorites(name, token));
+      dispatch(deleteFavorites(name, token)).then(({ payload }) => {
+        if (payload?.error) {
+          invalidUser();
+        }
+      });
       dispatch({ type: CHANGE_STATUS_FAV, payload: id });
+    } else {
+      invalidUser();
     }
   };
 
   const deleteCurrentCity = () => {
-    dispatch(deleteCity(id));
-    if (favorite && token) dispatch(deleteFavorites(name, token));
+    const token = getToken();
+    if (token) {
+      dispatch(deleteCity(id));
+      if (favorite) {
+        dispatch(deleteFavorites(name, token)).then(({ payload }) => {
+          if (payload?.error) {
+            invalidUser();
+          }
+        });
+      }
+    } else {
+      invalidUser();
+    }
   };
 
   const refresState = () => {
-    if (token) {
-      dispatch(getCity(name, token, true));
-    }
+    const token = getToken();
+    token
+      ? dispatch(getCity(name, token, true)).then(({ payload }) => {
+          if (payload?.error) {
+            invalidUser();
+          }
+        })
+      : invalidUser();
   };
 
   return (

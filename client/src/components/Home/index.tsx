@@ -1,15 +1,35 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
 import { ReducerState } from "../../models";
-import { getFavorites, loadCitysLocalstorage } from "../../redux/actions";
+import {
+  clearCityDetail,
+  clearCitys,
+  getFavorites,
+  loadCitysLocalstorage
+} from "../../redux/actions";
 import Cards from "../Cards";
 
 function Home() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const citys = useSelector((state: ReducerState) => state.citys);
+
+  const invalidUser = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Invalid User"
+    }).then(() => {
+      dispatch(clearCitys());
+      dispatch(clearCityDetail());
+      navigate("/");
+    });
+  };
 
   useEffect(() => {
     const token = getToken();
@@ -21,8 +41,16 @@ function Home() {
         }
       } else {
         setLoading(true);
-        dispatch(getFavorites(token)).finally(() => setLoading(false));
+        dispatch(getFavorites(token))
+          .then(({ payload }) => {
+            if (payload?.error) {
+              invalidUser();
+            }
+          })
+          .finally(() => setLoading(false));
       }
+    } else {
+      navigate("/");
     }
   }, []);
 

@@ -15,7 +15,7 @@ export const deleteFavorites = async (req: Request, res: Response) => {
 
       if (user && city) {
         const remover = await user.$remove("citys", city.id);
-        return res.json({ status: remover == 1 });
+        return res.json({ status: remover === 1 });
       }
     }
     throw Error;

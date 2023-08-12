@@ -15,7 +15,7 @@ const deleteFavorites = (ciudad: string, token: string) => {
       }
     });
     const result: Status = await response.json();
-    dispatch({ type: DELETE_FAVORITES, payload: result });
+    return dispatch({ type: DELETE_FAVORITES, payload: result });
   };
 };
 

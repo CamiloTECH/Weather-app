@@ -15,7 +15,7 @@ const addFavorites = (ciudad: string, token: string) => {
       }
     });
     const result: Status = await response.json();
-    dispatch({ type: ADD_FAVORITES, payload: result });
+    return dispatch({ type: ADD_FAVORITES, payload: result });
   };
 };
 

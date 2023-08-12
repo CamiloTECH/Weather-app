@@ -7,11 +7,14 @@ import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
 import { DailyWeather, HourlyWeather, ReducerState } from "../../models";
-import { clearCityDetail, getCityDetails } from "../../redux/actions";
+import {
+  clearCityDetail,
+  clearCitys,
+  getCityDetails
+} from "../../redux/actions";
 import { unixTimeNormalDate, weekDay } from "./setTime";
 
 function Details() {
-  const token = getToken();
   const { name } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,16 +25,37 @@ function Details() {
   const lat = query.get("lat");
   const lon = query.get("lon");
 
+  const invalidUser = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Invalid User"
+    }).then(() => {
+      navigate("/");
+      dispatch(clearCitys());
+    });
+  };
+
   const refresState = () => {
+    const token = getToken();
     if (token && lat && lon) {
       setLoading(true);
-      dispatch(getCityDetails(lat, lon, token)).finally(() => {
-        setLoading(false);
-      });
+      dispatch(getCityDetails(lat, lon, token))
+        .then(({ payload }) => {
+          if (payload?.error) {
+            invalidUser();
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      invalidUser();
     }
   };
 
   useEffect(() => {
+    const token = getToken();
     if (!lat || !lon) {
       navigate("/home");
     } else {
@@ -39,7 +63,9 @@ function Details() {
         setLoading(true);
         dispatch(getCityDetails(lat, lon, token))
           .then(({ payload }) => {
-            if (!payload?.lat) {
+            if (payload?.error) {
+              invalidUser();
+            } else if (!payload?.lat) {
               Swal.fire({
                 icon: "error",
                 title: "Oops...",
