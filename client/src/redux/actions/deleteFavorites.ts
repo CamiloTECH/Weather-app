@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 
-import { Status } from "../../models";
 import { DELETE_FAVORITES } from "../actionTypes";
 import URL from "./url";
 
@@ -14,7 +13,7 @@ const deleteFavorites = (ciudad: string, token: string) => {
         Authorization: `bearer ${token}`
       }
     });
-    const result: Status = await response.json();
+    const result = await response.json();
     return dispatch({ type: DELETE_FAVORITES, payload: result });
   };
 };

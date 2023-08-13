@@ -1,17 +1,6 @@
 import { City } from "./CityType";
 import { DetailCity } from "./DetailCityType";
 
-export interface Status {
-  status: boolean;
-  error?: string;
-}
-
-export interface StatusUser {
-  status: boolean;
-  token?: string;
-  message?: string;
-}
-
 export interface ReducerState {
   citys: City[];
   cityDetail: DetailCity | undefined;
@@ -26,7 +15,7 @@ export interface ReducerState {
 
 export interface actionTypes {
   type: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   payload: any;
 }
 
