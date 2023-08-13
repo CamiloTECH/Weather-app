@@ -1,4 +1,4 @@
-import { actionTypes, ReducerState } from "../models";
+import { actionTypes, ReducerState } from "../models/ReduxTypes";
 import {
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
@@ -119,7 +119,7 @@ function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
         statusRegister: action.payload
       };
     }
-    
+
     case CLEAR_USER: {
       return {
         ...state,

@@ -8,7 +8,7 @@ import type {} from "redux-thunk/extend-redux";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
-import { ReducerState } from "../../models";
+import { ReducerState } from "../../models/ReduxTypes";
 import { clearCityDetail, clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {
@@ -84,11 +84,7 @@ function SearchBar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light shadow-lg bg-black bg-opacity-75 py-2">
       <div className="container-fluid">
-        <NavLink
-          to={"/home"}
-          className="nav-link active"
-          aria-current="page"
-        >
+        <NavLink to={"/home"} className="nav-link active" aria-current="page">
           <div className="d-flex gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"

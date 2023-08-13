@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 
-import { Status } from "../../models";
 import { CHANGE_PASSWORD } from "../actionTypes";
 import URL from "./url";
 
@@ -11,7 +10,7 @@ const changePassword = (password: string, token: string) => {
       body: JSON.stringify({ password }),
       headers: { "Content-Type": "application/json" }
     });
-    const result: Status = await response.json();
+    const result = await response.json();
 
     return dispatch({ type: CHANGE_PASSWORD, payload: result });
   };
