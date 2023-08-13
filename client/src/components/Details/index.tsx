@@ -76,6 +76,7 @@ function Details() {
           .finally(() => setLoading(false));
       } else {
         navigate("/");
+        dispatch(clearCitys());
       }
     }
 

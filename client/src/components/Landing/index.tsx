@@ -27,7 +27,7 @@ function Landing() {
   };
 
   return (
-    <div className="container d-flex justify-content-center min-vh-100 align-items-center">
+    <div className="container d-flex justify-content-center min-vh-100 align-items-center py-5 px-0">
       <div className="row shadow-lg rounded rounded-3 align-items-stretch contenido">
         <div className="col bg d-none d-lg-block rounded-start shadow-lg"></div>
 

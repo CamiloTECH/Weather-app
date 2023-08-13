@@ -51,6 +51,7 @@ function Home() {
       }
     } else {
       navigate("/");
+      dispatch(clearCitys());
     }
   }, []);
 

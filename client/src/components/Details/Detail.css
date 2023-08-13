@@ -1,10 +1,6 @@
 .mainContainerDetail {
   min-height: calc(100vh - 63px);
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  max-width: 80%; */
+  padding: 30px 0px;
 }
 
 .scroll::-webkit-scrollbar {
@@ -64,9 +60,6 @@
 
   .imagen {
     width: 23%;
-  }
-  .mainContainerDetail {
-    padding: 30px 0px;
   }
 }
 

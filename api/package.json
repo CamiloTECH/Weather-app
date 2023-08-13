@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tsc": "./node_modules/typescript/bin/tsc",
-    "build": "rimraf ./build && npm run tsc",
+    "build": "rimraf ./build && tsc",
     "dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
     "start": "node build/index.js"
   },
