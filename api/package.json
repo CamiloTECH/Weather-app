@@ -22,7 +22,6 @@
     "nodemailer": "^6.7.5",
     "nodemon": "^3.0.1",
     "pg": "^8.7.3",
-    "rimraf": "^5.0.1",
     "sequelize": "^6.18.0",
     "sequelize-typescript": "^2.1.3"
   },
