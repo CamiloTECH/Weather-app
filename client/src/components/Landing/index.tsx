@@ -27,13 +27,7 @@ function Landing() {
   };
 
   return (
-    <div
-      className="container d-flex justify-content-center"
-      style={{
-        marginTop: signUp ? "2rem" : "3rem",
-        marginBottom: signUp ? "1rem" : "3rem"
-      }}
-    >
+    <div className="container d-flex justify-content-center min-vh-100 align-items-center">
       <div className="row shadow-lg rounded rounded-3 align-items-stretch contenido">
         <div className="col bg d-none d-lg-block rounded-start shadow-lg"></div>
 

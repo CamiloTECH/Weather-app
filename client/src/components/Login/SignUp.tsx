@@ -91,6 +91,7 @@ const SignUp: FC<Props> = ({ setSignUp }) => {
           value={inputs.userName}
           name="userName"
           autoFocus
+          placeholder="User name..."
           className="form-control"
           onChange={handleValidation}
         />
@@ -114,6 +115,7 @@ const SignUp: FC<Props> = ({ setSignUp }) => {
           type="email"
           value={inputs.email}
           name="email"
+          placeholder="Insert Email..."
           className="form-control"
           onChange={handleValidation}
         />
@@ -139,6 +141,7 @@ const SignUp: FC<Props> = ({ setSignUp }) => {
             name="password"
             value={inputs.password}
             className="col form-control"
+            placeholder="Insert Password..."
             onChange={handleValidation}
           />
           {viewPassword ? (

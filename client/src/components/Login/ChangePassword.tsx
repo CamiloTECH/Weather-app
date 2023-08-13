@@ -80,6 +80,7 @@ function ChangePassword({ token }: { token: string }) {
               name="password"
               autoFocus
               value={password}
+              placeholder="Insert new password..."
               className="col form-control"
               onChange={handleValidationPassword}
             />
@@ -132,6 +133,7 @@ function ChangePassword({ token }: { token: string }) {
           type="password"
           value={confirmPassword}
           name="confirmPassword"
+          placeholder="Confirm new password..."
           className="form-control"
           onChange={handleValidationPassword}
         />

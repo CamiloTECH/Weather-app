@@ -102,8 +102,11 @@ function Details() {
       ) : (
         cityDetail &&
         cityDetail.lat && (
-          <div className="container my-5 py-2">
-            <div className="row justify-content-center gap-5 ">
+          <div
+            className="container d-flex justify-content-center
+          align-items-center mainContainerDetail"
+          >
+            <div className="row justify-content-center gap-5 w-100">
               <div
                 className="col-10 col-lg-6 p-3 bg-black bg-opacity-75 shadow-lg"
                 style={{ borderRadius: "25px" }}

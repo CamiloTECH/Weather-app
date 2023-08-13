@@ -113,9 +113,9 @@ const Card: FC<Props> = props => {
 
   return (
     <div className="card p-2 shadow-lg bg-light" style={{ width: "20rem" }}>
-      <div className="p-0 m-0 me-1 d-flex justify-content-between">
+      <div className="p-0 m-0 d-flex justify-content-between">
         <button
-          className="p-0 m-0 ms-1 bg-transparent border-0 status"
+          className="p-0 m-0 bg-transparent border-0 status"
           title="Update status"
           onClick={refresState}
         >
@@ -164,15 +164,15 @@ const Card: FC<Props> = props => {
         <h5 className="card-title text-center fs-4 fw-bold mb-3">
           {name} - {country}
         </h5>
-        <p className="card-text px-3 py-2 text-capitalize">
-          <strong>Status: </strong>
-          {description}
-        </p>
       </div>
 
       <ul className="list-group list-group-flush">
         <li className="list-group-item">
-          <strong>Weahter: </strong>
+          <strong>Status: </strong>
+          {description}
+        </li>
+        <li className="list-group-item">
+          <strong>Weather: </strong>
           {weather}
         </li>
         <li className="list-group-item">
@@ -181,7 +181,7 @@ const Card: FC<Props> = props => {
         </li>
       </ul>
 
-      <div className="card-body d-flex justify-content-between">
+      <div className="card-body d-flex justify-content-between px-0 pb-0">
         <Link
           to={`/home/details/${name}?lat=${coord.lat}&lon=${coord.lon}`}
           className="btn btn-info fw-bold"

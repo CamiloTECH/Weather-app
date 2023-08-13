@@ -81,6 +81,7 @@ const ValidationEmail: FC<Props> = ({ setForgotPassword, setSignUp }) => {
           value={email}
           autoFocus
           name="email"
+          placeholder="Insert Email..."
           className="form-control"
           onChange={handleValidationEmail}
         />

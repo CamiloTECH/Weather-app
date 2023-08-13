@@ -73,6 +73,7 @@ function Login() {
           value={inputs.email}
           name="email"
           autoFocus
+          placeholder="Insert Email..."
           className="form-control"
           onChange={handleValidation}
         />
@@ -83,11 +84,12 @@ function Login() {
           Password:
         </label>
 
-        <div className="row ms-0 gap-0">
+        <div className="row ms-0 gap-0 w-100">
           <input
             type={viewPassword ? "text" : "password"}
             name="password"
             value={inputs.password}
+            placeholder="Insert password..."
             className="col form-control"
             onChange={handleValidation}
           />
@@ -97,7 +99,7 @@ function Login() {
               width="36"
               height="36"
               fill="currentColor"
-              className="bi bi-eye-fill col col-2 p-0 "
+              className="bi bi-eye-fill col col-2 p-0"
               viewBox="0 0 16 16"
               style={{ cursor: "pointer" }}
               onClick={() => setViewPassword(!viewPassword)}
