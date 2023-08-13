@@ -1,41 +1,60 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { validationEmail } from "../../redux/action";
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  FormEvent,
+  SetStateAction,
+  useState
+} from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
+import { validationEmail } from "../../redux/actions";
+import { regexEmail } from "./RegexValidation";
+
+interface Props {
+  setForgotPassword: Dispatch<SetStateAction<boolean>>;
+  setSignUp: Dispatch<SetStateAction<boolean>>;
 }
 
-function ValidationEmail() {
+const ValidationEmail: FC<Props> = ({ setForgotPassword, setSignUp }) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
-  const [validation, setValidation] = useState(false);
-  const { loading } = useSelector((state: State) => state);
-
-  useEffect(() => {
-    !error && email ? setValidation(false) : setValidation(true);
-  }, [email, error]);
+  const [loading, setLoading] = useState(false);
 
   const handleValidationEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
+    const { value } = e.target;
     setEmail(value.trim());
-
-    regexEmail.test(value.trim()) ? setError(false) : setError(true);
+    setError(!regexEmail.test(value.trim()));
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(validationEmail({email}))
-    setEmail("")
+    setLoading(true);
+    dispatch(validationEmail({ email }))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "The mail was sent!",
+            text: "Please check your e-mail"
+          }).then(() => {
+            setForgotPassword(false);
+            setSignUp(false);
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "This email doesn't exist, please enter another email or register"
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setEmail("");
+      });
   };
 
   return (
@@ -62,6 +81,7 @@ function ValidationEmail() {
           value={email}
           autoFocus
           name="email"
+          placeholder="Insert Email..."
           className="form-control"
           onChange={handleValidationEmail}
         />
@@ -70,9 +90,9 @@ function ValidationEmail() {
             type="submit"
             className="btn btn-primary"
             name="validation"
-            disabled={validation}
+            disabled={error || !email}
           >
-            {loading.status && loading.component === "validationEmail" ? (
+            {loading ? (
               <span className="spinner-border text-info" role="status"></span>
             ) : (
               "Send validation"
@@ -82,6 +102,6 @@ function ValidationEmail() {
       </form>
     </>
   );
-}
+};
 
 export default ValidationEmail;

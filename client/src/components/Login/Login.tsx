@@ -1,63 +1,55 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { singIn } from "../../redux/action";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: boolean;
-}
+import { clearUser, singIn } from "../../redux/actions";
+import { regexEmail } from "./RegexValidation";
 
 function Login() {
   const dispatch = useDispatch();
-  const [validation, setValidation] = useState(true);
+  const navigate = useNavigate();
   const [viewPassword, setViewPassword] = useState(false);
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const loading = useSelector((state: State) => state.loading);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (!error && inputs.email && inputs.password) {
-      setValidation(false);
-    } else {
-      setValidation(true);
+  const handleValidation = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = target;
+    setInputs({ ...inputs, [name]: value });
+
+    if (name === "email") {
+      setError(!regexEmail.test(value));
     }
-  }, [error, inputs]);
+  };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singIn(inputs));
-    setInputs({ email: "", password: "" });
-  };
-
-  const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
-    const name = e.target.name;
-
-    switch (name) {
-      case "password":
-        setInputs({
-          ...inputs,
-          password: value,
-        });
-        break;
-      case "email":
-        setInputs({
-          ...inputs,
-          email: value.trim(),
-        });
-
-        regexEmail.test(value) ? setError(false) : setError(true);
-        break;
-      default:
-        break;
-    }
+    setLoading(true);
+    dispatch(singIn({ ...inputs, email: inputs.email.trim() }))
+      .then(({ payload }) => {
+        if (payload.status && payload.token) {
+          window.localStorage.setItem("token", payload.token);
+          dispatch(clearUser());
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "You logged in successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => navigate("/home"));
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "Wrong password or email. Please check!"
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setInputs({ email: "", password: "" });
+      });
   };
 
   return (
@@ -81,8 +73,9 @@ function Login() {
           value={inputs.email}
           name="email"
           autoFocus
+          placeholder="Insert Email..."
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -91,13 +84,14 @@ function Login() {
           Password:
         </label>
 
-        <div className="row ms-0 gap-0">
+        <div className="row ms-0 gap-0 w-100">
           <input
             type={viewPassword ? "text" : "password"}
             name="password"
             value={inputs.password}
+            placeholder="Insert password..."
             className="col form-control"
-            onChange={handleValidationInputs}
+            onChange={handleValidation}
           />
           {viewPassword ? (
             <svg
@@ -136,9 +130,9 @@ function Login() {
           type="submit"
           className="btn btn-primary"
           name="login"
-          disabled={validation}
+          disabled={!inputs.email || !inputs.password || error}
         >
-          {loading.status && loading.component === "Login" ? (
+          {loading ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Login"

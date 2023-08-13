@@ -9,22 +9,20 @@ import {
   loginUser,
   validationEmail,
   changePassword,
-  loginGoogle,
 } from "../controllers/index";
-import { validationUser } from "../helpers/validationUser";
+import { validationUser } from "../helpers/index";
 
 const routes = Router();
 
 routes.get("/userFav", validationUser, getFavCitys);
-routes.get("/city/:city", getCity);
-routes.get("/details", getCityDetails);
+routes.get("/city/:city", validationUser, getCity);
+routes.get("/details", validationUser, getCityDetails);
 
 routes.post("/saveFavorites", validationUser, addFavorites);
 routes.delete("/deleteFavorites", validationUser, deleteFavorites);
 
 routes.post("/registerUser", registerUser);
 routes.post("/loginUser", loginUser);
-routes.post("/logingoogle", loginGoogle);
 
 routes.post("/validationEmail", validationEmail);
 routes.put("/changePassword/:token", changePassword);

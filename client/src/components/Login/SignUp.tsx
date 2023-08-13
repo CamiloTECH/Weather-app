@@ -1,117 +1,73 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { singUp } from "../../redux/action"
+import {
+  ChangeEvent,
+  Dispatch,
+  FC,
+  SetStateAction,
+  SyntheticEvent,
+  useState
+} from "react";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: boolean;
+import { singUp } from "../../redux/actions";
+import { regexEmail, regexPass } from "./RegexValidation";
+
+interface Props {
+  setSignUp: Dispatch<SetStateAction<boolean>>;
 }
-
-function SignUp() {
-  const dispatch = useDispatch()
-  const [validation, setValidation] = useState(true);
+const SignUp: FC<Props> = ({ setSignUp }) => {
+  const dispatch = useDispatch();
   const [viewPassword, setViewPassword] = useState(false);
-  const loading = useSelector((state: State) => state.loading);
+  const [loading, setLoading] = useState(false);
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
-    userName: "",
+    userName: ""
   });
   const [error, setError] = useState({
     email: false,
     password: false,
-    userName: false,
+    userName: false
   });
 
-  useEffect(() => {
-    if (
-      !error.email &&
-      !error.password &&
-      !error.userName &&
-      inputs.email &&
-      inputs.password &&
-      inputs.userName
-    ) {
-      setValidation(false);
+  const handleValidation = (e: ChangeEvent<HTMLInputElement>) => {
+    let validation = false;
+    const { value, name } = e.target;
+    setInputs({ ...inputs, [name]: value });
+
+    if (name === "userName") {
+      validation = value.trim().length <= 4;
+    } else if (name === "password") {
+      validation = !regexPass.test(value);
     } else {
-      setValidation(true);
+      validation = !regexEmail.test(value);
     }
-  }, [error, inputs]);
+    setError({ ...error, [name]: validation });
+  };
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    dispatch(singUp(inputs))
-    setInputs({ email: "", password: "", userName: "" })
-  };
-
-  const handleValidationInputs = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexEmail =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    const value = e.target.value;
-    const name = e.target.name;
-
-    switch (name) {
-      case "userName":
-        setInputs({
-          ...inputs,
-          userName: value,
-        });
-        if (value.trim().length > 4) {
-          setError({
-            ...error,
-            userName: false,
-          });
+    setLoading(true);
+    dispatch(singUp({ ...inputs, email: inputs.email.trim() }))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "You registered successfully!",
+            text: "Now, you can login!"
+          }).then(() => setSignUp(false));
         } else {
-          setError({
-            ...error,
-            userName: true,
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "This email already exists, please put another email or login"
           });
         }
-        break;
-      case "password":
-        const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-        setInputs({
-          ...inputs,
-          password: value,
-        });
-        if (regexPass.test(value)) {
-          setError({
-            ...error,
-            password: false,
-          });
-        } else {
-          setError({
-            ...error,
-            password: true,
-          });
-        }
-        break;
-      case "email":
-        setInputs({
-          ...inputs,
-          email: value.trim(),
-        });
-
-        if (regexEmail.test(value)) {
-          setError({
-            ...error,
-            email: false,
-          });
-        } else {
-          setError({
-            ...error,
-            email: true,
-          });
-        }
-        break;
-      default:
-        break;
-    }
+      })
+      .finally(() => {
+        setLoading(false);
+        setInputs({ email: "", password: "", userName: "" });
+      });
   };
 
   return (
@@ -135,8 +91,9 @@ function SignUp() {
           value={inputs.userName}
           name="userName"
           autoFocus
+          placeholder="User name..."
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -158,8 +115,9 @@ function SignUp() {
           type="email"
           value={inputs.email}
           name="email"
+          placeholder="Insert Email..."
           className="form-control"
-          onChange={handleValidationInputs}
+          onChange={handleValidation}
         />
       </div>
 
@@ -183,7 +141,8 @@ function SignUp() {
             name="password"
             value={inputs.password}
             className="col form-control"
-            onChange={handleValidationInputs}
+            placeholder="Insert Password..."
+            onChange={handleValidation}
           />
           {viewPassword ? (
             <svg
@@ -232,9 +191,16 @@ function SignUp() {
           type="submit"
           className="btn btn-primary"
           name="SignUp"
-          disabled={validation}
+          disabled={
+            error.email ||
+            error.password ||
+            error.userName ||
+            !inputs.email ||
+            !inputs.password ||
+            !inputs.userName
+          }
         >
-          {loading.status && loading.component==="SignUp" ? (
+          {loading ? (
             <span className="spinner-border text-info" role="status"></span>
           ) : (
             "Sign Up"
@@ -243,6 +209,6 @@ function SignUp() {
       </div>
     </form>
   );
-}
+};
 
 export default SignUp;

@@ -1,65 +1,60 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../redux/action";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-interface State {
-  citys: [];
-  cityDetail: {};
-  statusFavorites: {};
-  statusLogin: { status: boolean | undefined; token?: string };
-  statusRegister: { status: boolean | undefined };
-  loading: { status: boolean; component: string };
-  generalError: string;
-}
+import { changePassword } from "../../redux/actions";
+import { regexPass } from "./RegexValidation";
 
-function ChangePassword({token}:{token:string}) {
+function ChangePassword({ token }: { token: string }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [password, setPassword] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     password: false,
-    confirmPassword: false,
+    confirmPassword: false
   });
-  const [validation, setValidation] = useState(false);
-  const { loading } = useSelector((state: State) => state);
-
-  useEffect(() => {
-    if (
-      !error.password &&
-      !error.confirmPassword &&
-      password &&
-      password === confirmPassword
-    ) {
-      setValidation(false);
-    } else {
-      setValidation(true);
-    }
-  }, [error]);
 
   const handleValidationPassword = (e: ChangeEvent<HTMLInputElement>) => {
-    const regexPass = /^(?=\w*[a-z])\S{5,15}$/;
-    const value = e.target.value;
-    const name = e.target.name;
+    const { value, name } = e.target;
     if (name === "password") {
       setPassword(value);
       setConfirmPassword("");
-      regexPass.test(value)
-        ? setError({ ...error, password: false })
-        : setError({ ...error, password: true });
+      setError({ ...error, password: !regexPass.test(value) });
     } else if (name === "confirmPassword") {
       setConfirmPassword(value);
-      value === password
-        ? setError({ ...error, confirmPassword: false })
-        : setError({ ...error, confirmPassword: true });
+      setError({ ...error, confirmPassword: !(value === password) });
     }
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(changePassword({password},token))
-    setPassword("");
-    setConfirmPassword("");
+    setLoading(true);
+    dispatch(changePassword(password, token))
+      .then(({ payload }) => {
+        if (payload.status) {
+          Swal.fire({
+            icon: "success",
+            title: "Password changed successfully!",
+            text: "Now you can login successfully"
+          }).then(() => navigate("/"));
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops an error occurred!",
+            text: "An error occurred in the shipment"
+          }).then(() => navigate("/"));
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+        setPassword("");
+        setConfirmPassword("");
+      });
   };
 
   return (
@@ -85,6 +80,7 @@ function ChangePassword({token}:{token:string}) {
               name="password"
               autoFocus
               value={password}
+              placeholder="Insert new password..."
               className="col form-control"
               onChange={handleValidationPassword}
             />
@@ -129,7 +125,7 @@ function ChangePassword({token}:{token:string}) {
               htmlFor="confirmPassword"
               className="col form-label text-danger fw-bold text-end ps-0"
             >
-              Don't match
+              Don`t match
             </label>
           ) : null}
         </div>
@@ -137,6 +133,7 @@ function ChangePassword({token}:{token:string}) {
           type="password"
           value={confirmPassword}
           name="confirmPassword"
+          placeholder="Confirm new password..."
           className="form-control"
           onChange={handleValidationPassword}
         />
@@ -154,9 +151,14 @@ function ChangePassword({token}:{token:string}) {
             type="submit"
             className="btn btn-primary"
             name="validation"
-            disabled={validation}
+            disabled={
+              error.password ||
+              error.confirmPassword ||
+              !password ||
+              !confirmPassword
+            }
           >
-            {loading.status && loading.component === "changePassword" ? (
+            {loading ? (
               <span className="spinner-border text-info" role="status"></span>
             ) : (
               "Change Password"

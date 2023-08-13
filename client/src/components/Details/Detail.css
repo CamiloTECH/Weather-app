@@ -1,0 +1,92 @@
+.mainContainerDetail {
+  min-height: calc(100vh - 63px);
+  padding: 30px 0px;
+}
+
+.scroll::-webkit-scrollbar {
+  background-color: rgba(255, 255, 255, 0.404);
+  border-radius: 10px;
+}
+.temp {
+  font-size: 4rem;
+}
+.refresh {
+  color: #0dcaf0;
+  transition: color 0.5s;
+}
+
+.refresh:hover {
+  transition: color 0.5s;
+}
+
+.dia {
+  font-size: 1.2rem;
+}
+
+.imagen {
+  width: 21%;
+  filter: drop-shadow(1px 1px 10px #ffffff);
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #0dcaf0;
+}
+
+@media (max-width: 1395px) {
+  .imagen {
+    width: 23.5%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .dia {
+    font-size: 1rem;
+  }
+
+  .imagen {
+    width: 20%;
+  }
+}
+
+@media (max-width: 992px) {
+  .dia {
+    font-size: 1.3rem;
+  }
+
+  .imagen {
+    width: 23%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dia {
+    font-size: 1rem;
+  }
+
+  .imagen {
+    width: 25%;
+  }
+}
+
+@media (max-width: 575px) {
+  .temp {
+    font-size: 3rem;
+  }
+  .dia {
+    font-size: 1.4rem;
+  }
+  .imagen {
+    width: 25%;
+  }
+}
+
+@media (max-width: 393px) {
+  .dia {
+    font-size: 0.9rem;
+  }
+}
