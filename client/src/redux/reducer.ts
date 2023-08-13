@@ -1,4 +1,4 @@
-import { actionTypes, ReducerState } from "../models/ReduxTypes";
+import { ActionTypes, ReducerState } from "../models/ReduxTypes";
 import {
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
@@ -24,7 +24,7 @@ const inicialState: ReducerState = {
   statusChangePassword: { status: undefined }
 };
 
-function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
+function rootReducer(state: ReducerState = inicialState, action: ActionTypes) {
   switch (action.type) {
     case LOAD_CITIES_LOCALSTORAGE: {
       return {

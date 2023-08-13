@@ -1,4 +1,4 @@
-import { City } from "./CityType";
+import City from "./CityType";
 import { DetailCity } from "./DetailCityType";
 
 export interface ReducerState {
@@ -13,9 +13,8 @@ export interface ReducerState {
   statusChangePassword: { status: boolean | undefined; message?: string };
 }
 
-export interface actionTypes {
+export interface ActionTypes {
   type: string;
-  
   payload: any;
 }
 

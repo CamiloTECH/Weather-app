@@ -1,4 +1,4 @@
-export interface City {
+interface City {
   coord: {
     lon: number;
     lat: number;
@@ -43,3 +43,5 @@ export interface City {
   cod: number;
   fav: boolean;
 }
+
+export default City;
