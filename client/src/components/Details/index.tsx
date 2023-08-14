@@ -6,8 +6,9 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
-import { DailyWeather, HourlyWeather } from "../../models/DetailCityType";
-import { ReducerState } from "../../models/ReduxTypes";
+import DailyWeather from "../../models/DailyWeather";
+import HourlyWeather from "../../models/HourlyWeather";
+import ReducerState from "../../models/ReduxTypes";
 import {
   clearCityDetail,
   clearCitys,

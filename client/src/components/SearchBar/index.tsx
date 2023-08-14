@@ -8,7 +8,7 @@ import type {} from "redux-thunk/extend-redux";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
-import { ReducerState } from "../../models/ReduxTypes";
+import ReducerState from "../../models/ReduxTypes";
 import { clearCityDetail, clearCitys, getCity } from "../../redux/actions";
 
 function SearchBar() {

@@ -1,7 +1,7 @@
 import City from "./CityType";
-import { DetailCity } from "./DetailCityType";
+import DetailCity from "./DetailCity";
 
-export interface ReducerState {
+interface ReducerState {
   citys: City[];
   cityDetail: DetailCity | undefined;
   statusLogin: {
@@ -13,11 +13,4 @@ export interface ReducerState {
   statusChangePassword: { status: boolean | undefined; message?: string };
 }
 
-export interface ActionTypes {
-  type: string;
-  payload: any;
-}
-
-export interface Info {
-  ciudad: string;
-}
+export default ReducerState;

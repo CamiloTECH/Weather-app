@@ -1,4 +1,4 @@
-import { ActionTypes, ReducerState } from "../models/ReduxTypes";
+import ReducerState from "../models/ReduxTypes";
 import {
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
@@ -15,6 +15,11 @@ import {
   UPDATE_STATUS,
   VALIDATION_EMAIL
 } from "./actionTypes";
+
+interface ActionTypes {
+  type: string;
+  payload: any;
+}
 
 const inicialState: ReducerState = {
   citys: [],

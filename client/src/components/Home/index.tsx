@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
-import { ReducerState } from "../../models/ReduxTypes";
+import ReducerState from "../../models/ReduxTypes";
 import {
   clearCityDetail,
   clearCitys,
