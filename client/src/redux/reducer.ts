@@ -1,4 +1,6 @@
-import { actionTypes, ReducerState } from "../models/ReduxTypes";
+import City from "../models/CityType";
+import DetailCity from "../models/DetailCity";
+// import ReducerState from "../models/ReduxTypes";
 import {
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
@@ -16,6 +18,23 @@ import {
   VALIDATION_EMAIL
 } from "./actionTypes";
 
+interface ActionTypes {
+  type: string;
+  payload: any;
+}
+
+interface ReducerState {
+  citys: City[];
+  cityDetail: DetailCity | undefined;
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
+  statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
+}
+
 const inicialState: ReducerState = {
   citys: [],
   cityDetail: undefined,
@@ -24,7 +43,7 @@ const inicialState: ReducerState = {
   statusChangePassword: { status: undefined }
 };
 
-function rootReducer(state: ReducerState = inicialState, action: actionTypes) {
+function rootReducer(state: ReducerState = inicialState, action: ActionTypes) {
   switch (action.type) {
     case LOAD_CITIES_LOCALSTORAGE: {
       return {

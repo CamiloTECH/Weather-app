@@ -1,4 +1,4 @@
-import { City } from "../../models/CityType";
+import City from "../../models/CityType";
 import Card from "../Card";
 
 function Cards({ citys }: { citys: City[] }) {
