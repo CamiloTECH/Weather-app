@@ -1,4 +1,6 @@
-import ReducerState from "../models/ReduxTypes";
+import City from "../models/CityType";
+import DetailCity from "../models/DetailCity";
+// import ReducerState from "../models/ReduxTypes";
 import {
   CHANGE_PASSWORD,
   CHANGE_STATUS_FAV,
@@ -19,6 +21,18 @@ import {
 interface ActionTypes {
   type: string;
   payload: any;
+}
+
+interface ReducerState {
+  citys: City[];
+  cityDetail: DetailCity | undefined;
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
+  statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
 }
 
 const inicialState: ReducerState = {

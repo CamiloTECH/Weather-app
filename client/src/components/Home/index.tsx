@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
-import ReducerState from "../../models/ReduxTypes";
+import City from "../../models/CityType";
+import DetailCity from "../../models/DetailCity";
+// import ReducerState from "../../models/ReduxTypes";
 import {
   clearCityDetail,
   clearCitys,
@@ -12,6 +14,18 @@ import {
   loadCitysLocalstorage
 } from "../../redux/actions";
 import Cards from "../Cards";
+
+interface ReducerState {
+  citys: City[];
+  cityDetail: DetailCity | undefined;
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
+  statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
+}
 
 function Home() {
   const dispatch = useDispatch();

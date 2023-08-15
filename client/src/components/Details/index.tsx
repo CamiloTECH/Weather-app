@@ -6,15 +6,29 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 import getToken from "../../accessibility";
+import City from "../../models/CityType";
 import DailyWeather from "../../models/DailyWeather";
+import DetailCity from "../../models/DetailCity";
 import HourlyWeather from "../../models/HourlyWeather";
-import ReducerState from "../../models/ReduxTypes";
+// import ReducerState from "../../models/ReduxTypes";
 import {
   clearCityDetail,
   clearCitys,
   getCityDetails
 } from "../../redux/actions";
 import { unixTimeNormalDate, weekDay } from "./setTime";
+
+interface ReducerState {
+  citys: City[];
+  cityDetail: DetailCity | undefined;
+  statusLogin: {
+    status: boolean | undefined;
+    token?: string;
+    message?: string;
+  };
+  statusRegister: { status: boolean | undefined };
+  statusChangePassword: { status: boolean | undefined; message?: string };
+}
 
 function Details() {
   const { name } = useParams();
